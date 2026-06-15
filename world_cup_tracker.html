@@ -58,12 +58,12 @@
     margin:0 -20px 26px;padding:26px 28px 28px;
     position:relative;overflow:hidden;
   }
-  .hero::after{content:"";position:absolute;left:28px;right:28px;top:74px;height:2px;
+  .hero::after{content:"";position:absolute;left:28px;right:28px;top:98px;height:2px;
     background:linear-gradient(90deg, var(--gold), rgba(233,185,73,0));}
   .hero-inner{display:grid;grid-template-columns:1fr 1.05fr;gap:28px;align-items:start;}
   .hero-title h1{
     font-family:'Barlow Condensed','Barlow',sans-serif;
-    font-weight:700;font-size:42px;line-height:.98;margin:6px 0 2px;letter-spacing:.005em;
+    font-weight:700;font-size:42px;line-height:.98;margin:6px 0 16px;letter-spacing:.005em;
   }
   .hero-title .sub{color:#9FB6CC;font-size:15px;font-weight:500;}
   .hero-title .where{margin-top:14px;color:#C9D8E6;font-size:14px;}
@@ -476,7 +476,9 @@ function groupRowFor(team){
   const g = DATA.groups.find(x=>x.id===team.group);
   if(!g) return {pos:'-',pts:'-'};
   const idx = g.rows.findIndex(r=>r.team===team.name);
-  return {pos: idx>=0 ? idx+1 : '-', pts: idx>=0 ? g.rows[idx].pts : '-'};
+  if(idx<0) return {pos:'-',pts:'-'};
+  const pts = g.rows[idx].pts;
+  return {pos: g.started ? idx+1 : '-', pts: (pts==null ? 0 : pts)};
 }
 function lastResult(team){
   const fin = team.fixtures.filter(f=>f.status==='final');
