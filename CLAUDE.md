@@ -9,35 +9,37 @@ the 2026 FIFA World Cup. It is updated daily by a scheduled Claude Code routine.
 
 Each run of this routine must follow these steps in order:
 
-1. Read `world_cup_tracker.html` from the repo as the baseline.
-2. Search authoritative sources (FIFA.com, ESPN, NBC Sports) for the live state
-   of the tournament and collect all data needed to update the file.
+1. Read `world_cup_tracker.html` from the repo as the baseline. Keep its layout,
+   styling, and JavaScript identical; change only the data.
+2. Search authoritative sources (FIFA.com, ESPN, NBC Sports, official team and
+   confederation pages) for the live state of the tournament. Confirm the
+   tournament stage and today's date, and collect all data needed to update the
+   file.
 3. Update only the `DATA` object inside the file (layout, CSS, and JS must not
    change). Verify every group's goal differences sum to zero before saving.
 4. Save the updated file back to `world_cup_tracker.html` (overwrite in place).
 5. Save a dated copy as `world_cup_tracker_YYYY-MM-DD.html` using today's date.
-6. Commit both files to the designated development branch with a message such as
-   `Update tracker for <date>`.
-7. Push the branch to `origin`.
-8. Create a draft pull request targeting `main` if one does not already exist.
-9. **Immediately squash-merge the PR into `main`** using the GitHub MCP tool
-   `mcp__github__merge_pull_request` with `merge_method: "squash"`. Do not wait
-   for a review or any other approval. The routine is authorised to merge.
-10. After a successful merge, delete the remote development branch if a branch
-    deletion tool is available. If no such tool is available, skip this step
-    silently; do not error.
-11. Send a push notification summarising what changed (inside
-    `<routine_summary>` tags) so the results reach the owner's phone.
+6. Commit both files directly to the `main` branch, which is already checked out
+   at the start of the run, with a message such as `Update tracker for <date>`.
+   Do not create a new branch.
+7. Push directly to `origin main`. Do not open a pull request and do not perform
+   any merge step; the file is current on `main` as soon as the push lands.
+8. If a push-notification tool is available, send a short summary of what changed
+   so the result reaches the owner's phone. If no such tool is available, skip
+   this step silently and do not error.
 
-## Merge method
+Run every day even if nothing has changed: still set `meta.updated` to today's
+date, save today's dated copy, and commit.
 
-Always use **squash merge** (not regular merge or rebase) so that `main` keeps a
-clean one-commit-per-day history.
+## Branch and merge policy
+
+This routine commits straight to `main`. There is no development branch, no pull
+request, and no merge step. `main` keeps one commit per daily run.
 
 ## Authorisation
 
-The routine is explicitly authorised to push to its branch, open a PR, and
-squash-merge that PR into `main` without human review. This is intentional.
+The routine is explicitly authorised to commit and push directly to `main`
+without human review or a pull request. This is intentional.
 
 ## Data rules
 
