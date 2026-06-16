@@ -10,8 +10,9 @@ web font.
 ## Files
 
 - `world_cup_tracker.html` - the live tracker. Open it directly in any browser.
-- `world_cup_tracker_YYYY-MM-DD.html` - dated snapshots produced by the daily
-  update routine (see below).
+- `snapshots/world_cup_tracker_YYYY-MM-DD.html` - dated snapshots produced by the
+  daily update routine (see below). All dated copies live in the `snapshots/`
+  folder to keep the repository root tidy; see `snapshots/README.md`.
 
 ## How it works
 
@@ -56,6 +57,7 @@ layout, styling, and JavaScript identical; change only the data.
      next-match logic.
 3. Re-verify kickoff times in ET; correct any that have firmed up.
 4. Save the full updated HTML back to `world_cup_tracker.html` (overwrite it),
-   and also save a dated copy as `world_cup_tracker_YYYY-MM-DD.html`. Do not
-   change the visual design, the controls, or the countdown logic. Do not use
-   emojis anywhere, including in code.
+   and also save a dated copy inside the `snapshots/` folder as
+   `snapshots/world_cup_tracker_YYYY-MM-DD.html`. Do not change the visual design,
+   the controls, or the countdown logic. Do not use emojis anywhere, including in
+   code.

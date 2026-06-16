@@ -18,7 +18,10 @@ Each run of this routine must follow these steps in order:
 3. Update only the `DATA` object inside the file (layout, CSS, and JS must not
    change). Verify every group's goal differences sum to zero before saving.
 4. Save the updated file back to `world_cup_tracker.html` (overwrite in place).
-5. Save a dated copy as `world_cup_tracker_YYYY-MM-DD.html` using today's date.
+5. Save a dated copy inside the `snapshots/` folder as
+   `snapshots/world_cup_tracker_YYYY-MM-DD.html` using today's date. All dated
+   copies live in `snapshots/`; never write them to the repository root. Create
+   the folder if it does not exist.
 6. Commit both files to the development branch that is checked out at the start
    of the run, with a message such as `Update tracker for <date>`.
 7. Push that branch to `origin` with `git push -u origin <branch-name>`.
@@ -51,8 +54,8 @@ Each run of this routine must follow these steps in order:
      - hyperlinks to our repository:
        - the live tracker on `main`:
          https://github.com/TallGibbs/2026_Mens_World_Cup_Tracker/blob/main/world_cup_tracker.html
-       - today's dated snapshot (substitute today's date):
-         https://github.com/TallGibbs/2026_Mens_World_Cup_Tracker/blob/main/world_cup_tracker_YYYY-MM-DD.html
+       - today's dated snapshot in `snapshots/` (substitute today's date):
+         https://github.com/TallGibbs/2026_Mens_World_Cup_Tracker/blob/main/snapshots/world_cup_tracker_YYYY-MM-DD.html
        - the repository home:
          https://github.com/TallGibbs/2026_Mens_World_Cup_Tracker
 
