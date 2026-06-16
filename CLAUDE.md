@@ -51,14 +51,13 @@ Each run of this routine must follow these steps in order:
      - a friendly greeting;
      - the date and time the tracker was last updated (e.g. "Updated June 16,
        2026 at 9:32 AM ET"); and
-     - hyperlinks to the live, hosted tracker (these render the page directly in
-       a browser - prefer them over GitHub `blob/` links, which show raw source):
-       - the live web tracker (always current):
+     - links to our website only - the hosted tracker, which renders the page
+       directly in a browser. Do NOT link to the GitHub repository or to GitHub
+       `blob/` URLs (they show raw source, not the page). Use exactly these two:
+       - the live tracker (always current):
          https://worldcup.youmissedit.org/
-       - today's dated snapshot in `snapshots/` (substitute today's date):
+       - today's dated snapshot (substitute today's date):
          https://worldcup.youmissedit.org/snapshots/world_cup_tracker_YYYY-MM-DD.html
-       - the source repository (for reference):
-         https://github.com/TallGibbs/2026_Mens_World_Cup_Tracker
 
    Do NOT describe any matches, scores, standings, fixtures, results, schedules,
    or other tournament details anywhere in the subject or body - no game
