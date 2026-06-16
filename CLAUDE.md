@@ -29,15 +29,23 @@ Each run of this routine must follow these steps in order:
    `merge_method: "squash"`. After the merge the updated file is live on `main`;
    delete the merged branch if the tooling allows. This self-merge is explicitly
    authorised.
-9. Email the refreshed tracker to the distribution list. Read the recipient
-   addresses from `email_config.py` (the `RECIPIENTS` list) so there is a single
-   source of truth for who the update goes to. If an email tool that can send
-   messages is available, send `world_cup_tracker.html` to those recipients with
-   a subject such as `World Cup 2026 Tracker - <date>`, inlining the file's HTML
-   as the message body (and attaching the file as well if attachments are
-   supported). If only a draft tool is available, create the draft to those
-   recipients instead and note in the run summary that it needs a manual send. If
-   no email tool is available at all, skip this step silently and do not error.
+9. Email the distribution list a short message linking to the updated tracker.
+   Read the recipient addresses from `email_config.py` (the `RECIPIENTS` list) so
+   there is a single source of truth for who the update goes to. Do not inline or
+   attach the tracker (the file renders via JavaScript, which email clients strip,
+   and the connector cannot attach files). Instead, using a subject such as
+   `World Cup 2026 Tracker - <date>`, send a brief message whose body contains
+   hyperlinks to:
+     - the live tracker on `main`:
+       https://github.com/TallGibbs/2026_Mens_World_Cup_Tracker/blob/main/world_cup_tracker.html
+     - today's dated snapshot (substitute today's date):
+       https://github.com/TallGibbs/2026_Mens_World_Cup_Tracker/blob/main/world_cup_tracker_YYYY-MM-DD.html
+     - the repository home:
+       https://github.com/TallGibbs/2026_Mens_World_Cup_Tracker
+   If an email tool that can send messages is available, send it; if only a draft
+   tool is available, create the draft to those recipients instead and note in the
+   run summary that it needs a manual send. If no email tool is available at all,
+   skip this step silently and do not error.
 10. If a push-notification tool is available, send a short summary of what changed
    so the result reaches the owner's phone. If no such tool is available, skip
    this step silently and do not error.
