@@ -19,12 +19,17 @@ Each run of this routine must follow these steps in order:
    change). Verify every group's goal differences sum to zero before saving.
 4. Save the updated file back to `world_cup_tracker.html` (overwrite in place).
 5. Save a dated copy as `world_cup_tracker_YYYY-MM-DD.html` using today's date.
-6. Commit both files directly to the `main` branch, which is already checked out
-   at the start of the run, with a message such as `Update tracker for <date>`.
-   Do not create a new branch.
-7. Push directly to `origin main`. Do not open a pull request and do not perform
-   any merge step; the file is current on `main` as soon as the push lands.
-8. If a push-notification tool is available, send a short summary of what changed
+6. Commit both files to the development branch that is checked out at the start
+   of the run, with a message such as `Update tracker for <date>`.
+7. Push that branch to `origin` with `git push -u origin <branch-name>`.
+8. Open a pull request into `main` for that branch (if the harness has already
+   opened one, reuse it). Then merge it yourself without waiting for human
+   review: if the pull request is still a draft, mark it ready first, then
+   squash-merge it into `main` using the GitHub merge tool with
+   `merge_method: "squash"`. After the merge the updated file is live on `main`;
+   delete the merged branch if the tooling allows. This self-merge is explicitly
+   authorised.
+9. If a push-notification tool is available, send a short summary of what changed
    so the result reaches the owner's phone. If no such tool is available, skip
    this step silently and do not error.
 
@@ -33,13 +38,16 @@ date, save today's dated copy, and commit.
 
 ## Branch and merge policy
 
-This routine commits straight to `main`. There is no development branch, no pull
-request, and no merge step. `main` keeps one commit per daily run.
+Each run works on the development branch that is checked out at the start of the
+run, pushes that branch, opens (or reuses) a pull request into `main`, and then
+squash-merges that pull request into `main` itself. The routine does not wait for
+human review or approval before merging. `main` keeps one squashed commit per
+daily run.
 
 ## Authorisation
 
-The routine is explicitly authorised to commit and push directly to `main`
-without human review or a pull request. This is intentional.
+The routine is explicitly authorised to open a pull request and squash-merge it
+into `main` itself, without human review or approval. This is intentional.
 
 ## Data rules
 
