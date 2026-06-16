@@ -51,12 +51,13 @@ Each run of this routine must follow these steps in order:
      - a friendly greeting;
      - the date and time the tracker was last updated (e.g. "Updated June 16,
        2026 at 9:32 AM ET"); and
-     - hyperlinks to our repository:
-       - the live tracker on `main`:
-         https://github.com/TallGibbs/2026_Mens_World_Cup_Tracker/blob/main/world_cup_tracker.html
+     - hyperlinks to the live, hosted tracker (these render the page directly in
+       a browser - prefer them over GitHub `blob/` links, which show raw source):
+       - the live web tracker (always current):
+         https://worldcup.youmissedit.org/
        - today's dated snapshot in `snapshots/` (substitute today's date):
-         https://github.com/TallGibbs/2026_Mens_World_Cup_Tracker/blob/main/snapshots/world_cup_tracker_YYYY-MM-DD.html
-       - the repository home:
+         https://worldcup.youmissedit.org/snapshots/world_cup_tracker_YYYY-MM-DD.html
+       - the source repository (for reference):
          https://github.com/TallGibbs/2026_Mens_World_Cup_Tracker
 
    Do NOT describe any matches, scores, standings, fixtures, results, schedules,
@@ -92,6 +93,19 @@ pile up. `main` keeps one squashed commit per daily run.
 
 The routine is explicitly authorised to open a pull request and squash-merge it
 into `main` itself, without human review or approval. This is intentional.
+
+## Hosting
+
+The tracker is hosted on **Netlify** at **https://worldcup.youmissedit.org/**
+(subdomain of `youmissedit.org`; apex + `www` are unrelated and stay on Google
+Sites). The Netlify site is connected to this GitHub repo with **continuous
+deployment from `main`**, so the routine does not deploy anything itself: once a
+run's commit lands on `main` (step 8), Netlify rebuilds and the live site
+reflects it within a minute or two. There is no build step - `netlify.toml` just
+publishes the repo root and rewrites `/` to `world_cup_tracker.html`, so the bare
+domain renders the current tracker and dated snapshots are reachable at
+`/snapshots/world_cup_tracker_YYYY-MM-DD.html`. Setup and DNS details live in
+`docs/DEPLOY.md`.
 
 ## Data rules
 
