@@ -29,7 +29,16 @@ Each run of this routine must follow these steps in order:
    `merge_method: "squash"`. After the merge the updated file is live on `main`;
    delete the merged branch if the tooling allows. This self-merge is explicitly
    authorised.
-9. If a push-notification tool is available, send a short summary of what changed
+9. Email the refreshed tracker to the distribution list. Read the recipient
+   addresses from `email_config.py` (the `RECIPIENTS` list) so there is a single
+   source of truth for who the update goes to. If an email tool that can send
+   messages is available, send `world_cup_tracker.html` to those recipients with
+   a subject such as `World Cup 2026 Tracker - <date>`, inlining the file's HTML
+   as the message body (and attaching the file as well if attachments are
+   supported). If only a draft tool is available, create the draft to those
+   recipients instead and note in the run summary that it needs a manual send. If
+   no email tool is available at all, skip this step silently and do not error.
+10. If a push-notification tool is available, send a short summary of what changed
    so the result reaches the owner's phone. If no such tool is available, skip
    this step silently and do not error.
 
