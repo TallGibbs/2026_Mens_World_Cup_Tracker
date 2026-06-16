@@ -26,9 +26,13 @@ Each run of this routine must follow these steps in order:
    opened one, reuse it). Then merge it yourself without waiting for human
    review: if the pull request is still a draft, mark it ready first, then
    squash-merge it into `main` using the GitHub merge tool with
-   `merge_method: "squash"`. After the merge the updated file is live on `main`;
-   delete the merged branch if the tooling allows. This self-merge is explicitly
-   authorised.
+   `merge_method: "squash"`. After the merge the updated file is live on `main`.
+   Then verify the squash-merge succeeded - confirm the pull request shows as
+   merged and the squashed commit is on `main` - and only then delete the merged
+   development branch from `origin` (for example
+   `git push origin --delete <branch-name>`, or the GitHub delete-branch tool).
+   Do not delete the branch until the merge is verified. This self-merge and the
+   branch deletion are explicitly authorised.
 9. Email the distribution list a short message linking to the updated tracker.
    Read the recipient addresses from `email_config.py` (the `RECIPIENTS` list) so
    there is a single source of truth for who the update goes to. Do not inline or
@@ -58,8 +62,9 @@ date, save today's dated copy, and commit.
 Each run works on the development branch that is checked out at the start of the
 run, pushes that branch, opens (or reuses) a pull request into `main`, and then
 squash-merges that pull request into `main` itself. The routine does not wait for
-human review or approval before merging. `main` keeps one squashed commit per
-daily run.
+human review or approval before merging. After verifying the merge succeeded, it
+deletes the merged development branch from `origin` so stale branches do not pile
+up. `main` keeps one squashed commit per daily run.
 
 ## Authorisation
 
