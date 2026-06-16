@@ -9,6 +9,14 @@ the refreshed `world_cup_tracker.html` to `main` (see `CLAUDE.md`), Netlify sees
 the push and redeploys automatically, and the live site updates within a minute
 or two. The daily email links to the live web view instead of an attachment.
 
+## Current deployment (live)
+
+- **Netlify site:** `worldcup-youmissedit` (team **YouMissedIt**), continuous
+  deployment from `main`.
+- **Netlify URL (live, renders correctly):** https://worldcup-youmissedit.netlify.app/
+- **Custom domain:** `worldcup.youmissedit.org` - add the GoDaddy CNAME (step 3
+  below) to bring it live.
+
 ## How it serves
 
 `netlify.toml` (repo root) does two things:
