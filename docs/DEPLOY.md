@@ -14,8 +14,10 @@ or two. The daily email links to the live web view instead of an attachment.
 - **Netlify site:** `worldcup-youmissedit` (team **YouMissedIt**), continuous
   deployment from `main`.
 - **Netlify URL (live, renders correctly):** https://worldcup-youmissedit.netlify.app/
-- **Custom domain:** `worldcup.youmissedit.org` - add the GoDaddy CNAME (step 3
-  below) to bring it live.
+- **Custom domain (LIVE):** https://worldcup.youmissedit.org/ - GoDaddy CNAME
+  `worldcup` -> `worldcup-youmissedit.netlify.app` added, Let's Encrypt cert
+  issued (auto-renews). Verified 2026-06-16: root, /snapshots/, and the direct
+  file all return 200 over HTTPS and render the tracker.
 
 ## How it serves
 
