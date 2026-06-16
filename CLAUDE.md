@@ -36,26 +36,41 @@ Each run of this routine must follow these steps in order:
    git proxy forbids `git push origin --delete` (it returns HTTP 403), and no
    delete-branch API tool is available, so do not error if the branch cannot be
    removed from within a run. This self-merge is explicitly authorised.
-9. Email the distribution list a short message linking to the updated tracker.
-   Read the recipient addresses from `email_config.py` (the `RECIPIENTS` list) so
-   there is a single source of truth for who the update goes to. Do not inline or
-   attach the tracker (the file renders via JavaScript, which email clients strip,
-   and the connector cannot attach files). Instead, using a subject such as
-   `World Cup 2026 Tracker - <date>`, send a brief message whose body contains
-   hyperlinks to:
-     - the live tracker on `main`:
-       https://github.com/TallGibbs/2026_Mens_World_Cup_Tracker/blob/main/world_cup_tracker.html
-     - today's dated snapshot (substitute today's date):
-       https://github.com/TallGibbs/2026_Mens_World_Cup_Tracker/blob/main/world_cup_tracker_YYYY-MM-DD.html
-     - the repository home:
-       https://github.com/TallGibbs/2026_Mens_World_Cup_Tracker
+9. Email the distribution list a short, spoiler-free message linking to the
+   updated tracker. Read the recipient addresses from `email_config.py` (the
+   `RECIPIENTS` list) so there is a single source of truth for who the update goes
+   to. Do not inline or attach the tracker (the file renders via JavaScript, which
+   email clients strip, and the connector cannot attach files).
+
+   Keep the email deliberately minimal so it can never spoil a result. Using a
+   subject such as `World Cup 2026 Tracker - <date>`, the body must contain only
+   these three things, in this order:
+     - a friendly greeting;
+     - the date and time the tracker was last updated (e.g. "Updated June 16,
+       2026 at 9:32 AM ET"); and
+     - hyperlinks to our repository:
+       - the live tracker on `main`:
+         https://github.com/TallGibbs/2026_Mens_World_Cup_Tracker/blob/main/world_cup_tracker.html
+       - today's dated snapshot (substitute today's date):
+         https://github.com/TallGibbs/2026_Mens_World_Cup_Tracker/blob/main/world_cup_tracker_YYYY-MM-DD.html
+       - the repository home:
+         https://github.com/TallGibbs/2026_Mens_World_Cup_Tracker
+
+   Do NOT describe any matches, scores, standings, fixtures, results, schedules,
+   or other tournament details anywhere in the subject or body - no game
+   summaries, no "what changed" notes, no team mentions - so the email cannot
+   spoil a game for anyone who has not watched yet. The links alone let readers
+   open the tracker when they are ready.
+
    If an email tool that can send messages is available, send it; if only a draft
    tool is available, create the draft to those recipients instead and note in the
    run summary that it needs a manual send. If no email tool is available at all,
    skip this step silently and do not error.
-10. If a push-notification tool is available, send a short summary of what changed
-   so the result reaches the owner's phone. If no such tool is available, skip
-   this step silently and do not error.
+10. If a push-notification tool is available, send a short, spoiler-free ping that
+   the tracker has been refreshed - for example "World Cup 2026 Tracker updated
+   for June 16, 2026". Like the email, it must not include any matches, scores,
+   standings, results, or team details, so it cannot spoil a game on the owner's
+   phone. If no such tool is available, skip this step silently and do not error.
 
 Run every day even if nothing has changed: still set `meta.updated` to today's
 date, save today's dated copy, and commit.
