@@ -7,7 +7,8 @@ subdomain **`worldcup.youmissedit.org`**. There is no build step and no backend.
 Once set up, nothing about the daily routine changes: each run commits and pushes
 the refreshed `world_cup_tracker.html` to `main` (see `CLAUDE.md`), Netlify sees
 the push and redeploys automatically, and the live site updates within a minute
-or two. The daily email links to the live web view instead of an attachment.
+or two. Readers visit the live web view directly; the routine no longer sends
+an email.
 
 ## Current deployment (live)
 
