@@ -14,6 +14,11 @@ See `docs/DEPLOY.md` for the hosting and DNS setup.
 ## Files
 
 - `world_cup_tracker.html` - the live tracker. Open it directly in any browser.
+- `today.html` - the "Today's Games" subpage, linked from the tracker header. It
+  lists the day's matches with ET kickoff times, venues, where to watch (TV and
+  stream), each group's standings with the teams in action highlighted, and a few
+  preview bullets per game. All match data lives in a single `TODAY` object near
+  the top of its `<script>` block. Reachable at `/today` on the live site.
 - `snapshots/world_cup_tracker_YYYY-MM-DD.html` - dated snapshots produced by the
   daily update routine (see below). All dated copies live in the `snapshots/`
   folder to keep the repository root tidy; see `snapshots/README.md`.

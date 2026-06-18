@@ -21,3 +21,9 @@
   from = "/"
   to = "/world_cup_tracker.html"
   status = 200
+
+# Clean URL for the "Today's Games" subpage: /today renders today.html.
+[[redirects]]
+  from = "/today"
+  to = "/today.html"
+  status = 200
