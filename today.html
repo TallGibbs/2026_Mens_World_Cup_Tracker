@@ -27,6 +27,7 @@
     --loss:#C13A3A;
     --shadow:0 1px 2px rgba(19,32,46,.06), 0 6px 18px rgba(19,32,46,.06);
     --radius:14px;
+    --header-h:54px;
   }
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
@@ -47,6 +48,50 @@
     font-size:12px;color:var(--faint);
   }
 
+  /* ---------- Sticky site nav ---------- */
+  .skip-link{position:absolute;left:-9999px;top:0;z-index:200;
+    background:var(--gold);color:var(--band);padding:9px 14px;border-radius:0 0 8px 0;
+    font-family:'Barlow Condensed','Barlow',sans-serif;font-weight:700;
+    text-transform:uppercase;letter-spacing:.08em;font-size:13px;text-decoration:none;}
+  .skip-link:focus{left:0;}
+  .site-header{position:sticky;top:0;z-index:100;background:var(--band);
+    border-bottom:1px solid rgba(233,185,73,.35);box-shadow:0 1px 0 rgba(0,0,0,.18);}
+  .site-nav{max-width:1120px;margin:0 auto;display:flex;align-items:center;gap:18px;
+    height:var(--header-h);padding:0 20px;}
+  .brand{display:inline-flex;align-items:center;gap:9px;text-decoration:none;
+    font-family:'Barlow Condensed','Barlow',sans-serif;font-weight:700;font-size:19px;
+    letter-spacing:.045em;text-transform:uppercase;color:#EAF1F8;}
+  .brand .ball{width:9px;height:9px;border-radius:50%;background:var(--gold);flex:none;
+    box-shadow:0 0 0 3px rgba(233,185,73,.2);}
+  .nav-links{display:flex;align-items:stretch;gap:2px;list-style:none;margin:0 0 0 auto;padding:0;}
+  .nav-links a{display:inline-flex;align-items:center;min-height:44px;padding:0 14px;
+    font-family:'Barlow Condensed','Barlow',sans-serif;font-weight:600;font-size:15px;
+    text-transform:uppercase;letter-spacing:.07em;color:#C9D8E6;text-decoration:none;
+    border-bottom:3px solid transparent;transition:color .15s ease;}
+  .nav-links a:hover{color:#fff;}
+  .nav-links a[aria-current="page"]{color:var(--gold);border-bottom-color:var(--gold);}
+  .nav-links a:focus-visible,.brand:focus-visible,.nav-toggle:focus-visible{
+    outline:2px solid var(--gold);outline-offset:2px;}
+  .nav-toggle{display:none;}
+  html{scroll-padding-top:calc(var(--header-h) + 10px);}
+  @media (max-width:560px){
+    .nav-toggle{display:inline-flex;align-items:center;justify-content:center;margin-left:auto;
+      width:44px;height:44px;background:transparent;border:0;color:var(--gold);cursor:pointer;}
+    .nav-toggle span,.nav-toggle span::before,.nav-toggle span::after{display:block;
+      width:20px;height:2px;background:currentColor;border-radius:2px;}
+    .nav-toggle span{position:relative;}
+    .nav-toggle span::before{content:"";position:absolute;top:-6px;left:0;}
+    .nav-toggle span::after{content:"";position:absolute;top:6px;left:0;}
+    .nav-links{position:absolute;left:0;right:0;top:var(--header-h);flex-direction:column;gap:0;
+      margin:0;background:var(--band);border-bottom:1px solid rgba(233,185,73,.35);
+      box-shadow:var(--shadow);display:none;}
+    .nav-links.open{display:flex;}
+    .nav-links li{width:100%;}
+    .nav-links a{width:100%;min-height:48px;padding:0 20px;border-bottom:0;
+      border-left:3px solid transparent;}
+    .nav-links a[aria-current="page"]{border-bottom-color:transparent;border-left-color:var(--gold);}
+  }
+
   /* ---------- Hero band ---------- */
   .hero{
     background:linear-gradient(135deg, var(--band), var(--band-2));
@@ -57,11 +102,6 @@
   }
   .hero::after{content:"";position:absolute;left:28px;right:28px;top:96px;height:2px;
     background:linear-gradient(90deg, var(--gold), rgba(233,185,73,0));}
-  .backlink{display:inline-flex;align-items:center;gap:7px;color:#9FB6CC;
-    font-family:'Barlow Condensed','Barlow',sans-serif;text-transform:uppercase;
-    letter-spacing:.1em;font-weight:600;font-size:12px;text-decoration:none;}
-  .backlink:hover{color:#EAF1F8;}
-  .backlink .arr{font-size:15px;line-height:1;}
   .hero h1{
     font-family:'Barlow Condensed','Barlow',sans-serif;
     font-weight:700;font-size:40px;line-height:1;margin:10px 0 8px;letter-spacing:.005em;
@@ -170,10 +210,21 @@
 </style>
 </head>
 <body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header">
+  <nav class="site-nav" aria-label="Primary">
+    <a class="brand" href="/"><span class="ball" aria-hidden="true"></span>World Cup 2026</a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Open menu"><span></span></button>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="/">Tracker</a></li>
+      <li><a href="/today" aria-current="page">Today's Games</a></li>
+    </ul>
+  </nav>
+</header>
+<main id="main">
 <div class="wrap">
 
   <header class="hero">
-    <a class="backlink" href="/"><span class="arr">&#8592;</span> Back to the tracker</a>
     <h1 id="t-title">Today's Games<span class="stage-tag" id="t-stage"></span></h1>
     <div class="date" id="t-date"></div>
     <div class="tz" id="t-tz"></div>
@@ -199,6 +250,7 @@
   </div>
 
 </div>
+</main>
 
 <script>
 /* =========================================================================
@@ -383,6 +435,16 @@ function renderGames(){
 renderGames();
 /* keep the live / next-up badges fresh as the day rolls on */
 setInterval(renderGames, 60000);
+
+/* ---- sticky nav: mobile menu toggle ---- */
+(function(){
+  const t=document.querySelector('.nav-toggle'), l=document.getElementById('nav-links');
+  if(!t||!l) return;
+  t.addEventListener('click',()=>{
+    const open=l.classList.toggle('open');
+    t.setAttribute('aria-expanded', String(open));
+  });
+})();
 </script>
 </body>
 </html>
