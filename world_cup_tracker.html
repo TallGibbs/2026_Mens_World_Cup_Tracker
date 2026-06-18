@@ -115,6 +115,15 @@
     border:0;background:transparent;color:var(--muted);padding:8px 16px;border-radius:8px;cursor:pointer;}
   .seg button[aria-pressed="true"]{background:var(--band);color:#fff;}
   .seg button:focus-visible{outline:2px solid var(--gold);outline-offset:2px;}
+  .controls-right{display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+  .todaylink{display:inline-flex;align-items:center;gap:8px;text-decoration:none;
+    font-family:'Barlow Condensed','Barlow',sans-serif;font-weight:600;
+    text-transform:uppercase;letter-spacing:.08em;font-size:13px;color:#fff;
+    background:var(--band);border:1px solid var(--band);border-radius:11px;
+    padding:9px 16px;box-shadow:var(--shadow);white-space:nowrap;}
+  .todaylink:hover{background:var(--band-2);border-color:var(--band-2);}
+  .todaylink:focus-visible{outline:2px solid var(--gold);outline-offset:2px;}
+  .todaylink .dot{width:7px;height:7px;border-radius:50%;background:var(--gold);flex:none;}
   .search{position:relative;}
   .search input{font-family:'Barlow',sans-serif;font-size:14px;color:var(--ink);
     border:1px solid var(--hairline);background:var(--card);border-radius:11px;
@@ -248,9 +257,12 @@
       <button id="btn-mine" aria-pressed="false">Our teams</button>
       <button id="btn-all" aria-pressed="true">All groups</button>
     </div>
-    <div class="search">
-      <span class="ico" aria-hidden="true"></span>
-      <input id="search" type="search" placeholder="Find a team" aria-label="Find a team">
+    <div class="controls-right">
+      <a class="todaylink" href="/today.html"><span class="dot" aria-hidden="true"></span>Today's games</a>
+      <div class="search">
+        <span class="ico" aria-hidden="true"></span>
+        <input id="search" type="search" placeholder="Find a team" aria-label="Find a team">
+      </div>
     </div>
   </div>
 

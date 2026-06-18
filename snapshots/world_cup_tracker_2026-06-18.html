@@ -98,10 +98,14 @@
   .ondeck{margin-top:14px;border-top:1px solid rgba(255,255,255,.12);padding-top:12px;}
   .ondeck .h{font-family:'Barlow Condensed','Barlow',sans-serif;text-transform:uppercase;
     letter-spacing:.12em;font-weight:600;font-size:11.5px;color:#7F95AB;margin-bottom:7px;}
-  .ondeck ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px;}
-  .ondeck li{display:flex;align-items:center;gap:10px;font-size:13.5px;color:#D6E2EE;}
-  .ondeck .od-date{color:#8FA6BB;font-size:12.5px;min-width:88px;font-weight:500;}
-  .ondeck .od-kit{width:5px;height:15px;border-radius:3px;}
+  .ondeck ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px;}
+  .ondeck li{display:flex;align-items:flex-start;gap:10px;font-size:13.5px;color:#D6E2EE;}
+  .ondeck .od-kit{width:5px;height:15px;border-radius:3px;margin-top:2px;flex:none;}
+  .ondeck .od-body{display:flex;flex-direction:column;gap:2px;min-width:0;}
+  .ondeck .od-top{display:flex;align-items:baseline;gap:10px;}
+  .ondeck .od-date{color:#8FA6BB;font-size:12.5px;min-width:88px;font-weight:500;flex:none;}
+  .ondeck .od-sub{color:#8FA6BB;font-size:12px;}
+  .ondeck .od-sub span{white-space:nowrap;}
 
   /* ---------- Controls ---------- */
   .controls{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;margin-bottom:20px;}
@@ -111,6 +115,15 @@
     border:0;background:transparent;color:var(--muted);padding:8px 16px;border-radius:8px;cursor:pointer;}
   .seg button[aria-pressed="true"]{background:var(--band);color:#fff;}
   .seg button:focus-visible{outline:2px solid var(--gold);outline-offset:2px;}
+  .controls-right{display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+  .todaylink{display:inline-flex;align-items:center;gap:8px;text-decoration:none;
+    font-family:'Barlow Condensed','Barlow',sans-serif;font-weight:600;
+    text-transform:uppercase;letter-spacing:.08em;font-size:13px;color:#fff;
+    background:var(--band);border:1px solid var(--band);border-radius:11px;
+    padding:9px 16px;box-shadow:var(--shadow);white-space:nowrap;}
+  .todaylink:hover{background:var(--band-2);border-color:var(--band-2);}
+  .todaylink:focus-visible{outline:2px solid var(--gold);outline-offset:2px;}
+  .todaylink .dot{width:7px;height:7px;border-radius:50%;background:var(--gold);flex:none;}
   .search{position:relative;}
   .search input{font-family:'Barlow',sans-serif;font-size:14px;color:var(--ink);
     border:1px solid var(--hairline);background:var(--card);border-radius:11px;
@@ -244,9 +257,12 @@
       <button id="btn-mine" aria-pressed="false">Our teams</button>
       <button id="btn-all" aria-pressed="true">All groups</button>
     </div>
-    <div class="search">
-      <span class="ico" aria-hidden="true"></span>
-      <input id="search" type="search" placeholder="Find a team" aria-label="Find a team">
+    <div class="controls-right">
+      <a class="todaylink" href="/today.html"><span class="dot" aria-hidden="true"></span>Today's games</a>
+      <div class="search">
+        <span class="ico" aria-hidden="true"></span>
+        <input id="search" type="search" placeholder="Find a team" aria-label="Find a team">
+      </div>
     </div>
   </div>
 
@@ -455,9 +471,16 @@ function renderHero(){
   let rest='';
   if(h.mode==='count' && h.rest && h.rest.length){
     rest = '<div class="ondeck"><div class="h">Coming up for our teams</div><ul>'+
-      h.rest.map(r=>'<li><span class="od-date">'+esc(r.when.split(',')[0])+'</span>'+
-        '<span class="od-kit" style="background:'+r.kit+'"></span>'+
-        esc(r.team)+' v '+esc(r.opp)+'</li>').join('')+'</ul></div>';
+      h.rest.map(r=>{
+        const parts = r.when.split(',');
+        const od = esc(parts[0]);
+        const tm = esc(parts.slice(1).join(',').trim());
+        return '<li><span class="od-kit" style="background:'+r.kit+'"></span>'+
+          '<span class="od-body">'+
+            '<span class="od-top"><span class="od-date">'+od+'</span>'+esc(r.team)+' v '+esc(r.opp)+'</span>'+
+            '<span class="od-sub"><span>'+tm+'</span> &middot; <span>'+esc(r.venue)+'</span></span>'+
+          '</span></li>';
+      }).join('')+'</ul></div>';
   }
 
   if(h.mode==='live'){
