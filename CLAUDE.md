@@ -5,25 +5,39 @@
 `world_cup_tracker.html` is a self-contained, single-file matchday companion for
 the 2026 FIFA World Cup. It is updated daily by a scheduled Claude Code routine.
 
+`today.html` (served at `/today`) is the companion "Today's Games" page: a
+self-contained file listing the fixtures being played on the current date, each
+with a preview and the relevant group's standings as they stand before kickoff.
+It is refreshed by the same daily routine and must be kept in step with the
+tracker.
+
 ## Scheduled routine: daily tracker update
 
 Each run of this routine must follow these steps in order:
 
-1. Read `world_cup_tracker.html` from the repo as the baseline. Keep its layout,
-   styling, and JavaScript identical; change only the data.
+1. Read both `world_cup_tracker.html` and `today.html` from the repo as the
+   baselines. Keep each file's layout, styling, and JavaScript identical; change
+   only the data.
 2. Collect the live state of the tournament following the **Data sourcing**
    section below: work the tiered source list in order, parse structured data
    directly, and never base any score, result, or standing on an AI-generated
-   summary. Confirm the tournament stage and today's date before collecting data.
-3. Update only the `DATA` object inside the file (layout, CSS, and JS must not
-   change). Verify every group's goal differences sum to zero before saving.
-4. Save the updated file back to `world_cup_tracker.html` (overwrite in place).
-5. Save a dated copy inside the `snapshots/` folder as
+   summary. The helper `scripts/fetch_results.sh [YYYY-MM-DD]` prints the day's
+   matches (state, completion, score, venue, kickoff) straight from JSON - run it
+   to get the facts. Confirm the tournament stage and today's date before
+   collecting data.
+3. Update the data objects only (layout, CSS, and JS must not change):
+   - the `DATA` object in `world_cup_tracker.html`, and
+   - the `TODAY` object in `today.html` (see "Today's Games page" below).
+   Verify every group's goal differences sum to zero before saving.
+4. Save both updated files in place (`world_cup_tracker.html` and `today.html`).
+5. Save a dated copy of the tracker inside the `snapshots/` folder as
    `snapshots/world_cup_tracker_YYYY-MM-DD.html` using today's date. All dated
    copies live in `snapshots/`; never write them to the repository root. Create
-   the folder if it does not exist.
-6. Commit both files to the development branch that is checked out at the start
-   of the run, with a message such as `Update tracker for <date>`.
+   the folder if it does not exist. (Only the tracker is snapshotted; `today.html`
+   is not.)
+6. Commit every changed file (the tracker, `today.html`, and the new snapshot) to
+   the development branch that is checked out at the start of the run, with a
+   message such as `Update tracker for <date>`.
 7. Push that branch to `origin` with `git push -u origin <branch-name>`.
 8. Open a pull request into `main` for that branch (if the harness has already
    opened one, reuse it). Then merge it yourself without waiting for human
@@ -46,7 +60,8 @@ Each run of this routine must follow these steps in order:
    phone. If no such tool is available, skip this step silently and do not error.
 
 Run every day even if nothing has changed: still set `meta.updated` to today's
-date, save today's dated copy, and commit.
+date, refresh `today.html` for the current date, save today's dated copy, and
+commit.
 
 ## Branch and merge policy
 
@@ -88,6 +103,12 @@ All match results and standings must come from **structured data parsed
 directly** - never from a model-written summary. This section is binding; it
 exists because a run once recorded a fabricated scoreline (USA 2-1 Australia)
 that a search-result summary invented for a match that had not been played.
+
+The quickest way to honour this is the committed helper
+`scripts/fetch_results.sh [YYYY-MM-DD]`, which fetches the day's fixtures and
+prints them straight from JSON (it auto-selects Tier 1 if a key is set, else
+Tier 2). Use it as the default entry point; the tiers below document what it
+queries and how to fall back by hand.
 
 ### Hard rules (these override convenience)
 
@@ -199,3 +220,33 @@ How to populate it each run:
 - Because the hero auto-selects whichever featured fixture is chronologically
   next, make sure at least that next upcoming fixture always carries a fresh,
   accurate `preview`.
+
+## Today's Games page (`today.html`)
+
+`today.html` lists every match being played on the **current date** and must be
+refreshed each run so it never shows a past day's fixtures. Edit only the
+`TODAY` object; the layout, CSS, and JS stay identical.
+
+Populate `TODAY` from the same structured sources used for the tracker (run
+`scripts/fetch_results.sh` for today's date to get the fixtures, venues and
+kickoff times):
+
+- `date` - long form of today, e.g. "Friday, June 19, 2026".
+- `updated` - today's date, e.g. "June 19, 2026".
+- `stageLabel` - the tournament stage (e.g. "Group Stage").
+- `schedNote` - one line summarising the day (how many matches, which groups).
+- `tz` - keep the standing Eastern-Time/broadcast note unless coverage changes.
+- `kits` - a hex colour for each team appearing today (used for the colour bars).
+- `games[]` - one entry per match **kicking off today**, in time order. Each has
+  `group`, `stage`, `home`, `away`, `kick` (ET label), `iso` (ISO time with the
+  `-04:00` ET offset - drives the live/next-up badge), `venue`, `tv`, `stream`,
+  and a `bullets` array of 2-3 forward-looking "what to watch" notes. As with the
+  hero `preview`, keep bullets anticipatory; do not recap a finished game.
+- `groups{}` - for each group with a match today, its standings **as they stand
+  before today's games** (so the mini-table shows the pre-kickoff picture). These
+  rows mirror the tracker's group rows from the prior matchday; their goal
+  differences must still sum to zero per group.
+
+If no matches are scheduled on the current date, set `games` to an empty array
+(the page renders a tidy "no matches today" card) and still refresh `date`,
+`updated` and `schedNote`.
