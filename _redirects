@@ -1,13 +1,13 @@
-# URL rewrites for the static site.
+# URL rewrite for the static site on Cloudflare Pages.
 #
-# This file is read by Cloudflare Pages (the live host) and is also understood
-# by Netlify, so routing stays identical on either platform. Status 200 is a
-# rewrite: the target file is served while the address bar keeps the clean URL.
+# Cloudflare Pages serves clean URLs natively, so most paths need no rule:
+#   /today                              -> today.html
+#   /snapshots/world_cup_tracker_DATE   -> the matching .html snapshot
+# The only thing Pages can't infer is the bare root, because the tracker file is
+# not named index.html - so map "/" to it. (Do NOT add an explicit
+# "/today -> /today.html" rule: Pages also canonicalises /today.html back to
+# /today, so that rule creates an infinite redirect loop.)
 #
-# - "/"      renders the tracker (there is no index.html on purpose)
-# - "/today" renders the Today's Games subpage
-#
-# Dated snapshots are served directly from /snapshots/... and need no rule.
+# 200 = rewrite: the file is served while the address bar keeps the clean URL.
 
-/        /world_cup_tracker.html   200
-/today   /today.html              200
+/   /world_cup_tracker.html   200
