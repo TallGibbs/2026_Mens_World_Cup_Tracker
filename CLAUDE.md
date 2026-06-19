@@ -11,10 +11,10 @@ Each run of this routine must follow these steps in order:
 
 1. Read `world_cup_tracker.html` from the repo as the baseline. Keep its layout,
    styling, and JavaScript identical; change only the data.
-2. Search authoritative sources (FIFA.com, ESPN, NBC Sports, official team and
-   confederation pages) for the live state of the tournament. Confirm the
-   tournament stage and today's date, and collect all data needed to update the
-   file.
+2. Collect the live state of the tournament following the **Data sourcing**
+   section below: work the tiered source list in order, parse structured data
+   directly, and never base any score, result, or standing on an AI-generated
+   summary. Confirm the tournament stage and today's date before collecting data.
 3. Update only the `DATA` object inside the file (layout, CSS, and JS must not
    change). Verify every group's goal differences sum to zero before saving.
 4. Save the updated file back to `world_cup_tracker.html` (overwrite in place).
@@ -81,6 +81,77 @@ details live in `docs/DEPLOY.md`.
 caps usage at 300 credits/month and bills ~15 credits per production deploy, so a
 once-a-day deploy cadence exhausted the free credits and paused the site.
 Cloudflare Pages' free tier has no bandwidth cap and allows 500 builds/month.)
+
+## Data sourcing
+
+All match results and standings must come from **structured data parsed
+directly** - never from a model-written summary. This section is binding; it
+exists because a run once recorded a fabricated scoreline (USA 2-1 Australia)
+that a search-result summary invented for a match that had not been played.
+
+### Hard rules (these override convenience)
+
+- **Never** treat an AI-generated summary as a source of fact. Specifically:
+  - The `WebSearch` tool's prose answer/summary is **not** a source. Use
+    `WebSearch` only to discover URLs, then go to the data itself.
+  - `WebFetch` runs the page through a small model to answer your prompt, so its
+    answer is also a summary. Do not mark a fixture `final` on the strength of a
+    `WebFetch` answer alone. `WebFetch` is acceptable only as the Tier 4 last
+    resort below, and only when the page's own factual content is unambiguous.
+  - Prefer JSON endpoints you parse yourself (via `curl` + `jq` in Bash) so no
+    model sits between the source and the data.
+- **Completion guard for `status:"final"`.** Mark a fixture `final` only when
+  BOTH hold: (a) a Tier 1-3 structured source reports the match as completed
+  (status FINISHED / "post" / FT-AET-PEN), AND (b) its scheduled kickoff is at
+  least ~2.5 hours before the real current time. If kickoff has not yet passed,
+  the fixture stays `upcoming` no matter what any source claims.
+- **Cross-check before recording.** A result is only recorded when at least one
+  structured source confirms it; if you must fall back to Tier 4, require two
+  independent sources to agree on the same scoreline before writing it.
+- After building standings, re-verify every group's goal differences sum to zero
+  (a fabricated or mis-keyed result usually breaks this).
+
+### Tiered source order (work top-down; stop at the first that yields the data)
+
+1. **football-data.org (structured JSON, official-grade).** Use when the
+   `FOOTBALL_DATA_API_KEY` environment variable is set. Parse JSON directly:
+   ```
+   curl -s -H "X-Auth-Token: $FOOTBALL_DATA_API_KEY" \
+     "https://api.football-data.org/v4/competitions/WC/matches?dateFrom=YYYY-MM-DD&dateTo=YYYY-MM-DD"
+   curl -s -H "X-Auth-Token: $FOOTBALL_DATA_API_KEY" \
+     "https://api.football-data.org/v4/competitions/WC/standings"
+   ```
+   Only `status == "FINISHED"` counts as played; read `score.fullTime.home/away`.
+2. **ESPN site API (structured JSON, no auth).** Reliable fallback needing no
+   key - confirmed reachable and parseable from the run environment. Parse JSON
+   directly:
+   ```
+   curl -s "https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/scoreboard?dates=YYYYMMDD"
+   ```
+   Read `events[].competitions[].status.type.state`: only `"post"` with
+   `completed:true` counts; scores are in `competitors[].score`.
+3. **api-football.com (structured JSON, RapidAPI/API-Sports).** Use when the
+   `API_FOOTBALL_KEY` environment variable is set:
+   ```
+   curl -s -H "x-apisports-key: $API_FOOTBALL_KEY" \
+     "https://v3.football.api-sports.io/fixtures?league=1&season=2026&date=YYYY-MM-DD"
+   ```
+   Only `fixture.status.short` in `FT`/`AET`/`PEN` counts as played.
+4. **Direct page fetch (last resort).** Only if Tiers 1-3 are all unavailable.
+   Fetch an authoritative results page (FIFA.com, ESPN scoreboard, official
+   confederation pages) and read the page's own factual scoreline - not a
+   model's paraphrase. Apply the completion guard and the two-source cross-check
+   above before recording anything.
+
+If no source confirms a match has finished, leave that fixture `upcoming` and
+its group at the prior matchday's standings, then still complete the rest of the
+run (refresh `meta.updated`, save the dated snapshot, commit). A stale-but-true
+file is always preferable to a fresh-but-invented one.
+
+Note on environment: as of this writing neither `FOOTBALL_DATA_API_KEY` nor
+`API_FOOTBALL_KEY` is set in the run environment, so Tier 2 (ESPN, no auth) is
+the active primary source. Add either key as an environment variable to promote
+Tiers 1/3 ahead of it.
 
 ## Data rules
 
