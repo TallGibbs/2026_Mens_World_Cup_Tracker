@@ -232,19 +232,10 @@ It confirms the toolchain (node, jq, curl) is present and prints a data health
 snapshot via the validator, so you begin with a clear picture of the current
 state (a stale-data report is expected before you refresh).
 
-To make that pre-flight run automatically at the start of every Claude Code
-session on this repo, add a `SessionStart` hook to `.claude/settings.json` (this
-is optional and is left to the repo owner, since it changes how the agent starts):
-
-```json
-{
-  "hooks": {
-    "SessionStart": [
-      { "hooks": [ { "type": "command", "command": "bash scripts/preflight.sh" } ] }
-    ]
-  }
-}
-```
+This pre-flight is registered as a `SessionStart` hook in `.claude/settings.json`,
+so it runs automatically at the start of every Claude Code session on this repo -
+each run opens with the toolchain check and data health snapshot before any edits.
+You can also run it by hand any time with `bash scripts/preflight.sh`.
 
 ## Hero "Next up" preview must stay forward-looking
 
