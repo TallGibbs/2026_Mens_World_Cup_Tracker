@@ -83,3 +83,42 @@ domain renders the current tracker and dated snapshots are reachable at
 - No placeholder values may remain in the file.
 - Do not use emojis anywhere in the file.
 - Do not change the visual design, controls, or countdown logic.
+- The site designates the **men's** tournament (titles, the hero headline via
+  `meta.tournament`, and the nav brand all say "Men's"). Keep that wording; a
+  separate Women's edition may be built later.
+
+## Hero "Next up" preview must stay forward-looking
+
+The hero's "Next up for our teams" card shows a details panel for the single
+next featured fixture: the relevant group's standings plus a short **What to
+watch** list. That list is rendered from the upcoming fixture's `preview` field
+and must be **forward-looking - never a recap of a game already played**.
+
+How to populate it each run:
+
+- Add a `preview` array to every **upcoming** fixture in `teams[].fixtures`
+  (entries with `status:"upcoming"`). Finished fixtures (`status:"final"`) do not
+  need one. Example:
+
+  ```js
+  {opp:"Australia", when:"Fri Jun 19, 3:00 PM ET", date:"2026-06-19T15:00:00-04:00",
+   venue:"Lumen Field, Seattle", tv:"FOX", status:"upcoming",
+   preview:[
+     "A win sends the USA into the Round of 32 with a match to spare.",
+     "Both teams won their openers, so first place in Group D is on the line.",
+     "Pochettino expects Pulisic (calf) back in the starting XI."
+   ]}
+  ```
+
+- Write 2-3 concise bullets about what is **still to come**: what a result would
+  mean (qualification or seeding math), team form heading in, and confirmed
+  availability/lineup news (injuries, returns, suspensions) for *that upcoming*
+  match. Phrase everything in the future/anticipatory tense.
+- Do NOT restate the score, scorers, or events of a previous game in `preview`.
+  Past-game recaps belong only in `teams[].note` (shown on the team cards lower
+  down), which is a separate, backward-looking field. Keep the two distinct:
+  `note` = what just happened to the team; `preview` = what to watch in the next
+  fixture.
+- Because the hero auto-selects whichever featured fixture is chronologically
+  next, make sure at least that next upcoming fixture always carries a fresh,
+  accurate `preview`.
