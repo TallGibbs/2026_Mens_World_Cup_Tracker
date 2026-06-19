@@ -2,22 +2,28 @@
 
 ## Repository purpose
 
-`world_cup_tracker.html` is a self-contained, single-file matchday companion for
-the 2026 FIFA World Cup. It is updated daily by a scheduled Claude Code routine.
+All tournament data lives in one file, `data.js` (the `WC` object) - the single
+source of truth. Two pages render from it:
 
-`today.html` (served at `/today`) is the companion "Today's Games" page: a
-self-contained file listing the fixtures being played on the current date, each
-with a preview and the relevant group's standings as they stand before kickoff.
-It is refreshed by the same daily routine and must be kept in step with the
-tracker.
+- `world_cup_tracker.html` - the matchday companion (group standings, featured
+  teams, next-up countdown). It uses `WC` as its `DATA`.
+- `today.html` (served at `/today`) - the "Today's Games" page listing the
+  fixtures on the current date, each with a preview and the relevant group's
+  standings before kickoff. It uses `WC.today` for the day's games and derives
+  each standings table from the shared `WC.groups`, so the two pages can never
+  disagree.
+
+The site is updated daily by a scheduled Claude Code routine that edits `data.js`
+only - never the pages' layout, CSS, or JavaScript. (Both pages load `data.js` as
+a classic `<script>` before their render script.)
 
 ## Scheduled routine: daily tracker update
 
 Each run of this routine must follow these steps in order:
 
-1. Read both `world_cup_tracker.html` and `today.html` from the repo as the
-   baselines. Keep each file's layout, styling, and JavaScript identical; change
-   only the data.
+1. Read `data.js` as the baseline. The page layout, styling, and JavaScript in
+   `world_cup_tracker.html` and `today.html` must stay identical; the routine
+   changes data in `data.js` only.
 2. Collect the live state of the tournament following the **Data sourcing**
    section below: work the tiered source list in order, parse structured data
    directly, and never base any score, result, or standing on an AI-generated
@@ -25,24 +31,29 @@ Each run of this routine must follow these steps in order:
    matches (state, completion, score, venue, kickoff) straight from JSON - run it
    to get the facts. Confirm the tournament stage and today's date before
    collecting data.
-3. Update the data objects only (layout, CSS, and JS must not change):
-   - the `DATA` object in `world_cup_tracker.html`, and
-   - the `TODAY` object in `today.html` (see "Today's Games page" below).
+3. Update `data.js` only - the `WC` object (the pages' layout, CSS, and JS must
+   not change):
+   - `WC.meta` (set `updated` to today), `WC.teams` (featured fixtures), and
+     `WC.groups` (all 12 group tables), and
+   - `WC.today` for the Today's Games page (see "Today's Games page" below).
+     today.html derives its standings from `WC.groups`, so there is no separate
+     standings copy to maintain.
    Verify every group's goal differences sum to zero before saving.
-4. Save both updated files in place (`world_cup_tracker.html` and `today.html`).
+4. Save `data.js`.
 5. **Validate before going further.** Run `node scripts/validate.mjs` (it checks
    today's date in Eastern Time by default). It must print `ALL CHECKS PASSED`
-   before you continue. If it prints any `[FAIL]`, fix the `DATA`/`TODAY` objects
-   and re-run until clean - never edit the validator to silence a check. The
-   **Validation** section below lists what it enforces.
-6. Save a dated copy of the tracker inside the `snapshots/` folder as
-   `snapshots/world_cup_tracker_YYYY-MM-DD.html` using today's date. All dated
-   copies live in `snapshots/`; never write them to the repository root. Create
-   the folder if it does not exist. (Only the tracker is snapshotted; `today.html`
-   is not.)
-7. Commit every changed file (the tracker, `today.html`, and the new snapshot) to
-   the development branch that is checked out at the start of the run, with a
-   message such as `Update tracker for <date>`.
+   before you continue. If it prints any `[FAIL]`, fix `data.js` and re-run until
+   clean - never edit the validator to silence a check. The **Validation**
+   section below lists what it enforces.
+6. Save a dated, self-contained snapshot of the tracker by running
+   `node scripts/snapshot.mjs` (it inlines `data.js` into
+   `snapshots/world_cup_tracker_YYYY-MM-DD.html` so the dated copy is frozen).
+   All dated copies live in `snapshots/`; never write them to the repository
+   root. (Only the tracker is snapshotted; `today.html` is not.)
+7. Commit every changed file (`data.js` and the new snapshot; the HTML pages
+   change only if you intentionally edited them) to the development branch that
+   is checked out at the start of the run, with a message such as
+   `Update tracker for <date>`.
 8. Push that branch to `origin` with `git push -u origin <branch-name>`.
 9. Open a pull request into `main` for that branch (if the harness has already
    opened one, reuse it). Then merge it yourself without waiting for human
@@ -64,9 +75,9 @@ Each run of this routine must follow these steps in order:
    standings, results, or team details, so it cannot spoil a game on the owner's
    phone. If no such tool is available, skip this step silently and do not error.
 
-Run every day even if nothing has changed: still set `meta.updated` to today's
-date, refresh `today.html` for the current date, run `node scripts/validate.mjs`
-until it prints `ALL CHECKS PASSED`, save today's dated copy, and commit.
+Run every day even if nothing has changed: still set `WC.meta.updated` to today's
+date, refresh `WC.today` for the current date, run `node scripts/validate.mjs`
+until it prints `ALL CHECKS PASSED`, run `node scripts/snapshot.mjs`, and commit.
 
 ## Branch and merge policy
 
@@ -181,23 +192,22 @@ Tiers 1/3 ahead of it.
 
 ## Data rules
 
-- `meta.updated` must be set to today's date (e.g. "June 16, 2026").
+- `WC.meta.updated` must be set to today's date (e.g. "June 16, 2026").
 - Every group's goal differences must sum to zero before committing.
-- No placeholder values may remain in the file.
-- Do not use emojis anywhere in the file.
+- No placeholder values may remain in `data.js`.
+- Do not use emojis anywhere in `data.js` or the pages.
 - Do not change the visual design, controls, or countdown logic.
 - The site designates the **men's** tournament (titles, the hero headline via
-  `meta.tournament`, and the nav brand all say "Men's"). Keep that wording; a
+  `WC.meta.tournament`, and the nav brand all say "Men's"). Keep that wording; a
   separate Women's edition may be built later.
 - Before committing, `node scripts/validate.mjs` must print `ALL CHECKS PASSED`.
   It enforces every rule in this section mechanically (see **Validation** below).
 
 ## Validation (`scripts/validate.mjs`)
 
-`scripts/validate.mjs` is the mechanical gate for every run. It reads the `DATA`
-object from `world_cup_tracker.html` and the `TODAY` object from `today.html`,
-then exits non-zero if anything is off. Run it after editing the data and before
-committing:
+`scripts/validate.mjs` is the mechanical gate for every run. It reads the `WC`
+object from `data.js` and exits non-zero if anything is off. Run it after editing
+the data and before committing:
 
 ```
 node scripts/validate.mjs            # checks today's date in Eastern Time
@@ -209,23 +219,21 @@ It must print `ALL CHECKS PASSED`. What it enforces:
 - **Table math, per group:** exactly four teams, goal differences sum to zero,
   `pld = w + d + l`, `pts = 3*w + d`, total wins equal total losses, draws and
   matches-played are even, and no negative values.
-- **Freshness:** `DATA.meta.updated`, `TODAY.updated` and `TODAY.date` are all
-  today's date, and every `TODAY.games[].iso` is dated today. This is the check
-  that catches a `today.html` that was not refreshed for the current day.
-- **Cross-page agreement:** for every group shown on `today.html`, its
-  pre-kickoff standings match the tracker's group rows exactly (team order and
-  every number), so the two pages can never silently drift apart.
+- **Freshness:** `WC.meta.updated` and `WC.today.date` are today's date, and
+  every `WC.today.games[].iso` is dated today. This is the check that catches a
+  Today's Games list that was not refreshed for the current day.
 - **Fixtures:** each featured `final` fixture carries integer scores; each
   `upcoming` fixture carries a `preview` of at least two forward-looking bullets;
-  every `TODAY.games[]` entry has all its fields plus at least two `bullets`, and
-  its two teams appear in that group's table.
+  every `WC.today.games[]` entry has all its fields plus at least two `bullets`,
+  and its two teams appear in that group's table.
 - **Hygiene:** the tournament is labelled "Men's", and there are no emojis or
   placeholder tokens in the data.
 
-If a check fails, fix the data - never weaken the validator to go green. A
-failure almost always means a mis-keyed or fabricated result (the class of bug
-that once put an invented score on the site), a `today.html` left on yesterday's
-fixtures, or the two pages disagreeing.
+Cross-page agreement no longer needs a check: both pages render from the same
+`WC.groups`, so their standings cannot disagree. If a check fails, fix `data.js` -
+never weaken the validator to go green. A failure almost always means a mis-keyed
+or fabricated result (the class of bug that once put an invented score on the
+site) or a Today's Games list left on yesterday's fixtures.
 
 At the very start of each run, also run the pre-flight `bash scripts/preflight.sh`.
 It confirms the toolchain (node, jq, curl) is present and prints a data health
@@ -246,7 +254,7 @@ and must be **forward-looking - never a recap of a game already played**.
 
 How to populate it each run:
 
-- Add a `preview` array to every **upcoming** fixture in `teams[].fixtures`
+- Add a `preview` array to every **upcoming** fixture in `WC.teams[].fixtures`
   (entries with `status:"upcoming"`). Finished fixtures (`status:"final"`) do not
   need one. Example:
 
@@ -265,26 +273,25 @@ How to populate it each run:
   availability/lineup news (injuries, returns, suspensions) for *that upcoming*
   match. Phrase everything in the future/anticipatory tense.
 - Do NOT restate the score, scorers, or events of a previous game in `preview`.
-  Past-game recaps belong only in `teams[].note` (shown on the team cards lower
-  down), which is a separate, backward-looking field. Keep the two distinct:
+  Past-game recaps belong only in `WC.teams[].note` (shown on the team cards
+  lower down), which is a separate, backward-looking field. Keep the two distinct:
   `note` = what just happened to the team; `preview` = what to watch in the next
   fixture.
 - Because the hero auto-selects whichever featured fixture is chronologically
   next, make sure at least that next upcoming fixture always carries a fresh,
   accurate `preview`.
 
-## Today's Games page (`today.html`)
+## Today's Games page (`WC.today`)
 
 `today.html` lists every match being played on the **current date** and must be
-refreshed each run so it never shows a past day's fixtures. Edit only the
-`TODAY` object; the layout, CSS, and JS stay identical.
+refreshed each run so it never shows a past day's fixtures. Edit the `WC.today`
+object in `data.js`; the page layout, CSS, and JS stay identical.
 
-Populate `TODAY` from the same structured sources used for the tracker (run
+Populate `WC.today` from the same structured sources used for the tracker (run
 `scripts/fetch_results.sh` for today's date to get the fixtures, venues and
 kickoff times):
 
 - `date` - long form of today, e.g. "Friday, June 19, 2026".
-- `updated` - today's date, e.g. "June 19, 2026".
 - `stageLabel` - the tournament stage (e.g. "Group Stage").
 - `schedNote` - one line summarising the day (how many matches, which groups).
 - `tz` - keep the standing Eastern-Time/broadcast note unless coverage changes.
@@ -294,11 +301,12 @@ kickoff times):
   `-04:00` ET offset - drives the live/next-up badge), `venue`, `tv`, `stream`,
   and a `bullets` array of 2-3 forward-looking "what to watch" notes. As with the
   hero `preview`, keep bullets anticipatory; do not recap a finished game.
-- `groups{}` - for each group with a match today, its standings **as they stand
-  before today's games** (so the mini-table shows the pre-kickoff picture). These
-  rows mirror the tracker's group rows from the prior matchday; their goal
-  differences must still sum to zero per group.
 
-If no matches are scheduled on the current date, set `games` to an empty array
-(the page renders a tidy "no matches today" card) and still refresh `date`,
-`updated` and `schedNote`.
+The standings mini-table under each game is derived automatically from
+`WC.groups` (the group the match belongs to), so there is **no** separate
+standings copy to maintain on this page - just keep `WC.groups` correct. The
+`updated` line reuses `WC.meta.updated`.
+
+If no matches are scheduled on the current date, set `WC.today.games` to an empty
+array (the page renders a tidy "no matches today" card) and still refresh `date`
+and `schedNote`.

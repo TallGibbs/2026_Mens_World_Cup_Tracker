@@ -253,92 +253,15 @@
 </div>
 </main>
 
+<script src="/data.js"></script>
 <script>
 /* =========================================================================
-   TODAY'S GAMES DATA  -  refreshed each day by the routine.
-   - date / updated: today's date
-   - games[]: each match playing today (time order). "iso" drives the live/
-     countdown badge; "kick" is the on-screen ET label.
-   - groups{}: the standings (before today's games) for each group with a
-     game today, so each card can show where the teams stand.
+   This page renders from the shared WC object defined in data.js (loaded
+   above): WC.today for the day's games, and WC.groups for each game's standings
+   mini-table (no separate standings copy). The daily routine edits data.js, NOT
+   this file. Do not change the markup, CSS, or the JavaScript below.
    ========================================================================= */
-const TODAY = {
-  date:"Friday, June 19, 2026",
-  stageLabel:"Group Stage",
-  updated:"June 19, 2026",
-  tz:"All kickoff times are listed in Eastern Time (ET). US broadcast on FOX / FS1, with Spanish-language coverage on Telemundo; FOX One streams every match.",
-  schedNote:"Four matches today - Matchday 2 continues across Groups C and D.",
-  kits:{
-    "USA":"#0A3161",
-    "Australia":"#00843D",
-    "Scotland":"#0B4DA1",
-    "Morocco":"#C1272D",
-    "Brazil":"#009C3B",
-    "Haiti":"#00209F",
-    "Turkiye":"#E30A17",
-    "Paraguay":"#0038A8"
-  },
-  games:[
-    {
-      group:"D", stage:"Group D - Matchday 2",
-      home:"USA", away:"Australia",
-      kick:"3:00 PM ET", iso:"2026-06-19T15:00:00-04:00",
-      venue:"Lumen Field, Seattle", tv:"FOX", stream:"FOX One / Telemundo (ES)",
-      bullets:[
-        "Both teams won their openers, so the winner takes a commanding step toward the Round of 32 and likely tops Group D.",
-        "The USA carried a 4-1 opening win into Seattle; Pochettino is monitoring Pulisic's fitness after a calf knock.",
-        "Australia arrive level on points after a 2-0 start and will press the USA with direct, physical play."
-      ]
-    },
-    {
-      group:"C", stage:"Group C - Matchday 2",
-      home:"Scotland", away:"Morocco",
-      kick:"6:00 PM ET", iso:"2026-06-19T18:00:00-04:00",
-      venue:"Gillette Stadium, Foxborough", tv:"FOX", stream:"FOX One / Telemundo (ES)",
-      bullets:[
-        "Group C leaders Scotland, 1-0 winners over Haiti, can take a big step toward the knockouts with another result.",
-        "Morocco drew their opener with Brazil and need three points to avoid falling behind in a tight group.",
-        "A Scotland win would pile pressure on Brazil ahead of the nightcap in Philadelphia."
-      ]
-    },
-    {
-      group:"C", stage:"Group C - Matchday 2",
-      home:"Brazil", away:"Haiti",
-      kick:"8:30 PM ET", iso:"2026-06-19T20:30:00-04:00",
-      venue:"Lincoln Financial Field, Philadelphia", tv:"FOX", stream:"FOX One / Telemundo (ES)",
-      bullets:[
-        "Brazil, held to a draw by Morocco, are heavy favourites and need a win to keep pace at the top of Group C.",
-        "Haiti lost their opener and are chasing a statement result to revive their qualifying hopes.",
-        "Watch whether Brazil's attack clicks into gear after a frustrating opening day."
-      ]
-    },
-    {
-      group:"D", stage:"Group D - Matchday 2",
-      home:"Turkiye", away:"Paraguay",
-      kick:"11:00 PM ET", iso:"2026-06-19T23:00:00-04:00",
-      venue:"Levi's Stadium, Santa Clara", tv:"FS1", stream:"FOX One / Telemundo (ES)",
-      bullets:[
-        "Both lost their openers, so this is effectively a must-win to stay in Round of 32 contention.",
-        "Turkiye fell to Australia and need a response; Paraguay were beaten by the USA.",
-        "The loser will be all but eliminated heading into the final round of group games."
-      ]
-    }
-  ],
-  groups:{
-    C:[
-      {team:"Scotland", pld:1,w:1,d:0,l:0,gd:1,pts:3},
-      {team:"Morocco",  pld:1,w:0,d:1,l:0,gd:0,pts:1},
-      {team:"Brazil",   pld:1,w:0,d:1,l:0,gd:0,pts:1},
-      {team:"Haiti",    pld:1,w:0,d:0,l:1,gd:-1,pts:0}
-    ],
-    D:[
-      {team:"USA",       pld:1,w:1,d:0,l:0,gd:3,pts:3},
-      {team:"Australia", pld:1,w:1,d:0,l:0,gd:2,pts:3},
-      {team:"Turkiye",   pld:1,w:0,d:0,l:1,gd:-2,pts:0},
-      {team:"Paraguay",  pld:1,w:0,d:0,l:1,gd:-3,pts:0}
-    ]
-  }
-};
+const TODAY = WC.today;
 
 /* =========================== rendering =========================== */
 function el(html){const d=document.createElement('div');d.innerHTML=html.trim();return d.firstChild;}
@@ -350,7 +273,7 @@ document.getElementById('t-stage').textContent = TODAY.stageLabel;
 document.getElementById('t-date').textContent  = TODAY.date;
 document.getElementById('t-tz').innerHTML       = esc(TODAY.tz);
 document.getElementById('sched-note').textContent = TODAY.schedNote;
-document.getElementById('updated').innerHTML   = "Refreshed <b>"+esc(TODAY.updated)+"</b>";
+document.getElementById('updated').innerHTML   = "Refreshed <b>"+esc(WC.meta.updated)+"</b>";
 
 /* ---- which game is "next up" (first that hasn't kicked off) ---- */
 function statusFor(iso){
@@ -367,7 +290,7 @@ function nextUpcomingIso(){
 
 /* ---- one group mini-table, highlighting the two teams in this game ---- */
 function miniTable(g){
-  const rows = (TODAY.groups[g.group]||[]);
+  const rows = ((WC.groups.find(x=>x.id===g.group)||{}).rows)||[];
   const playing = [g.home, g.away];
   const body = rows.map((r,i)=>{
     const cls=[];
