@@ -1,87 +1,99 @@
-# Deploy & Hosting (Netlify + GoDaddy)
+# Deploy & Hosting (Cloudflare Pages + GoDaddy)
 
-The tracker is a single static HTML file, so hosting is simple: a Netlify site
-connected to this GitHub repo with **continuous deployment**, served at the
-subdomain **`worldcup.youmissedit.org`**. There is no build step and no backend.
+The tracker is a single static HTML file, so hosting is simple: a Cloudflare
+Pages project connected to this GitHub repo with **continuous deployment**,
+served at the subdomain **`worldcup.youmissedit.org`**. There is no build step
+and no backend.
 
 Once set up, nothing about the daily routine changes: each run commits and pushes
-the refreshed `world_cup_tracker.html` to `main` (see `CLAUDE.md`), Netlify sees
-the push and redeploys automatically, and the live site updates within a minute
-or two. Readers visit the live web view directly; the routine no longer sends
-an email.
+the refreshed `world_cup_tracker.html` to `main` (see `CLAUDE.md`), Cloudflare
+Pages sees the push and redeploys automatically, and the live site updates within
+a minute or two.
 
-## Current deployment (live)
+## Why Cloudflare Pages (migrated off Netlify)
 
-- **Netlify site:** `worldcup-youmissedit` (team **YouMissedIt**), continuous
-  deployment from `main`.
-- **Netlify URL (live, renders correctly):** https://worldcup-youmissedit.netlify.app/
-- **Custom domain (LIVE):** https://worldcup.youmissedit.org/ - GoDaddy CNAME
-  `worldcup` -> `worldcup-youmissedit.netlify.app` added, Let's Encrypt cert
-  issued (auto-renews). Verified 2026-06-16: root, /snapshots/, and the direct
-  file all return 200 over HTTPS and render the tracker.
+The site previously ran on Netlify. Netlify's free plan is now a hard **300
+credits/month** with no overage, and **each production deploy costs ~15
+credits** - so a site that redeploys **every day** (~30 x 15 = ~450 credits/mo)
+blows past the free cap on deploys alone, which **pauses the site** until the
+next billing cycle. Cloudflare Pages' free tier fits a daily-updated static site
+far better: **no bandwidth cap** and **500 builds/month** (our ~30/mo is a
+fraction), plus free custom domains and SSL.
 
 ## How it serves
 
-`netlify.toml` (repo root) does two things:
+`_redirects` (repo root) defines two rewrites, in syntax shared by Cloudflare
+Pages and Netlify:
 
-- `publish = "."` - publish the repo as-is (no build command).
-- a `200` (rewrite) rule mapping `/` -> `/world_cup_tracker.html`, so the bare
-  domain renders the current tracker while the URL stays clean.
+- `/` -> `/world_cup_tracker.html` (status `200`, so the bare domain renders the
+  current tracker while the URL stays clean).
+- `/today` -> `/today.html`.
 
-Dated snapshots are reachable directly, e.g.
-`https://worldcup.youmissedit.org/snapshots/world_cup_tracker_2026-06-16.html`.
+There is no build command and the build output directory is the repo root, so
+Cloudflare publishes the files as-is. Dated snapshots are reachable directly,
+e.g. `https://worldcup.youmissedit.org/snapshots/world_cup_tracker_2026-06-16.html`.
 
 ## One-time setup
 
-### 1. Create the Netlify site (interactive - needs your Netlify login)
+### 1. Create the Cloudflare Pages project (needs your Cloudflare login)
 
-Netlify dashboard -> **Add new site -> Import an existing project -> Deploy with
-GitHub** -> authorize Netlify for GitHub if prompted -> pick
-`TallGibbs/2026_Mens_World_Cup_Tracker` -> use team **YouMissedIt** (same team as
-the Woodloch site).
+Cloudflare dashboard -> **Workers & Pages -> Create -> Pages -> Connect to Git**
+-> authorize Cloudflare for GitHub if prompted -> pick
+`TallGibbs/2026_Mens_World_Cup_Tracker` -> production branch **`main`**.
 
-Build settings: leave the **build command empty** and **publish directory** as
-the repo root (`netlify.toml` already sets `publish = "."`). Click **Deploy**.
-Netlify gives the site a `*.netlify.app` URL - confirm the tracker renders there
-before wiring DNS.
+Build settings:
 
-> CLI alternative (if you prefer the terminal): from the repo root run
-> `netlify login` then `netlify init` (link to a new site, no build command),
-> and `netlify deploy --prod` for a manual publish. Continuous deployment via the
-> GitHub import above is preferred because the daily routine already pushes to
-> `main`.
+| Field | Value |
+|---|---|
+| Framework preset | **None** |
+| Build command | **(leave empty)** |
+| Build output directory | **`/`** (repo root) |
 
-### 2. Add the custom domain in Netlify
+Click **Save and Deploy**. Cloudflare gives the project a `*.pages.dev` URL -
+confirm the tracker renders there (and that `/today` and a `/snapshots/...` file
+load) before wiring DNS.
 
-Netlify -> the new site -> **Domain management -> Add a domain** ->
-`worldcup.youmissedit.org`. Netlify shows a **CNAME target** (e.g.
-`your-site-name.netlify.app`). Copy it.
+### 2. Add the custom domain in Cloudflare Pages
 
-### 3. Add one CNAME at GoDaddy (leave apex + www alone)
+Pages project -> **Custom domains -> Set up a custom domain** ->
+`worldcup.youmissedit.org`. Because the `youmissedit.org` zone is **not** on
+Cloudflare, it will show a **CNAME target** (the project's `*.pages.dev`
+hostname). Copy it.
 
-GoDaddy -> `youmissedit.org` -> **DNS -> Records -> Add**:
+### 3. Update the one CNAME at GoDaddy (leave apex + www alone)
+
+GoDaddy -> `youmissedit.org` -> **DNS -> Records**. Edit the existing
+**`worldcup`** CNAME (it currently points at the old Netlify target) and change
+its value:
 
 | Field | Value |
 |---|---|
 | Type | **CNAME** |
 | Name/Host | **`worldcup`** (just the label, not the full domain) |
-| Value / Points to | **the Netlify target from step 2** |
+| Value / Points to | **the Cloudflare Pages target from step 2** (`<project>.pages.dev`) |
 | TTL | default |
 
-**Do NOT change the apex `@` or `www`** - those stay pointed at Google Sites,
-exactly like the Woodloch setup. This adds one subdomain and touches nothing else.
+**Do NOT change the apex `@` or `www`** - those stay pointed at Google Sites.
+This swaps one subdomain record and touches nothing else.
 
-Netlify auto-provisions a Let's Encrypt certificate once DNS resolves (usually
-minutes, up to ~24h). Then **https://worldcup.youmissedit.org/** is live and
-auto-renews.
+Cloudflare auto-provisions the SSL certificate once DNS resolves (usually
+minutes). Then **https://worldcup.youmissedit.org/** is live and auto-renews.
+
+### 4. Decommission Netlify (optional cleanup)
+
+Once the subdomain resolves to Cloudflare and HTTPS is green, you can delete (or
+just leave paused) the old `worldcup-youmissedit` Netlify site. Removing this
+site also frees credits for any other projects on that Netlify account, since one
+paused project pauses the whole account.
 
 ## Day-to-day
 
-Nothing to do. The daily routine's push to `main` triggers a Netlify redeploy.
-To publish a manual change, just commit and push to `main`.
+Nothing to do. The daily routine's push to `main` triggers a Cloudflare Pages
+redeploy. To publish a manual change, just commit and push to `main`.
 
 ## Verifying a deploy
 
-- Netlify dashboard -> **Deploys** shows each push and its build/publish status.
+- Cloudflare dashboard -> the Pages project -> **Deployments** shows each push
+  and its status.
 - Open https://worldcup.youmissedit.org/ and confirm `meta.updated` matches the
   latest run's date.

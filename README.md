@@ -7,9 +7,9 @@ standings. Everything (markup, styling, and JavaScript) lives in
 `world_cup_tracker.html` with no external build step or dependencies beyond a
 web font.
 
-**Live site:** https://worldcup.youmissedit.org/ - hosted on Netlify with
-continuous deployment from `main`, so each daily update publishes automatically.
-See `docs/DEPLOY.md` for the hosting and DNS setup.
+**Live site:** https://worldcup.youmissedit.org/ - hosted on Cloudflare Pages
+with continuous deployment from `main`, so each daily update publishes
+automatically. See `docs/DEPLOY.md` for the hosting and DNS setup.
 
 ## Files
 
