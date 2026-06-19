@@ -1133,12 +1133,9 @@ const WC = {
 </script>
 <script>
 /* =========================================================================
-   TOURNAMENT DATA  -  this is the only block that needs refreshing each day.
-   - meta.updated: the date you regenerated the page
-   - teams[].fixtures: set status "final" and add us/them once a game is played
-   - groups[].rows: points, results, goal difference
-   Fixture times: "date" (ISO, with the -04:00 ET offset) drives the countdown;
-   "when" is the plain label shown on screen.
+   The tracker renders from the shared WC object defined in data.js (loaded
+   above). The daily routine edits data.js, NOT this file. Do not change the
+   markup, CSS, or the JavaScript below.
    ========================================================================= */
 const DATA = WC;
 
