@@ -65,16 +65,22 @@ into `main` itself, without human review or approval. This is intentional.
 
 ## Hosting
 
-The tracker is hosted on **Netlify** at **https://worldcup.youmissedit.org/**
-(subdomain of `youmissedit.org`; apex + `www` are unrelated and stay on Google
-Sites). The Netlify site is connected to this GitHub repo with **continuous
-deployment from `main`**, so the routine does not deploy anything itself: once a
-run's commit lands on `main` (step 8), Netlify rebuilds and the live site
-reflects it within a minute or two. There is no build step - `netlify.toml` just
-publishes the repo root and rewrites `/` to `world_cup_tracker.html`, so the bare
-domain renders the current tracker and dated snapshots are reachable at
-`/snapshots/world_cup_tracker_YYYY-MM-DD.html`. Setup and DNS details live in
-`docs/DEPLOY.md`.
+The tracker is hosted on **Cloudflare Pages** at
+**https://worldcup.youmissedit.org/** (subdomain of `youmissedit.org`; apex +
+`www` are unrelated and stay on Google Sites). The Pages project is connected to
+this GitHub repo with **continuous deployment from `main`**, so the routine does
+not deploy anything itself: once a run's commit lands on `main` (step 8),
+Cloudflare Pages rebuilds and the live site reflects it within a minute or two.
+There is no build step - Cloudflare publishes the repo root as-is, and the
+`_redirects` file rewrites `/` to `world_cup_tracker.html` (and `/today` to
+`today.html`), so the bare domain renders the current tracker and dated snapshots
+are reachable at `/snapshots/world_cup_tracker_YYYY-MM-DD.html`. Setup and DNS
+details live in `docs/DEPLOY.md`.
+
+(The site previously ran on Netlify; it was migrated because Netlify's free plan
+caps usage at 300 credits/month and bills ~15 credits per production deploy, so a
+once-a-day deploy cadence exhausted the free credits and paused the site.
+Cloudflare Pages' free tier has no bandwidth cap and allows 500 builds/month.)
 
 ## Data rules
 
