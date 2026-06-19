@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>World Cup 2026 - Today's Games</title>
+<title>Men's World Cup 2026 - Today's Games</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -100,7 +100,7 @@
     margin:0 -20px 26px;padding:24px 28px 26px;
     position:relative;overflow:hidden;
   }
-  .hero::after{content:"";position:absolute;left:28px;right:28px;top:96px;height:2px;
+  .hero-rule{height:2px;margin:13px 0 14px;border-radius:2px;
     background:linear-gradient(90deg, var(--gold), rgba(233,185,73,0));}
   .hero h1{
     font-family:'Barlow Condensed','Barlow',sans-serif;
@@ -213,7 +213,7 @@
 <a class="skip-link" href="#main">Skip to content</a>
 <header class="site-header">
   <nav class="site-nav" aria-label="Primary">
-    <a class="brand" href="/"><span class="ball" aria-hidden="true"></span>World Cup 2026</a>
+    <a class="brand" href="/"><span class="ball" aria-hidden="true"></span>Men's World Cup 2026</a>
     <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Open menu"><span></span></button>
     <ul class="nav-links" id="nav-links">
       <li><a href="/">Tracker</a></li>
@@ -227,6 +227,7 @@
   <header class="hero">
     <h1 id="t-title">Today's Games<span class="stage-tag" id="t-stage"></span></h1>
     <div class="date" id="t-date"></div>
+    <div class="hero-rule"></div>
     <div class="tz" id="t-tz"></div>
   </header>
 
