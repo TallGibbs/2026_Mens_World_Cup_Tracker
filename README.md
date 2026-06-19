@@ -27,6 +27,15 @@ automatically. See `docs/DEPLOY.md` for the hosting and DNS setup.
 - `snapshots/world_cup_tracker_YYYY-MM-DD.html` - dated snapshots produced by the
   daily update routine (see below). All dated copies live in the `snapshots/`
   folder to keep the repository root tidy; see `snapshots/README.md`.
+- `scripts/fetch_results.sh` - pulls the day's fixtures/results straight from a
+  structured JSON source (no AI summary in the loop) for the daily update.
+- `scripts/validate.mjs` - the data quality gate. Run `node scripts/validate.mjs`
+  after editing the data; it checks per-group table math, freshness, and that the
+  tracker and `today.html` standings agree, and must print `ALL CHECKS PASSED`
+  before committing.
+- `scripts/preflight.sh` - start-of-run health check: verifies the toolchain and
+  prints a validator snapshot (`bash scripts/preflight.sh`). See `CLAUDE.md` for
+  the full routine.
 
 ## How it works
 

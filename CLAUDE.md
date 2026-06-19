@@ -30,16 +30,21 @@ Each run of this routine must follow these steps in order:
    - the `TODAY` object in `today.html` (see "Today's Games page" below).
    Verify every group's goal differences sum to zero before saving.
 4. Save both updated files in place (`world_cup_tracker.html` and `today.html`).
-5. Save a dated copy of the tracker inside the `snapshots/` folder as
+5. **Validate before going further.** Run `node scripts/validate.mjs` (it checks
+   today's date in Eastern Time by default). It must print `ALL CHECKS PASSED`
+   before you continue. If it prints any `[FAIL]`, fix the `DATA`/`TODAY` objects
+   and re-run until clean - never edit the validator to silence a check. The
+   **Validation** section below lists what it enforces.
+6. Save a dated copy of the tracker inside the `snapshots/` folder as
    `snapshots/world_cup_tracker_YYYY-MM-DD.html` using today's date. All dated
    copies live in `snapshots/`; never write them to the repository root. Create
    the folder if it does not exist. (Only the tracker is snapshotted; `today.html`
    is not.)
-6. Commit every changed file (the tracker, `today.html`, and the new snapshot) to
+7. Commit every changed file (the tracker, `today.html`, and the new snapshot) to
    the development branch that is checked out at the start of the run, with a
    message such as `Update tracker for <date>`.
-7. Push that branch to `origin` with `git push -u origin <branch-name>`.
-8. Open a pull request into `main` for that branch (if the harness has already
+8. Push that branch to `origin` with `git push -u origin <branch-name>`.
+9. Open a pull request into `main` for that branch (if the harness has already
    opened one, reuse it). Then merge it yourself without waiting for human
    review: if the pull request is still a draft, mark it ready first, then
    squash-merge it into `main` using the GitHub merge tool with
@@ -53,15 +58,15 @@ Each run of this routine must follow these steps in order:
    git proxy forbids `git push origin --delete` (it returns HTTP 403), and no
    delete-branch API tool is available, so do not error if the branch cannot be
    removed from within a run. This self-merge is explicitly authorised.
-9. If a push-notification tool is available, send a short, spoiler-free ping that
+10. If a push-notification tool is available, send a short, spoiler-free ping that
    the tracker has been refreshed - for example "World Cup 2026 Tracker updated
    for June 16, 2026". Like the email, it must not include any matches, scores,
    standings, results, or team details, so it cannot spoil a game on the owner's
    phone. If no such tool is available, skip this step silently and do not error.
 
 Run every day even if nothing has changed: still set `meta.updated` to today's
-date, refresh `today.html` for the current date, save today's dated copy, and
-commit.
+date, refresh `today.html` for the current date, run `node scripts/validate.mjs`
+until it prints `ALL CHECKS PASSED`, save today's dated copy, and commit.
 
 ## Branch and merge policy
 
@@ -184,6 +189,62 @@ Tiers 1/3 ahead of it.
 - The site designates the **men's** tournament (titles, the hero headline via
   `meta.tournament`, and the nav brand all say "Men's"). Keep that wording; a
   separate Women's edition may be built later.
+- Before committing, `node scripts/validate.mjs` must print `ALL CHECKS PASSED`.
+  It enforces every rule in this section mechanically (see **Validation** below).
+
+## Validation (`scripts/validate.mjs`)
+
+`scripts/validate.mjs` is the mechanical gate for every run. It reads the `DATA`
+object from `world_cup_tracker.html` and the `TODAY` object from `today.html`,
+then exits non-zero if anything is off. Run it after editing the data and before
+committing:
+
+```
+node scripts/validate.mjs            # checks today's date in Eastern Time
+node scripts/validate.mjs 2026-06-20 # or check a specific date
+```
+
+It must print `ALL CHECKS PASSED`. What it enforces:
+
+- **Table math, per group:** exactly four teams, goal differences sum to zero,
+  `pld = w + d + l`, `pts = 3*w + d`, total wins equal total losses, draws and
+  matches-played are even, and no negative values.
+- **Freshness:** `DATA.meta.updated`, `TODAY.updated` and `TODAY.date` are all
+  today's date, and every `TODAY.games[].iso` is dated today. This is the check
+  that catches a `today.html` that was not refreshed for the current day.
+- **Cross-page agreement:** for every group shown on `today.html`, its
+  pre-kickoff standings match the tracker's group rows exactly (team order and
+  every number), so the two pages can never silently drift apart.
+- **Fixtures:** each featured `final` fixture carries integer scores; each
+  `upcoming` fixture carries a `preview` of at least two forward-looking bullets;
+  every `TODAY.games[]` entry has all its fields plus at least two `bullets`, and
+  its two teams appear in that group's table.
+- **Hygiene:** the tournament is labelled "Men's", and there are no emojis or
+  placeholder tokens in the data.
+
+If a check fails, fix the data - never weaken the validator to go green. A
+failure almost always means a mis-keyed or fabricated result (the class of bug
+that once put an invented score on the site), a `today.html` left on yesterday's
+fixtures, or the two pages disagreeing.
+
+At the very start of each run, also run the pre-flight `bash scripts/preflight.sh`.
+It confirms the toolchain (node, jq, curl) is present and prints a data health
+snapshot via the validator, so you begin with a clear picture of the current
+state (a stale-data report is expected before you refresh).
+
+To make that pre-flight run automatically at the start of every Claude Code
+session on this repo, add a `SessionStart` hook to `.claude/settings.json` (this
+is optional and is left to the repo owner, since it changes how the agent starts):
+
+```json
+{
+  "hooks": {
+    "SessionStart": [
+      { "hooks": [ { "type": "command", "command": "bash scripts/preflight.sh" } ] }
+    ]
+  }
+}
+```
 
 ## Hero "Next up" preview must stay forward-looking
 
