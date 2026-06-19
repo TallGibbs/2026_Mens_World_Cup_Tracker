@@ -79,13 +79,6 @@ This swaps one subdomain record and touches nothing else.
 Cloudflare auto-provisions the SSL certificate once DNS resolves (usually
 minutes). Then **https://worldcup.youmissedit.org/** is live and auto-renews.
 
-### 4. Decommission Netlify (optional cleanup)
-
-Once the subdomain resolves to Cloudflare and HTTPS is green, you can delete (or
-just leave paused) the old `worldcup-youmissedit` Netlify site. Removing this
-site also frees credits for any other projects on that Netlify account, since one
-paused project pauses the whole account.
-
 ## Day-to-day
 
 Nothing to do. The daily routine's push to `main` triggers a Cloudflare Pages
