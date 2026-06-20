@@ -24,7 +24,7 @@ const WC = {
     "stage": "Group Stage",
     "where": "Group stage runs Jun 11 - Jun 27. Round of 32 begins Jun 28. Final Jul 19 at MetLife Stadium, New Jersey.",
     "standNote": "All 12 groups. Our teams' groups are pinned to the top.",
-    "updated": "June 19, 2026"
+    "updated": "June 20, 2026"
   },
   "teams": [
     {
@@ -48,12 +48,9 @@ const WC = {
           "date": "2026-06-19T15:00:00-04:00",
           "venue": "Lumen Field, Seattle",
           "tv": "FOX",
-          "status": "upcoming",
-          "preview": [
-            "A win sends the USA into the Round of 32 with a match to spare.",
-            "Both teams won their openers, so first place in Group D is on the line.",
-            "Pochettino expects Pulisic (calf) back in the starting XI."
-          ]
+          "status": "final",
+          "us": 2,
+          "them": 0
         },
         {
           "opp": "Turkiye",
@@ -63,12 +60,13 @@ const WC = {
           "tv": "FOX",
           "status": "upcoming",
           "preview": [
-            "Group D finale - likely decides who finishes top of the group.",
-            "Turkiye will be chasing the win they need to reach the knockouts."
+            "The USA have already clinched a Round of 32 place, so this Group D finale is about seeding and top spot.",
+            "Turkiye, still without a point, must win to keep any qualifying hope alive.",
+            "Pochettino may rotate and manage minutes with progress already secured."
           ]
         }
       ],
-      "note": "Balogun scored twice in a dominant opener; Pulisic came off at halftime with a calf knock but Pochettino says he is expected fit for Australia on Jun 19."
+      "note": "Back-to-back wins: a 4-1 opener over Paraguay and a 2-0 shutout of Australia have the USA on six points and already into the Round of 32 with a group game to spare."
     },
     {
       "name": "Netherlands",
@@ -247,39 +245,39 @@ const WC = {
       "started": true,
       "rows": [
         {
-          "team": "Scotland",
-          "pld": 1,
+          "team": "Brazil",
+          "pld": 2,
           "w": 1,
-          "d": 0,
+          "d": 1,
           "l": 0,
-          "gd": 1,
-          "pts": 3
+          "gd": 3,
+          "pts": 4
         },
         {
           "team": "Morocco",
-          "pld": 1,
-          "w": 0,
+          "pld": 2,
+          "w": 1,
           "d": 1,
           "l": 0,
-          "gd": 0,
-          "pts": 1
+          "gd": 1,
+          "pts": 4
         },
         {
-          "team": "Brazil",
-          "pld": 1,
-          "w": 0,
-          "d": 1,
-          "l": 0,
+          "team": "Scotland",
+          "pld": 2,
+          "w": 1,
+          "d": 0,
+          "l": 1,
           "gd": 0,
-          "pts": 1
+          "pts": 3
         },
         {
           "team": "Haiti",
-          "pld": 1,
+          "pld": 2,
           "w": 0,
           "d": 0,
-          "l": 1,
-          "gd": -1,
+          "l": 2,
+          "gd": -4,
           "pts": 0
         }
       ]
@@ -290,37 +288,37 @@ const WC = {
       "rows": [
         {
           "team": "USA",
-          "pld": 1,
-          "w": 1,
+          "pld": 2,
+          "w": 2,
           "d": 0,
           "l": 0,
-          "gd": 3,
-          "pts": 3
+          "gd": 5,
+          "pts": 6
         },
         {
           "team": "Australia",
-          "pld": 1,
+          "pld": 2,
           "w": 1,
           "d": 0,
-          "l": 0,
-          "gd": 2,
+          "l": 1,
+          "gd": 0,
+          "pts": 3
+        },
+        {
+          "team": "Paraguay",
+          "pld": 2,
+          "w": 1,
+          "d": 0,
+          "l": 1,
+          "gd": -2,
           "pts": 3
         },
         {
           "team": "Turkiye",
-          "pld": 1,
+          "pld": 2,
           "w": 0,
           "d": 0,
-          "l": 1,
-          "gd": -2,
-          "pts": 0
-        },
-        {
-          "team": "Paraguay",
-          "pld": 1,
-          "w": 0,
-          "d": 0,
-          "l": 1,
+          "l": 2,
           "gd": -3,
           "pts": 0
         }
@@ -664,83 +662,65 @@ const WC = {
     }
   ],
   "today": {
-    "date": "Friday, June 19, 2026",
+    "date": "Saturday, June 20, 2026",
     "stageLabel": "Group Stage",
     "tz": "All kickoff times are listed in Eastern Time (ET). US broadcast on FOX / FS1, with Spanish-language coverage on Telemundo; FOX One streams every match.",
-    "schedNote": "Four matches today - Matchday 2 continues across Groups C and D.",
+    "schedNote": "Three matches today - Matchday 2 across Groups E and F.",
     "kits": {
-      "USA": "#0A3161",
-      "Australia": "#00843D",
-      "Scotland": "#0B4DA1",
-      "Morocco": "#C1272D",
-      "Brazil": "#009C3B",
-      "Haiti": "#00209F",
-      "Turkiye": "#E30A17",
-      "Paraguay": "#0038A8"
+      "Netherlands": "#F36C21",
+      "Sweden": "#FECC02",
+      "Germany": "#1C1C1C",
+      "Ivory Coast": "#FF8200",
+      "Ecuador": "#FFD100",
+      "Curacao": "#00209F"
     },
     "games": [
       {
-        "group": "D",
-        "stage": "Group D - Matchday 2",
-        "home": "USA",
-        "away": "Australia",
-        "kick": "3:00 PM ET",
-        "iso": "2026-06-19T15:00:00-04:00",
-        "venue": "Lumen Field, Seattle",
+        "group": "F",
+        "stage": "Group F - Matchday 2",
+        "home": "Netherlands",
+        "away": "Sweden",
+        "kick": "1:00 PM ET",
+        "iso": "2026-06-20T13:00:00-04:00",
+        "venue": "NRG Stadium, Houston",
         "tv": "FOX",
         "stream": "FOX One / Telemundo (ES)",
         "bullets": [
-          "Both teams won their openers, so the winner takes a commanding step toward the Round of 32 and likely tops Group D.",
-          "The USA carried a 4-1 opening win into Seattle; Pochettino is monitoring Pulisic's fitness after a calf knock.",
-          "Australia arrive level on points after a 2-0 start and will press the USA with direct, physical play."
+          "Group F leaders Sweden, 4-0 winners over Tunisia, can move to the brink of the Round of 32 with another result.",
+          "The Netherlands, held 2-2 by Japan, need a win to take control of the group after a frustrating opener.",
+          "Watch a reshaped Dutch back line with Jurrien Timber ruled out of the tournament."
         ]
       },
       {
-        "group": "C",
-        "stage": "Group C - Matchday 2",
-        "home": "Scotland",
-        "away": "Morocco",
-        "kick": "6:00 PM ET",
-        "iso": "2026-06-19T18:00:00-04:00",
-        "venue": "Gillette Stadium, Foxborough",
+        "group": "E",
+        "stage": "Group E - Matchday 2",
+        "home": "Germany",
+        "away": "Ivory Coast",
+        "kick": "4:00 PM ET",
+        "iso": "2026-06-20T16:00:00-04:00",
+        "venue": "BMO Field, Toronto",
         "tv": "FOX",
         "stream": "FOX One / Telemundo (ES)",
         "bullets": [
-          "Group C leaders Scotland, 1-0 winners over Haiti, can take a big step toward the knockouts with another result.",
-          "Morocco drew their opener with Brazil and need three points to avoid falling behind in a tight group.",
-          "A Scotland win would pile pressure on Brazil ahead of the nightcap in Philadelphia."
+          "Both sides won their openers, so the winner takes a commanding lead at the top of Group E.",
+          "Germany arrive on the back of a dominant opening victory and will back their attack at BMO Field.",
+          "Ivory Coast, 1-0 winners in their first match, will look to frustrate Germany and hit on the counter."
         ]
       },
       {
-        "group": "C",
-        "stage": "Group C - Matchday 2",
-        "home": "Brazil",
-        "away": "Haiti",
-        "kick": "8:30 PM ET",
-        "iso": "2026-06-19T20:30:00-04:00",
-        "venue": "Lincoln Financial Field, Philadelphia",
-        "tv": "FOX",
-        "stream": "FOX One / Telemundo (ES)",
-        "bullets": [
-          "Brazil, held to a draw by Morocco, are heavy favourites and need a win to keep pace at the top of Group C.",
-          "Haiti lost their opener and are chasing a statement result to revive their qualifying hopes.",
-          "Watch whether Brazil's attack clicks into gear after a frustrating opening day."
-        ]
-      },
-      {
-        "group": "D",
-        "stage": "Group D - Matchday 2",
-        "home": "Turkiye",
-        "away": "Paraguay",
-        "kick": "11:00 PM ET",
-        "iso": "2026-06-19T23:00:00-04:00",
-        "venue": "Levi's Stadium, Santa Clara",
+        "group": "E",
+        "stage": "Group E - Matchday 2",
+        "home": "Ecuador",
+        "away": "Curacao",
+        "kick": "8:00 PM ET",
+        "iso": "2026-06-20T20:00:00-04:00",
+        "venue": "GEHA Field at Arrowhead Stadium, Kansas City",
         "tv": "FS1",
         "stream": "FOX One / Telemundo (ES)",
         "bullets": [
-          "Both lost their openers, so this is effectively a must-win to stay in Round of 32 contention.",
-          "Turkiye fell to Australia and need a response; Paraguay were beaten by the USA.",
-          "The loser will be all but eliminated heading into the final round of group games."
+          "Both teams lost their openers, making this effectively a must-win to stay in Round of 32 contention.",
+          "Ecuador will back themselves to bounce back at Arrowhead after a narrow opening defeat.",
+          "Curacao, beaten heavily by Germany, need a response to revive their qualifying hopes."
         ]
       }
     ]
