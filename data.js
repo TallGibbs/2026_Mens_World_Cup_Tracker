@@ -24,7 +24,7 @@ const WC = {
     "stage": "Group Stage",
     "where": "Group stage runs Jun 11 - Jun 27. Round of 32 begins Jun 28. Final Jul 19 at MetLife Stadium, New Jersey.",
     "standNote": "All 12 groups. Our teams' groups are pinned to the top.",
-    "updated": "June 20, 2026"
+    "updated": "June 21, 2026"
   },
   "teams": [
     {
@@ -89,12 +89,9 @@ const WC = {
           "date": "2026-06-20T13:00:00-04:00",
           "venue": "NRG Stadium, Houston",
           "tv": "FOX",
-          "status": "upcoming",
-          "preview": [
-            "After drawing their opener, the Dutch need a win to take control of Group F.",
-            "Sweden lead the group and can all but qualify with three points here.",
-            "Watch a reshaped Dutch defense with Jurrien Timber out for the tournament."
-          ]
+          "status": "final",
+          "us": 5,
+          "them": 1
         },
         {
           "opp": "Tunisia",
@@ -104,12 +101,13 @@ const WC = {
           "tv": "FS1",
           "status": "upcoming",
           "preview": [
-            "Group F finale; the Netherlands likely need at least a draw to advance.",
-            "Tunisia will be playing to keep a long-shot qualifying hope alive."
+            "Group F finale; a win would clinch top spot for the Netherlands, while a draw should be enough to advance.",
+            "Tunisia, beaten in both group games so far, are already eliminated and playing for pride.",
+            "Expect the Dutch to manage minutes with a Round of 32 place all but secured."
           ]
         }
       ],
-      "note": "Jurrien Timber ruled out of the tournament with a groin injury; the Dutch drew 2-2 with Japan and must beat Sweden on Jun 20 to stay on track."
+      "note": "The Dutch bounced back from a 2-2 draw with Japan to rout Sweden 5-1, climbing to four points and the top of Group F on goals scored. They close the group against Tunisia on Jun 25."
     },
     {
       "name": "England",
@@ -330,39 +328,39 @@ const WC = {
       "rows": [
         {
           "team": "Germany",
-          "pld": 1,
-          "w": 1,
+          "pld": 2,
+          "w": 2,
           "d": 0,
           "l": 0,
-          "gd": 6,
-          "pts": 3
+          "gd": 7,
+          "pts": 6
         },
         {
           "team": "Ivory Coast",
-          "pld": 1,
+          "pld": 2,
           "w": 1,
           "d": 0,
-          "l": 0,
-          "gd": 1,
+          "l": 1,
+          "gd": 0,
           "pts": 3
         },
         {
           "team": "Ecuador",
-          "pld": 1,
+          "pld": 2,
           "w": 0,
-          "d": 0,
+          "d": 1,
           "l": 1,
           "gd": -1,
-          "pts": 0
+          "pts": 1
         },
         {
           "team": "Curacao",
-          "pld": 1,
+          "pld": 2,
           "w": 0,
-          "d": 0,
+          "d": 1,
           "l": 1,
           "gd": -6,
-          "pts": 0
+          "pts": 1
         }
       ]
     },
@@ -371,39 +369,39 @@ const WC = {
       "started": true,
       "rows": [
         {
-          "team": "Sweden",
-          "pld": 1,
+          "team": "Netherlands",
+          "pld": 2,
           "w": 1,
-          "d": 0,
+          "d": 1,
           "l": 0,
           "gd": 4,
-          "pts": 3
+          "pts": 4
         },
         {
           "team": "Japan",
-          "pld": 1,
-          "w": 0,
+          "pld": 2,
+          "w": 1,
           "d": 1,
           "l": 0,
-          "gd": 0,
-          "pts": 1
+          "gd": 4,
+          "pts": 4
         },
         {
-          "team": "Netherlands",
-          "pld": 1,
-          "w": 0,
-          "d": 1,
-          "l": 0,
+          "team": "Sweden",
+          "pld": 2,
+          "w": 1,
+          "d": 0,
+          "l": 1,
           "gd": 0,
-          "pts": 1
+          "pts": 3
         },
         {
           "team": "Tunisia",
-          "pld": 1,
+          "pld": 2,
           "w": 0,
           "d": 0,
-          "l": 1,
-          "gd": -4,
+          "l": 2,
+          "gd": -8,
           "pts": 0
         }
       ]
@@ -662,65 +660,101 @@ const WC = {
     }
   ],
   "today": {
-    "date": "Saturday, June 20, 2026",
+    "date": "Sunday, June 21, 2026",
     "stageLabel": "Group Stage",
     "tz": "All kickoff times are listed in Eastern Time (ET). US broadcast on FOX / FS1, with Spanish-language coverage on Telemundo; FOX One streams every match.",
-    "schedNote": "Three matches today - Matchday 2 across Groups E and F.",
+    "schedNote": "Five matches today - Matchday 2 across Groups F, G and H.",
     "kits": {
-      "Netherlands": "#F36C21",
-      "Sweden": "#FECC02",
-      "Germany": "#1C1C1C",
-      "Ivory Coast": "#FF8200",
-      "Ecuador": "#FFD100",
-      "Curacao": "#00209F"
+      "Tunisia": "#E70013",
+      "Japan": "#142880",
+      "Spain": "#AA151B",
+      "Saudi Arabia": "#006C35",
+      "Belgium": "#C8102E",
+      "Iran": "#239F40",
+      "Uruguay": "#5CB8E8",
+      "Cape Verde": "#003893",
+      "New Zealand": "#1C1C1C",
+      "Egypt": "#CE1126"
     },
     "games": [
       {
         "group": "F",
         "stage": "Group F - Matchday 2",
-        "home": "Netherlands",
-        "away": "Sweden",
-        "kick": "1:00 PM ET",
-        "iso": "2026-06-20T13:00:00-04:00",
-        "venue": "NRG Stadium, Houston",
-        "tv": "FOX",
-        "stream": "FOX One / Telemundo (ES)",
-        "bullets": [
-          "Group F leaders Sweden, 4-0 winners over Tunisia, can move to the brink of the Round of 32 with another result.",
-          "The Netherlands, held 2-2 by Japan, need a win to take control of the group after a frustrating opener.",
-          "Watch a reshaped Dutch back line with Jurrien Timber ruled out of the tournament."
-        ]
-      },
-      {
-        "group": "E",
-        "stage": "Group E - Matchday 2",
-        "home": "Germany",
-        "away": "Ivory Coast",
-        "kick": "4:00 PM ET",
-        "iso": "2026-06-20T16:00:00-04:00",
-        "venue": "BMO Field, Toronto",
-        "tv": "FOX",
-        "stream": "FOX One / Telemundo (ES)",
-        "bullets": [
-          "Both sides won their openers, so the winner takes a commanding lead at the top of Group E.",
-          "Germany arrive on the back of a dominant opening victory and will back their attack at BMO Field.",
-          "Ivory Coast, 1-0 winners in their first match, will look to frustrate Germany and hit on the counter."
-        ]
-      },
-      {
-        "group": "E",
-        "stage": "Group E - Matchday 2",
-        "home": "Ecuador",
-        "away": "Curacao",
-        "kick": "8:00 PM ET",
-        "iso": "2026-06-20T20:00:00-04:00",
-        "venue": "GEHA Field at Arrowhead Stadium, Kansas City",
+        "home": "Tunisia",
+        "away": "Japan",
+        "kick": "12:00 AM ET",
+        "iso": "2026-06-21T00:00:00-04:00",
+        "venue": "Estadio BBVA, Monterrey",
         "tv": "FS1",
         "stream": "FOX One / Telemundo (ES)",
         "bullets": [
-          "Both teams lost their openers, making this effectively a must-win to stay in Round of 32 contention.",
-          "Ecuador will back themselves to bounce back at Arrowhead after a narrow opening defeat.",
-          "Curacao, beaten heavily by Germany, need a response to revive their qualifying hopes."
+          "Japan look to back up their opening draw with the Netherlands and climb into the qualifying places.",
+          "Winless Tunisia need a result to stay alive in Group F after losing their opener.",
+          "A Japan win would tighten an already congested race behind the Dutch."
+        ]
+      },
+      {
+        "group": "H",
+        "stage": "Group H - Matchday 2",
+        "home": "Spain",
+        "away": "Saudi Arabia",
+        "kick": "12:00 PM ET",
+        "iso": "2026-06-21T12:00:00-04:00",
+        "venue": "Mercedes-Benz Stadium, Atlanta",
+        "tv": "FOX",
+        "stream": "FOX One / Telemundo (ES)",
+        "bullets": [
+          "Spain, held in their opener, need three points to take charge of a tight Group H.",
+          "Saudi Arabia will look to spring an upset and build on their opening-day draw.",
+          "With all four teams level after Matchday 1, a winner here moves clear at the top."
+        ]
+      },
+      {
+        "group": "G",
+        "stage": "Group G - Matchday 2",
+        "home": "Belgium",
+        "away": "Iran",
+        "kick": "3:00 PM ET",
+        "iso": "2026-06-21T15:00:00-04:00",
+        "venue": "SoFi Stadium, Los Angeles",
+        "tv": "FOX",
+        "stream": "FOX One / Telemundo (ES)",
+        "bullets": [
+          "Belgium chase a first win after being held in their Group G opener.",
+          "Iran will sit deep and counter, hoping to frustrate the Belgian attack again.",
+          "All four Group G teams are level on a point, so a win sends the victor clear."
+        ]
+      },
+      {
+        "group": "H",
+        "stage": "Group H - Matchday 2",
+        "home": "Uruguay",
+        "away": "Cape Verde",
+        "kick": "6:00 PM ET",
+        "iso": "2026-06-21T18:00:00-04:00",
+        "venue": "Hard Rock Stadium, Miami",
+        "tv": "FS1",
+        "stream": "FOX One / Telemundo (ES)",
+        "bullets": [
+          "Uruguay aim to convert their experience into a first win after a cagey opening draw.",
+          "World Cup debutants Cape Verde will look to build on a creditable point in their first match.",
+          "A result here could vault either side to the top of a wide-open Group H."
+        ]
+      },
+      {
+        "group": "G",
+        "stage": "Group G - Matchday 2",
+        "home": "New Zealand",
+        "away": "Egypt",
+        "kick": "9:00 PM ET",
+        "iso": "2026-06-21T21:00:00-04:00",
+        "venue": "BC Place, Vancouver",
+        "tv": "FS1",
+        "stream": "FOX One / Telemundo (ES)",
+        "bullets": [
+          "New Zealand seek a statement win in Vancouver after holding firm in their opener.",
+          "Egypt, with Salah pulling the strings, want three points to seize control of Group G.",
+          "With the group level on points, the winner takes a real step toward the Round of 32."
         ]
       }
     ]
