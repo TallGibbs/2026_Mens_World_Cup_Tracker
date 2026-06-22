@@ -24,7 +24,7 @@ const WC = {
     "stage": "Group Stage",
     "where": "Group stage runs Jun 11 - Jun 27. Round of 32 begins Jun 28. Final Jul 19 at MetLife Stadium, New Jersey.",
     "standNote": "All 12 groups. Our teams' groups are pinned to the top.",
-    "updated": "June 21, 2026"
+    "updated": "June 22, 2026"
   },
   "teams": [
     {
@@ -411,39 +411,39 @@ const WC = {
       "started": true,
       "rows": [
         {
-          "team": "New Zealand",
-          "pld": 1,
-          "w": 0,
+          "team": "Egypt",
+          "pld": 2,
+          "w": 1,
           "d": 1,
           "l": 0,
-          "gd": 0,
-          "pts": 1
+          "gd": 2,
+          "pts": 4
         },
         {
           "team": "Iran",
-          "pld": 1,
+          "pld": 2,
           "w": 0,
-          "d": 1,
+          "d": 2,
           "l": 0,
           "gd": 0,
-          "pts": 1
-        },
-        {
-          "team": "Egypt",
-          "pld": 1,
-          "w": 0,
-          "d": 1,
-          "l": 0,
-          "gd": 0,
-          "pts": 1
+          "pts": 2
         },
         {
           "team": "Belgium",
-          "pld": 1,
+          "pld": 2,
           "w": 0,
-          "d": 1,
+          "d": 2,
           "l": 0,
           "gd": 0,
+          "pts": 2
+        },
+        {
+          "team": "New Zealand",
+          "pld": 2,
+          "w": 0,
+          "d": 1,
+          "l": 1,
+          "gd": -2,
           "pts": 1
         }
       ]
@@ -453,39 +453,39 @@ const WC = {
       "started": true,
       "rows": [
         {
-          "team": "Saudi Arabia",
-          "pld": 1,
-          "w": 0,
+          "team": "Spain",
+          "pld": 2,
+          "w": 1,
           "d": 1,
           "l": 0,
-          "gd": 0,
-          "pts": 1
+          "gd": 4,
+          "pts": 4
         },
         {
           "team": "Uruguay",
-          "pld": 1,
+          "pld": 2,
           "w": 0,
-          "d": 1,
+          "d": 2,
           "l": 0,
           "gd": 0,
-          "pts": 1
-        },
-        {
-          "team": "Spain",
-          "pld": 1,
-          "w": 0,
-          "d": 1,
-          "l": 0,
-          "gd": 0,
-          "pts": 1
+          "pts": 2
         },
         {
           "team": "Cape Verde",
-          "pld": 1,
+          "pld": 2,
           "w": 0,
-          "d": 1,
+          "d": 2,
           "l": 0,
           "gd": 0,
+          "pts": 2
+        },
+        {
+          "team": "Saudi Arabia",
+          "pld": 2,
+          "w": 0,
+          "d": 1,
+          "l": 1,
+          "gd": -4,
           "pts": 1
         }
       ]
@@ -660,101 +660,83 @@ const WC = {
     }
   ],
   "today": {
-    "date": "Sunday, June 21, 2026",
+    "date": "Monday, June 22, 2026",
     "stageLabel": "Group Stage",
     "tz": "All kickoff times are listed in Eastern Time (ET). US broadcast on FOX / FS1, with Spanish-language coverage on Telemundo; FOX One streams every match.",
-    "schedNote": "Five matches today - Matchday 2 across Groups F, G and H.",
+    "schedNote": "Four matches today - Matchday 2 across Groups I and J.",
     "kits": {
-      "Tunisia": "#E70013",
-      "Japan": "#142880",
-      "Spain": "#AA151B",
-      "Saudi Arabia": "#006C35",
-      "Belgium": "#C8102E",
-      "Iran": "#239F40",
-      "Uruguay": "#5CB8E8",
-      "Cape Verde": "#003893",
-      "New Zealand": "#1C1C1C",
-      "Egypt": "#CE1126"
+      "Argentina": "#75AADB",
+      "Austria": "#ED2939",
+      "France": "#001E96",
+      "Iraq": "#CE1126",
+      "Norway": "#BA0C2F",
+      "Senegal": "#00853F",
+      "Jordan": "#007A3D",
+      "Algeria": "#D21034"
     },
     "games": [
       {
-        "group": "F",
-        "stage": "Group F - Matchday 2",
-        "home": "Tunisia",
-        "away": "Japan",
-        "kick": "12:00 AM ET",
-        "iso": "2026-06-21T00:00:00-04:00",
-        "venue": "Estadio BBVA, Monterrey",
-        "tv": "FS1",
-        "stream": "FOX One / Telemundo (ES)",
-        "bullets": [
-          "Japan look to back up their opening draw with the Netherlands and climb into the qualifying places.",
-          "Winless Tunisia need a result to stay alive in Group F after losing their opener.",
-          "A Japan win would tighten an already congested race behind the Dutch."
-        ]
-      },
-      {
-        "group": "H",
-        "stage": "Group H - Matchday 2",
-        "home": "Spain",
-        "away": "Saudi Arabia",
-        "kick": "12:00 PM ET",
-        "iso": "2026-06-21T12:00:00-04:00",
-        "venue": "Mercedes-Benz Stadium, Atlanta",
+        "group": "J",
+        "stage": "Group J - Matchday 2",
+        "home": "Argentina",
+        "away": "Austria",
+        "kick": "1:00 PM ET",
+        "iso": "2026-06-22T13:00:00-04:00",
+        "venue": "AT&T Stadium, Arlington",
         "tv": "FOX",
         "stream": "FOX One / Telemundo (ES)",
         "bullets": [
-          "Spain, held in their opener, need three points to take charge of a tight Group H.",
-          "Saudi Arabia will look to spring an upset and build on their opening-day draw.",
-          "With all four teams level after Matchday 1, a winner here moves clear at the top."
+          "Top-of-the-table clash: both Argentina and Austria opened with wins, so the winner moves clear in Group J.",
+          "Argentina will fancy their attack after a 3-0 opening statement, while Austria arrive full of confidence.",
+          "A victory here would put one side on the brink of a Round of 32 place with a game to spare."
         ]
       },
       {
-        "group": "G",
-        "stage": "Group G - Matchday 2",
-        "home": "Belgium",
-        "away": "Iran",
-        "kick": "3:00 PM ET",
-        "iso": "2026-06-21T15:00:00-04:00",
-        "venue": "SoFi Stadium, Los Angeles",
+        "group": "I",
+        "stage": "Group I - Matchday 2",
+        "home": "France",
+        "away": "Iraq",
+        "kick": "5:00 PM ET",
+        "iso": "2026-06-22T17:00:00-04:00",
+        "venue": "Lincoln Financial Field, Philadelphia",
         "tv": "FOX",
         "stream": "FOX One / Telemundo (ES)",
         "bullets": [
-          "Belgium chase a first win after being held in their Group G opener.",
-          "Iran will sit deep and counter, hoping to frustrate the Belgian attack again.",
-          "All four Group G teams are level on a point, so a win sends the victor clear."
+          "France look to follow up their opening win and edge closer to the knockout rounds.",
+          "Iraq, beaten on Matchday 1, need a result to keep their qualifying hopes alive.",
+          "Les Bleus will be heavy favourites but must guard against a determined Iraqi side."
         ]
       },
       {
-        "group": "H",
-        "stage": "Group H - Matchday 2",
-        "home": "Uruguay",
-        "away": "Cape Verde",
-        "kick": "6:00 PM ET",
-        "iso": "2026-06-21T18:00:00-04:00",
-        "venue": "Hard Rock Stadium, Miami",
+        "group": "I",
+        "stage": "Group I - Matchday 2",
+        "home": "Norway",
+        "away": "Senegal",
+        "kick": "8:00 PM ET",
+        "iso": "2026-06-22T20:00:00-04:00",
+        "venue": "MetLife Stadium, East Rutherford",
         "tv": "FS1",
         "stream": "FOX One / Telemundo (ES)",
         "bullets": [
-          "Uruguay aim to convert their experience into a first win after a cagey opening draw.",
-          "World Cup debutants Cape Verde will look to build on a creditable point in their first match.",
-          "A result here could vault either side to the top of a wide-open Group H."
+          "Norway, who opened with an emphatic win, can take control of Group I with another three points.",
+          "Senegal must respond after an opening defeat or risk falling out of the qualifying picture.",
+          "Haaland and company will test a Senegal side desperate for a reaction in New Jersey."
         ]
       },
       {
-        "group": "G",
-        "stage": "Group G - Matchday 2",
-        "home": "New Zealand",
-        "away": "Egypt",
-        "kick": "9:00 PM ET",
-        "iso": "2026-06-21T21:00:00-04:00",
-        "venue": "BC Place, Vancouver",
+        "group": "J",
+        "stage": "Group J - Matchday 2",
+        "home": "Jordan",
+        "away": "Algeria",
+        "kick": "11:00 PM ET",
+        "iso": "2026-06-22T23:00:00-04:00",
+        "venue": "Levi's Stadium, Santa Clara",
         "tv": "FS1",
         "stream": "FOX One / Telemundo (ES)",
         "bullets": [
-          "New Zealand seek a statement win in Vancouver after holding firm in their opener.",
-          "Egypt, with Salah pulling the strings, want three points to seize control of Group G.",
-          "With the group level on points, the winner takes a real step toward the Round of 32."
+          "Both Jordan and Algeria lost their openers, so this is close to a must-win for each side.",
+          "Algeria will look to their attacking talent to spark a turnaround after a quiet first match.",
+          "The loser would be all but eliminated from Group J with one game remaining."
         ]
       }
     ]
