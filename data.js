@@ -24,7 +24,7 @@ const WC = {
     "stage": "Group Stage",
     "where": "Group stage runs Jun 11 - Jun 27. Round of 32 begins Jun 28. Final Jul 19 at MetLife Stadium, New Jersey.",
     "standNote": "All 12 groups. Our teams' groups are pinned to the top.",
-    "updated": "June 22, 2026"
+    "updated": "June 23, 2026"
   },
   "teams": [
     {
@@ -495,39 +495,39 @@ const WC = {
       "started": true,
       "rows": [
         {
-          "team": "Norway",
-          "pld": 1,
-          "w": 1,
+          "team": "France",
+          "pld": 2,
+          "w": 2,
           "d": 0,
           "l": 0,
-          "gd": 3,
-          "pts": 3
+          "gd": 5,
+          "pts": 6
         },
         {
-          "team": "France",
-          "pld": 1,
-          "w": 1,
+          "team": "Norway",
+          "pld": 2,
+          "w": 2,
           "d": 0,
           "l": 0,
-          "gd": 2,
-          "pts": 3
+          "gd": 4,
+          "pts": 6
         },
         {
           "team": "Senegal",
-          "pld": 1,
+          "pld": 2,
           "w": 0,
           "d": 0,
-          "l": 1,
-          "gd": -2,
+          "l": 2,
+          "gd": -3,
           "pts": 0
         },
         {
           "team": "Iraq",
-          "pld": 1,
+          "pld": 2,
           "w": 0,
           "d": 0,
-          "l": 1,
-          "gd": -3,
+          "l": 2,
+          "gd": -6,
           "pts": 0
         }
       ]
@@ -538,37 +538,37 @@ const WC = {
       "rows": [
         {
           "team": "Argentina",
-          "pld": 1,
-          "w": 1,
+          "pld": 2,
+          "w": 2,
           "d": 0,
           "l": 0,
-          "gd": 3,
-          "pts": 3
+          "gd": 5,
+          "pts": 6
         },
         {
           "team": "Austria",
-          "pld": 1,
+          "pld": 2,
           "w": 1,
           "d": 0,
-          "l": 0,
-          "gd": 2,
+          "l": 1,
+          "gd": 0,
+          "pts": 3
+        },
+        {
+          "team": "Algeria",
+          "pld": 2,
+          "w": 1,
+          "d": 0,
+          "l": 1,
+          "gd": -2,
           "pts": 3
         },
         {
           "team": "Jordan",
-          "pld": 1,
+          "pld": 2,
           "w": 0,
           "d": 0,
-          "l": 1,
-          "gd": -2,
-          "pts": 0
-        },
-        {
-          "team": "Algeria",
-          "pld": 1,
-          "w": 0,
-          "d": 0,
-          "l": 1,
+          "l": 2,
           "gd": -3,
           "pts": 0
         }
@@ -660,83 +660,83 @@ const WC = {
     }
   ],
   "today": {
-    "date": "Monday, June 22, 2026",
+    "date": "Tuesday, June 23, 2026",
     "stageLabel": "Group Stage",
     "tz": "All kickoff times are listed in Eastern Time (ET). US broadcast on FOX / FS1, with Spanish-language coverage on Telemundo; FOX One streams every match.",
-    "schedNote": "Four matches today - Matchday 2 across Groups I and J.",
+    "schedNote": "Four matches today - Matchday 2 across Groups K and L.",
     "kits": {
-      "Argentina": "#75AADB",
-      "Austria": "#ED2939",
-      "France": "#001E96",
-      "Iraq": "#CE1126",
-      "Norway": "#BA0C2F",
-      "Senegal": "#00853F",
-      "Jordan": "#007A3D",
-      "Algeria": "#D21034"
+      "Portugal": "#006600",
+      "Uzbekistan": "#0099B5",
+      "England": "#CF142B",
+      "Ghana": "#006B3F",
+      "Panama": "#DA121A",
+      "Croatia": "#FF0000",
+      "Colombia": "#FCD116",
+      "DR Congo": "#007FFF"
     },
     "games": [
       {
-        "group": "J",
-        "stage": "Group J - Matchday 2",
-        "home": "Argentina",
-        "away": "Austria",
+        "group": "K",
+        "stage": "Group K - Matchday 2",
+        "home": "Portugal",
+        "away": "Uzbekistan",
         "kick": "1:00 PM ET",
-        "iso": "2026-06-22T13:00:00-04:00",
-        "venue": "AT&T Stadium, Arlington",
+        "iso": "2026-06-23T13:00:00-04:00",
+        "venue": "NRG Stadium, Houston",
         "tv": "FOX",
         "stream": "FOX One / Telemundo (ES)",
         "bullets": [
-          "Top-of-the-table clash: both Argentina and Austria opened with wins, so the winner moves clear in Group J.",
-          "Argentina will fancy their attack after a 3-0 opening statement, while Austria arrive full of confidence.",
-          "A victory here would put one side on the brink of a Round of 32 place with a game to spare."
+          "Portugal, held to a draw in their opener, need a win to take charge of Group K.",
+          "Uzbekistan are chasing their first points of the tournament after an opening defeat.",
+          "Ronaldo's side will look to turn possession into goals against a compact Uzbek block."
         ]
       },
       {
-        "group": "I",
-        "stage": "Group I - Matchday 2",
-        "home": "France",
-        "away": "Iraq",
-        "kick": "5:00 PM ET",
-        "iso": "2026-06-22T17:00:00-04:00",
-        "venue": "Lincoln Financial Field, Philadelphia",
+        "group": "L",
+        "stage": "Group L - Matchday 2",
+        "home": "England",
+        "away": "Ghana",
+        "kick": "4:00 PM ET",
+        "iso": "2026-06-23T16:00:00-04:00",
+        "venue": "Gillette Stadium, Foxborough",
         "tv": "FOX",
         "stream": "FOX One / Telemundo (ES)",
         "bullets": [
-          "France look to follow up their opening win and edge closer to the knockout rounds.",
-          "Iraq, beaten on Matchday 1, need a result to keep their qualifying hopes alive.",
-          "Les Bleus will be heavy favourites but must guard against a determined Iraqi side."
+          "A win would send England into the Round of 32 with a match to spare after their opening victory.",
+          "Ghana also won their opener, so first place in Group L is on the line.",
+          "Kane will aim to build on the brace he scored against Croatia."
         ]
       },
       {
-        "group": "I",
-        "stage": "Group I - Matchday 2",
-        "home": "Norway",
-        "away": "Senegal",
-        "kick": "8:00 PM ET",
-        "iso": "2026-06-22T20:00:00-04:00",
-        "venue": "MetLife Stadium, East Rutherford",
+        "group": "L",
+        "stage": "Group L - Matchday 2",
+        "home": "Panama",
+        "away": "Croatia",
+        "kick": "7:00 PM ET",
+        "iso": "2026-06-23T19:00:00-04:00",
+        "venue": "BMO Field, Toronto",
         "tv": "FS1",
         "stream": "FOX One / Telemundo (ES)",
         "bullets": [
-          "Norway, who opened with an emphatic win, can take control of Group I with another three points.",
-          "Senegal must respond after an opening defeat or risk falling out of the qualifying picture.",
-          "Haaland and company will test a Senegal side desperate for a reaction in New Jersey."
+          "Both Panama and Croatia lost their openers, making this close to a must-win in Group L.",
+          "Croatia need a response after falling to England on Matchday 1.",
+          "Panama will look to spring a surprise and revive their qualifying hopes."
         ]
       },
       {
-        "group": "J",
-        "stage": "Group J - Matchday 2",
-        "home": "Jordan",
-        "away": "Algeria",
-        "kick": "11:00 PM ET",
-        "iso": "2026-06-22T23:00:00-04:00",
-        "venue": "Levi's Stadium, Santa Clara",
+        "group": "K",
+        "stage": "Group K - Matchday 2",
+        "home": "Colombia",
+        "away": "DR Congo",
+        "kick": "10:00 PM ET",
+        "iso": "2026-06-23T22:00:00-04:00",
+        "venue": "Estadio Akron, Guadalajara",
         "tv": "FS1",
         "stream": "FOX One / Telemundo (ES)",
         "bullets": [
-          "Both Jordan and Algeria lost their openers, so this is close to a must-win for each side.",
-          "Algeria will look to their attacking talent to spark a turnaround after a quiet first match.",
-          "The loser would be all but eliminated from Group J with one game remaining."
+          "Group K leaders Colombia can move to the brink of qualification with another win.",
+          "DR Congo, who drew their opener, need points to stay in the hunt.",
+          "Expect Colombia to press for an early goal in Guadalajara."
         ]
       }
     ]
