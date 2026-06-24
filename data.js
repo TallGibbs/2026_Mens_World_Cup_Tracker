@@ -24,7 +24,7 @@ const WC = {
     "stage": "Group Stage",
     "where": "Group stage runs Jun 11 - Jun 27. Round of 32 begins Jun 28. Final Jul 19 at MetLife Stadium, New Jersey.",
     "standNote": "All 12 groups. Our teams' groups are pinned to the top.",
-    "updated": "June 23, 2026"
+    "updated": "June 24, 2026"
   },
   "teams": [
     {
@@ -130,12 +130,9 @@ const WC = {
           "date": "2026-06-23T16:00:00-04:00",
           "venue": "Gillette Stadium, Foxborough",
           "tv": "FOX / BBC One",
-          "status": "upcoming",
-          "preview": [
-            "England can book a Round of 32 place with a win after their opening victory.",
-            "Ghana also won their opener, setting up a Group L heavyweight clash.",
-            "Kane will look to build on his brace against Croatia."
-          ]
+          "status": "final",
+          "us": 0,
+          "them": 0
         },
         {
           "opp": "Panama",
@@ -145,12 +142,13 @@ const WC = {
           "tv": "FOX / ITV1",
           "status": "upcoming",
           "preview": [
-            "Group L finale; England will aim to lock up top spot.",
-            "Panama need a statement result to keep their qualifying hopes alive."
+            "Group L finale: England sit top on goal difference, so a win locks up first place and could be enough to seal a Round of 32 spot.",
+            "Panama, beaten twice already, are all but eliminated and need a heavy win plus other results to keep faint hopes alive.",
+            "Watch whether Tuchel rotates with England in control of the group; Kane is still chasing his first goal since the opener."
           ]
         }
       ],
-      "note": "England beat Croatia 4-2 in their opener; Kane scored twice and Bellingham added another in a statement win. Next up: Ghana in Foxborough on Jun 23."
+      "note": "England were held to a goalless draw by Ghana in Foxborough, leaving them top of Group L on goal difference with four points. They close the group against Panama at MetLife on Jun 27."
     }
   ],
   "groups": [
@@ -580,38 +578,38 @@ const WC = {
       "rows": [
         {
           "team": "Colombia",
-          "pld": 1,
-          "w": 1,
+          "pld": 2,
+          "w": 2,
           "d": 0,
           "l": 0,
-          "gd": 2,
-          "pts": 3
-        },
-        {
-          "team": "DR Congo",
-          "pld": 1,
-          "w": 0,
-          "d": 1,
-          "l": 0,
-          "gd": 0,
-          "pts": 1
+          "gd": 3,
+          "pts": 6
         },
         {
           "team": "Portugal",
-          "pld": 1,
-          "w": 0,
+          "pld": 2,
+          "w": 1,
           "d": 1,
           "l": 0,
-          "gd": 0,
+          "gd": 5,
+          "pts": 4
+        },
+        {
+          "team": "DR Congo",
+          "pld": 2,
+          "w": 0,
+          "d": 1,
+          "l": 1,
+          "gd": -1,
           "pts": 1
         },
         {
           "team": "Uzbekistan",
-          "pld": 1,
+          "pld": 2,
           "w": 0,
           "d": 0,
-          "l": 1,
-          "gd": -2,
+          "l": 2,
+          "gd": -7,
           "pts": 0
         }
       ]
@@ -622,37 +620,37 @@ const WC = {
       "rows": [
         {
           "team": "England",
-          "pld": 1,
+          "pld": 2,
           "w": 1,
-          "d": 0,
+          "d": 1,
           "l": 0,
           "gd": 2,
-          "pts": 3
+          "pts": 4
         },
         {
           "team": "Ghana",
-          "pld": 1,
+          "pld": 2,
           "w": 1,
-          "d": 0,
+          "d": 1,
           "l": 0,
           "gd": 1,
+          "pts": 4
+        },
+        {
+          "team": "Croatia",
+          "pld": 2,
+          "w": 1,
+          "d": 0,
+          "l": 1,
+          "gd": -1,
           "pts": 3
         },
         {
           "team": "Panama",
-          "pld": 1,
+          "pld": 2,
           "w": 0,
           "d": 0,
-          "l": 1,
-          "gd": -1,
-          "pts": 0
-        },
-        {
-          "team": "Croatia",
-          "pld": 1,
-          "w": 0,
-          "d": 0,
-          "l": 1,
+          "l": 2,
           "gd": -2,
           "pts": 0
         }
@@ -660,83 +658,119 @@ const WC = {
     }
   ],
   "today": {
-    "date": "Tuesday, June 23, 2026",
+    "date": "Wednesday, June 24, 2026",
     "stageLabel": "Group Stage",
     "tz": "All kickoff times are listed in Eastern Time (ET). US broadcast on FOX / FS1, with Spanish-language coverage on Telemundo; FOX One streams every match.",
-    "schedNote": "Four matches today - Matchday 2 across Groups K and L.",
+    "schedNote": "Six matches today - Matchday 3 across Groups A, B and C, with each group's pair kicking off simultaneously.",
     "kits": {
-      "Portugal": "#006600",
-      "Uzbekistan": "#0099B5",
-      "England": "#CF142B",
-      "Ghana": "#006B3F",
-      "Panama": "#DA121A",
-      "Croatia": "#FF0000",
-      "Colombia": "#FCD116",
-      "DR Congo": "#007FFF"
+      "Bosnia and Herzegovina": "#002395",
+      "Qatar": "#8A1538",
+      "Switzerland": "#FF0000",
+      "Canada": "#D52B1E",
+      "Morocco": "#C1272D",
+      "Haiti": "#00209F",
+      "Scotland": "#005EB8",
+      "Brazil": "#FEDF00",
+      "Czechia": "#11457E",
+      "Mexico": "#006847",
+      "South Africa": "#007A4D",
+      "South Korea": "#CD2E3A"
     },
     "games": [
       {
-        "group": "K",
-        "stage": "Group K - Matchday 2",
-        "home": "Portugal",
-        "away": "Uzbekistan",
-        "kick": "1:00 PM ET",
-        "iso": "2026-06-23T13:00:00-04:00",
-        "venue": "NRG Stadium, Houston",
+        "group": "B",
+        "stage": "Group B - Matchday 3",
+        "home": "Bosnia and Herzegovina",
+        "away": "Qatar",
+        "kick": "3:00 PM ET",
+        "iso": "2026-06-24T15:00:00-04:00",
+        "venue": "Lumen Field, Seattle",
         "tv": "FOX",
         "stream": "FOX One / Telemundo (ES)",
         "bullets": [
-          "Portugal, held to a draw in their opener, need a win to take charge of Group K.",
-          "Uzbekistan are chasing their first points of the tournament after an opening defeat.",
-          "Ronaldo's side will look to turn possession into goals against a compact Uzbek block."
+          "Both sides sit on a single point and need a win to have any chance of sneaking through as a best third-place team.",
+          "With Canada and Switzerland well clear, this is effectively a play-off for pride and goal difference.",
+          "Expect an open game as neither can afford to settle for a draw."
         ]
       },
       {
-        "group": "L",
-        "stage": "Group L - Matchday 2",
-        "home": "England",
-        "away": "Ghana",
-        "kick": "4:00 PM ET",
-        "iso": "2026-06-23T16:00:00-04:00",
-        "venue": "Gillette Stadium, Foxborough",
+        "group": "B",
+        "stage": "Group B - Matchday 3",
+        "home": "Switzerland",
+        "away": "Canada",
+        "kick": "3:00 PM ET",
+        "iso": "2026-06-24T15:00:00-04:00",
+        "venue": "BC Place, Vancouver",
+        "tv": "FS1",
+        "stream": "FOX One / Telemundo (ES)",
+        "bullets": [
+          "Level on four points, the winner tops Group B and a draw should see both advance.",
+          "Co-hosts Canada carry a healthy goal difference, so even a narrow defeat may not knock them out.",
+          "Switzerland will fancy their organisation against Canada's quick transitions in Vancouver."
+        ]
+      },
+      {
+        "group": "C",
+        "stage": "Group C - Matchday 3",
+        "home": "Morocco",
+        "away": "Haiti",
+        "kick": "6:00 PM ET",
+        "iso": "2026-06-24T18:00:00-04:00",
+        "venue": "Mercedes-Benz Stadium, Atlanta",
         "tv": "FOX",
         "stream": "FOX One / Telemundo (ES)",
         "bullets": [
-          "A win would send England into the Round of 32 with a match to spare after their opening victory.",
-          "Ghana also won their opener, so first place in Group L is on the line.",
-          "Kane will aim to build on the brace he scored against Croatia."
+          "A win guarantees Morocco a place in the Round of 32 and could secure top spot in Group C.",
+          "Haiti, still without a point, are already eliminated and playing for a first goal of the tournament.",
+          "Morocco will want to protect a positive goal difference with the group still tight at the top."
         ]
       },
       {
-        "group": "L",
-        "stage": "Group L - Matchday 2",
-        "home": "Panama",
-        "away": "Croatia",
-        "kick": "7:00 PM ET",
-        "iso": "2026-06-23T19:00:00-04:00",
-        "venue": "BMO Field, Toronto",
+        "group": "C",
+        "stage": "Group C - Matchday 3",
+        "home": "Scotland",
+        "away": "Brazil",
+        "kick": "6:00 PM ET",
+        "iso": "2026-06-24T18:00:00-04:00",
+        "venue": "Hard Rock Stadium, Miami Gardens",
         "tv": "FS1",
         "stream": "FOX One / Telemundo (ES)",
         "bullets": [
-          "Both Panama and Croatia lost their openers, making this close to a must-win in Group L.",
-          "Croatia need a response after falling to England on Matchday 1.",
-          "Panama will look to spring a surprise and revive their qualifying hopes."
+          "Brazil can clinch first place in Group C with a victory over Scotland.",
+          "Scotland, on three points, likely need at least a draw to keep their qualifying hopes alive.",
+          "A Scotland upset would blow Group C wide open on the final day."
         ]
       },
       {
-        "group": "K",
-        "stage": "Group K - Matchday 2",
-        "home": "Colombia",
-        "away": "DR Congo",
-        "kick": "10:00 PM ET",
-        "iso": "2026-06-23T22:00:00-04:00",
-        "venue": "Estadio Akron, Guadalajara",
+        "group": "A",
+        "stage": "Group A - Matchday 3",
+        "home": "Czechia",
+        "away": "Mexico",
+        "kick": "9:00 PM ET",
+        "iso": "2026-06-24T21:00:00-04:00",
+        "venue": "Estadio Banorte, Guadalajara",
+        "tv": "FOX",
+        "stream": "FOX One / Telemundo (ES)",
+        "bullets": [
+          "Co-hosts Mexico are already through on six points and play for top spot and momentum in front of a home crowd.",
+          "Czechia must win to have any chance of advancing as a best third-place side.",
+          "Watch whether Mexico rotate with qualification secured ahead of the knockouts."
+        ]
+      },
+      {
+        "group": "A",
+        "stage": "Group A - Matchday 3",
+        "home": "South Africa",
+        "away": "South Korea",
+        "kick": "9:00 PM ET",
+        "iso": "2026-06-24T21:00:00-04:00",
+        "venue": "Estadio BBVA, Monterrey",
         "tv": "FS1",
         "stream": "FOX One / Telemundo (ES)",
         "bullets": [
-          "Group K leaders Colombia can move to the brink of qualification with another win.",
-          "DR Congo, who drew their opener, need points to stay in the hunt.",
-          "Expect Colombia to press for an early goal in Guadalajara."
+          "South Korea can seal a Round of 32 spot with a win after collecting three points so far.",
+          "South Africa, on one point, must win to keep their qualifying hopes alive.",
+          "Goal difference could decide second place, so both sides will chase a decisive result."
         ]
       }
     ]
