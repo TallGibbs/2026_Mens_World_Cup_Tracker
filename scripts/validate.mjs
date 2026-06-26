@@ -63,21 +63,26 @@ function extractObject(src, name) {
 /* ---------- raw-text scans ---------- */
 const EMOJI = /[\u{1F000}-\u{1FAFF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{1F1E6}-\u{1F1FF}️]/u;
 const PLACEHOLDER = /\b(TBD|TODO|FIXME|PLACEHOLDER|Lorem ipsum|XXXX?)\b/i;
+const PHASES = ['group', 'r32', 'r16', 'qf', 'sf', 'final', 'done'];
+const ROUND_KEYS = ['r32', 'r16', 'qf', 'sf', 'third', 'final']; // a today-game's `stage` set to one of these marks it knockout
 function scanEmoji(label, text) { if (text && EMOJI.test(text)) fail(`${label}: contains an emoji character (none allowed)`); }
 function scanPlaceholder(label, obj) { if (obj) { const m = JSON.stringify(obj).match(PLACEHOLDER); if (m) fail(`${label}: contains placeholder token "${m[0]}"`); } }
 
 /* ---------- group-table invariants ---------- */
 function checkGroupRows(id, rows) {
   if (!Array.isArray(rows) || rows.length !== 4) { fail(`Group ${id}: expected 4 rows, got ${rows && rows.length}`); return; }
-  let sgd = 0, sw = 0, sl = 0, sd = 0, spld = 0;
+  let sgd = 0, sw = 0, sl = 0, sd = 0, spld = 0, sgf = 0, sga = 0;
   for (const r of rows) {
-    for (const k of ['pld', 'w', 'd', 'l', 'gd', 'pts']) if (typeof r[k] !== 'number' || Number.isNaN(r[k])) fail(`Group ${id} / ${r.team}: ${k} is not a number`);
+    for (const k of ['pld', 'w', 'd', 'l', 'gd', 'gf', 'ga', 'pts']) if (typeof r[k] !== 'number' || Number.isNaN(r[k])) fail(`Group ${id} / ${r.team}: ${k} is not a number`);
     if (r.pld < 0 || r.w < 0 || r.d < 0 || r.l < 0 || r.pts < 0) fail(`Group ${id} / ${r.team}: negative value`);
+    if (r.gf < 0 || r.ga < 0) fail(`Group ${id} / ${r.team}: negative gf/ga (gf=${r.gf}, ga=${r.ga})`);
     if (r.pld !== r.w + r.d + r.l) fail(`Group ${id} / ${r.team}: pld(${r.pld}) != w+d+l(${r.w + r.d + r.l})`);
     if (r.pts !== 3 * r.w + r.d) fail(`Group ${id} / ${r.team}: pts(${r.pts}) != 3w+d(${3 * r.w + r.d})`);
-    sgd += r.gd; sw += r.w; sl += r.l; sd += r.d; spld += r.pld;
+    if (r.gd !== r.gf - r.ga) fail(`Group ${id} / ${r.team}: gd(${r.gd}) != gf-ga(${r.gf - r.ga})`);
+    sgd += r.gd; sw += r.w; sl += r.l; sd += r.d; spld += r.pld; sgf += r.gf; sga += r.ga;
   }
   if (sgd !== 0) fail(`Group ${id}: goal differences sum to ${sgd}, not 0`);
+  if (sgf !== sga) fail(`Group ${id}: total gf(${sgf}) != total ga(${sga})`);
   if (sw !== sl) fail(`Group ${id}: total wins(${sw}) != total losses(${sl})`);
   if (sd % 2 !== 0) fail(`Group ${id}: total draws(${sd}) is odd (each draw is shared by two teams)`);
   if (spld % 2 !== 0) fail(`Group ${id}: total matches played(${spld}) is odd`);
@@ -106,9 +111,16 @@ if (WC) {
   else {
     if (!/men's/i.test(WC.meta.tournament || '')) fail(`WC.meta.tournament should say "Men's" (got "${WC.meta.tournament}")`);
     if (norm(WC.meta.updated) !== norm(expectedShort)) fail(`WC.meta.updated = "${WC.meta.updated}", expected today "${expectedShort}"`);
+    if (WC.meta.phase != null && !PHASES.includes(WC.meta.phase)) fail(`WC.meta.phase must be one of ${PHASES.join('|')} (got "${WC.meta.phase}")`);
   }
+  const PHASE = (WC.meta && WC.meta.phase) || 'group';
 
   for (const g of (WC.groups || [])) { byId[g.id] = g; checkGroupRows(g.id, g.rows || []); }
+
+  // Index every bracket slot by id (empty until WC.bracket exists - Phase 1).
+  const bracketById = {};
+  if (WC.bracket && Array.isArray(WC.bracket.rounds))
+    for (const rd of WC.bracket.rounds) for (const m of (rd.matches || [])) bracketById[m.id] = m;
 
   for (const t of (WC.teams || [])) {
     const g = byId[t.group];
@@ -126,16 +138,39 @@ if (WC) {
   if (norm(today.date) !== norm(expectedLong)) fail(`WC.today.date = "${today.date}", expected today "${expectedLong}"`);
   (today.games || []).forEach((gm, idx) => {
     const tag = `today game #${idx + 1} (${gm.home} v ${gm.away})`;
-    for (const k of ['group', 'home', 'away', 'kick', 'iso', 'venue', 'tv', 'stream']) if (!gm[k]) fail(`${tag}: missing "${k}"`);
+
+    // Knockout when the stage is a knockout round key, or when phase is past group and there is no single group.
+    // (Group-stage games use a descriptive `stage` label like "Group I - Matchday 3", never a round key.)
+    const isKo = ROUND_KEYS.includes(gm.stage) || (PHASE !== 'group' && !gm.group);
+    const requiredKeys = isKo
+      ? ['home', 'away', 'kick', 'iso', 'venue', 'tv', 'stream', 'bracketId']   // knockout: no group; link to bracket slot
+      : ['group', 'home', 'away', 'kick', 'iso', 'venue', 'tv', 'stream'];      // group: unchanged
+    for (const k of requiredKeys) if (!gm[k]) fail(`${tag}: missing "${k}"`);
+    if (isKo && gm.group) fail(`${tag}: knockout game should not carry a single "group"`);
+
     if (!Array.isArray(gm.bullets) || gm.bullets.length < 2) fail(`${tag}: needs a "bullets" array of >=2 entries`);
+
     if (gm.iso) {
       if (Number.isNaN(+new Date(gm.iso))) fail(`${tag}: iso "${gm.iso}" is not a valid date`);
       else if (gm.iso.slice(0, 10) !== targetYMD) fail(`${tag}: iso date ${gm.iso.slice(0, 10)} is not today (${targetYMD}) - stale fixture`);
     }
+
+    // Group-stage both-teams-in-group check: UNCHANGED; already guarded by gm.group, so it self-skips for knockout.
     if (gm.group) {
       const g = byId[gm.group];
       if (!g) fail(`${tag}: group ${gm.group} is not one of WC.groups`);
       else for (const side of [gm.home, gm.away]) if (!(g.rows || []).some((r) => r.team === side)) fail(`${tag}: ${side} is not in Group ${gm.group}`);
+    }
+
+    // Knockout linkage: today-game must reference a real bracket slot whose resolved teams agree.
+    // Short-circuits while WC.bracket is absent (Phase 0); activates once the bracket exists (Phase 1).
+    if (isKo && gm.bracketId && WC.bracket) {
+      const node = bracketById[gm.bracketId];
+      if (!node) fail(`${tag}: bracketId "${gm.bracketId}" is not in WC.bracket`);
+      else {
+        if (node.homeTeam && gm.home !== node.homeTeam) fail(`${tag}: home "${gm.home}" disagrees with bracket slot ${gm.bracketId} (homeTeam "${node.homeTeam}")`);
+        if (node.awayTeam && gm.away !== node.awayTeam) fail(`${tag}: away "${gm.away}" disagrees with bracket slot ${gm.bracketId} (awayTeam "${node.awayTeam}")`);
+      }
     }
   });
 }
