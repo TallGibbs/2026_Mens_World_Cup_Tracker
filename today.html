@@ -190,6 +190,14 @@
   .gd-pos{color:var(--qual);} .gd-neg{color:var(--loss);}
   .standnote{font-size:11.5px;color:var(--faint);margin-top:9px;}
 
+  /* ---------- Knockout sub-card (Today page, knockout rounds) ---------- */
+  .koside{display:flex;flex-direction:column;gap:10px;margin-top:2px;}
+  .korow{display:flex;align-items:center;gap:10px;}
+  .korow .kit{height:26px;}
+  .kteam{font-family:'Barlow Condensed','Barlow',sans-serif;font-weight:700;font-size:18px;}
+  .kseed{margin-left:auto;font-size:11.5px;color:var(--faint);font-family:'Barlow Condensed','Barlow',sans-serif;text-transform:uppercase;letter-spacing:.06em;}
+  .komid{font-size:11px;color:var(--faint);text-transform:uppercase;letter-spacing:.08em;text-align:center;border-top:1px dashed var(--hairline);border-bottom:1px dashed var(--hairline);padding:5px 0;}
+
   /* ---------- Footer ---------- */
   .legend{display:flex;flex-wrap:wrap;gap:18px;align-items:center;margin:24px 2px 0;color:var(--muted);font-size:13px;}
   .legend .k{display:inline-flex;align-items:center;gap:7px;}
@@ -308,6 +316,22 @@ function miniTable(g){
     '<div class="standnote">Highlighted = playing now &middot; updated after full time on the main tracker.</div>';
 }
 
+/* ---- knockout games have two teams from different groups, so they show a
+   single-elimination sub-card (not one group's mini-table). A game is knockout
+   when its stage is a round key (r32..final) or it carries no single group. ---- */
+function isKnockout(g){ return ['r32','r16','qf','sf','third','final'].includes(g.stage) || !g.group; }
+function knockoutCard(g){
+  return '<div class="side-h">'+esc(g.round||g.stage||'Knockout')+'</div>'+
+    '<div class="koside">'+
+      '<div class="korow"><span class="kit" style="background:'+kitFor(g.home)+'"></span>'+
+        '<span class="kteam">'+esc(g.home)+'</span><span class="kseed">'+esc(g.homeFrom||'')+'</span></div>'+
+      '<div class="komid">winner advances</div>'+
+      '<div class="korow"><span class="kit" style="background:'+kitFor(g.away)+'"></span>'+
+        '<span class="kteam">'+esc(g.away)+'</span><span class="kseed">'+esc(g.awayFrom||'')+'</span></div>'+
+    '</div>'+
+    '<div class="standnote">Single elimination &middot; winner advances. Full bracket on the <a href="/bracket">bracket page</a>.</div>';
+}
+
 function badgeFor(iso, isNext){
   const st = statusFor(iso);
   if(st==='live') return '<span class="badge live"><span class="live-dot"></span>Live</span>';
@@ -349,7 +373,7 @@ function renderGames(){
             '</div>'+
             bullets+
           '</div>'+
-          '<div class="gc-side">'+miniTable(g)+'</div>'+
+          '<div class="gc-side">'+(isKnockout(g)?knockoutCard(g):miniTable(g))+'</div>'+
         '</div>'+
       '</article>');
     wrap.appendChild(card);
