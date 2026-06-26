@@ -89,20 +89,23 @@ function checkGroupRows(id, rows) {
 }
 
 /* ---------- load the single source ---------- */
-let dataSrc, trackerSrc, todaySrc, WC;
+let dataSrc, trackerSrc, todaySrc, bracketSrc, WC;
 try { dataSrc = readFileSync(join(root, 'data.js'), 'utf8'); } catch (e) { fail('cannot read data.js: ' + e.message); }
 try { trackerSrc = readFileSync(join(root, 'world_cup_tracker.html'), 'utf8'); } catch (e) { fail('cannot read world_cup_tracker.html: ' + e.message); }
 try { todaySrc = readFileSync(join(root, 'today.html'), 'utf8'); } catch (e) { fail('cannot read today.html: ' + e.message); }
+try { bracketSrc = readFileSync(join(root, 'bracket.html'), 'utf8'); } catch (e) { /* optional until created */ }
 try { if (dataSrc) WC = extractObject(dataSrc, 'WC'); } catch (e) { fail('parse WC from data.js: ' + e.message); }
 
 scanEmoji('data.js', dataSrc);
 scanEmoji('world_cup_tracker.html', trackerSrc);
 scanEmoji('today.html', todaySrc);
+scanEmoji('bracket.html', bracketSrc);
 scanPlaceholder('data.js (WC)', WC);
 
-/* both pages must actually load the shared data file */
+/* every page must actually load the shared data file */
 if (trackerSrc && !/<script src="\/data\.js"><\/script>/.test(trackerSrc)) fail('world_cup_tracker.html does not load /data.js');
 if (todaySrc && !/<script src="\/data\.js"><\/script>/.test(todaySrc)) fail('today.html does not load /data.js');
+if (bracketSrc && !/<script src="\/data\.js"><\/script>/.test(bracketSrc)) fail('bracket.html does not load /data.js');
 
 /* ---------- WC checks ---------- */
 const byId = {};
@@ -173,6 +176,96 @@ if (WC) {
       }
     }
   });
+
+  /* ---------- Bracket + groupsFinal integrity (gated on WC.bracket) ---------- */
+  if (WC.bracket) {
+    const knownTeams = new Set();
+    for (const g of (WC.groupsFinal || WC.groups || [])) for (const r of (g.rows || [])) knownTeams.add(r.team);
+
+    if (typeof WC.bracket.source !== 'string' || !WC.bracket.source.trim())
+      fail('WC.bracket.source must be a non-empty named structured source string');
+    if (!Array.isArray(WC.bracket.rounds)) fail('WC.bracket.rounds must be an array');
+
+    const ROUND_SIZE = { r32: 16, r16: 8, qf: 4, sf: 2, third: 1, final: 1 };
+    const seenIds = new Set();
+    for (const rd of (WC.bracket.rounds || [])) {
+      const exp = ROUND_SIZE[rd.key];
+      if (exp == null) fail(`WC.bracket: unknown round key "${rd.key}"`);
+      else if (!Array.isArray(rd.matches) || rd.matches.length !== exp)
+        fail(`WC.bracket round "${rd.key}": expected ${exp} matches, got ${rd.matches && rd.matches.length}`);
+
+      for (const m of (rd.matches || [])) {
+        if (!m.id) { fail(`WC.bracket round "${rd.key}": a match is missing "id"`); continue; }
+        if (seenIds.has(m.id)) fail(`WC.bracket: duplicate match id "${m.id}"`);
+        seenIds.add(m.id);
+
+        for (const k of ['home', 'away', 'iso', 'venue', 'tv', 'status'])
+          if (m[k] == null || m[k] === '') fail(`WC.bracket ${m.id}: missing "${k}"`);
+        if (m.status !== 'upcoming' && m.status !== 'final')
+          fail(`WC.bracket ${m.id}: status must be "upcoming" or "final" (got "${m.status}")`);
+
+        for (const side of ['homeTeam', 'awayTeam'])
+          if (m[side] != null && m[side] !== '' && !knownTeams.has(m[side]))
+            fail(`WC.bracket ${m.id}: ${side} "${m[side]}" is not a known tournament team`);
+
+        if (m.status === 'final') {
+          if (!Number.isInteger(m.hs) || !Number.isInteger(m.as) || m.hs < 0 || m.as < 0)
+            fail(`WC.bracket ${m.id}: a final match needs integer hs/as >= 0`);
+          if (!m.homeTeam || !m.awayTeam)
+            fail(`WC.bracket ${m.id}: a final match must have both teams resolved`);
+          if (m.winner !== m.homeTeam && m.winner !== m.awayTeam)
+            fail(`WC.bracket ${m.id}: winner "${m.winner}" must equal homeTeam or awayTeam`);
+          if (Number.isInteger(m.hs) && Number.isInteger(m.as)) {
+            if (m.hs === m.as) {
+              if (!/^\d+-\d+$/.test(m.pens || '')) fail(`WC.bracket ${m.id}: level score ${m.hs}-${m.as} must record a penalty result "X-Y" in "pens"`);
+              else {
+                const [ph, pa] = m.pens.split('-').map(Number);
+                if (ph === pa) fail(`WC.bracket ${m.id}: penalties cannot be level (${m.pens})`);
+                else if (m.winner !== (ph > pa ? m.homeTeam : m.awayTeam)) fail(`WC.bracket ${m.id}: winner "${m.winner}" disagrees with penalties ${m.pens}`);
+              }
+            } else {
+              if (m.pens) fail(`WC.bracket ${m.id}: non-level score ${m.hs}-${m.as} must not record penalties`);
+              if (m.winner !== (m.hs > m.as ? m.homeTeam : m.awayTeam)) fail(`WC.bracket ${m.id}: winner "${m.winner}" disagrees with score ${m.hs}-${m.as}`);
+            }
+          }
+        } else {
+          if (m.hs != null || m.as != null || m.winner != null || m.pens != null)
+            fail(`WC.bracket ${m.id}: an upcoming match must not carry hs/as/winner/pens`);
+        }
+      }
+    }
+
+    // No resolved team appears twice within one round.
+    for (const rd of (WC.bracket.rounds || [])) {
+      const seenInRound = new Set();
+      for (const m of (rd.matches || [])) for (const side of [m.homeTeam, m.awayTeam]) {
+        if (!side) continue;
+        if (seenInRound.has(side)) fail(`WC.bracket round "${rd.key}": team "${side}" appears more than once`);
+        seenInRound.add(side);
+      }
+    }
+
+    // Advancement: a final winner must occupy the EXACT feedsSide of its feedsInto slot.
+    for (const rd of (WC.bracket.rounds || [])) for (const m of (rd.matches || [])) {
+      if (!m.feedsInto) continue;
+      const nxt = bracketById[m.feedsInto];
+      if (!nxt) { fail(`WC.bracket ${m.id}: feedsInto "${m.feedsInto}" is not a known slot id`); continue; }
+      if (m.feedsSide !== 'home' && m.feedsSide !== 'away') { fail(`WC.bracket ${m.id}: feedsSide must be "home" or "away"`); continue; }
+      if (m.status === 'final' && m.winner) {
+        const slot = m.feedsSide === 'home' ? nxt.homeTeam : nxt.awayTeam;
+        if (slot !== m.winner) fail(`WC.bracket ${m.id}: winner "${m.winner}" not keyed into ${m.feedsInto}.${m.feedsSide} (found "${slot}")`);
+      }
+    }
+  }
+
+  // Phase consistency: once past group, the frozen final table must exist.
+  if (PHASE !== 'group' && !WC.groupsFinal) fail(`WC.meta.phase is "${PHASE}" but WC.groupsFinal is missing`);
+
+  // groupsFinal table math + all rows pld:3.
+  if (WC.groupsFinal) for (const g of WC.groupsFinal) {
+    checkGroupRows('FINAL ' + g.id, g.rows || []);
+    for (const r of (g.rows || [])) if (r.pld !== 3) fail(`WC.groupsFinal ${g.id} / ${r.team}: pld is ${r.pld}, expected 3`);
+  }
 }
 
 /* ---------- report ---------- */

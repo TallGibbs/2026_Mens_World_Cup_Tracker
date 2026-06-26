@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Men's World Cup 2026 - Matchday Companion</title>
+<title>Men's World Cup 2026 - Bracket</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -298,6 +298,51 @@
     .live-dot{animation:pulse 1.8s infinite;}
     @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(58,208,122,.5);}70%{box-shadow:0 0 0 8px rgba(58,208,122,0);}100%{box-shadow:0 0 0 0 rgba(58,208,122,0);}}
   }
+
+  /* ---------- Bracket page ---------- */
+  .bracket-hero{margin:16px 2px 14px;}
+  .bracket-hero h1{font-family:'Barlow Condensed','Barlow',sans-serif;font-weight:700;font-size:38px;line-height:1;margin:4px 0 0;letter-spacing:.005em;}
+  .bracket-note{color:var(--muted);font-size:14px;margin:11px 2px 0;max-width:66ch;}
+  .bracket-scroll{display:flex;gap:18px;overflow-x:auto;padding:4px 2px 14px;scroll-snap-type:x proximity;}
+  .round-col{flex:0 0 290px;min-width:290px;scroll-snap-align:start;}
+  .round-head{display:flex;align-items:baseline;gap:10px;margin:6px 0 12px;}
+  .round-head h2{font-family:'Barlow Condensed','Barlow',sans-serif;font-weight:700;font-size:22px;margin:0;letter-spacing:.01em;}
+  .round-head .rc-count{color:var(--muted);font-size:12.5px;}
+  .round-list{display:flex;flex-direction:column;gap:14px;}
+
+  .bmatch{background:var(--card);border:1px solid var(--hairline);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;}
+  .bm-head{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:9px 12px;background:#F7F9FB;border-bottom:1px solid var(--hairline);}
+  .bm-id{font-family:'Barlow Condensed','Barlow',sans-serif;text-transform:uppercase;letter-spacing:.07em;font-size:11px;font-weight:700;color:var(--faint);}
+  .bm-state{font-size:12px;font-weight:600;color:var(--muted);}
+  .bm-state.final{color:var(--faint);}
+
+  .bm-row{display:flex;align-items:center;gap:10px;padding:9px 12px;}
+  .bm-row + .bm-row{border-top:1px solid #EEF2F6;}
+  .bm-kit{width:4px;height:22px;border-radius:3px;flex:none;}
+  .bm-team{font-family:'Barlow Condensed','Barlow',sans-serif;font-weight:600;font-size:17px;}
+  .bm-from{margin-left:auto;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);font-family:'Barlow Condensed','Barlow',sans-serif;text-align:right;}
+  .bm-score{margin-left:auto;font-family:'Barlow Condensed','Barlow',sans-serif;font-weight:700;font-size:18px;color:var(--ink);}
+  .bm-row.winner .bm-team{font-weight:700;color:var(--ink);}
+  .bm-row.loser .bm-team,.bm-row.loser .bm-score{color:var(--faint);}
+  .bm-row.unresolved .bm-team{color:var(--faint);font-weight:600;}
+  .bm-foot{padding:8px 12px;border-top:1px solid #EEF2F6;color:var(--faint);font-size:12px;}
+
+  /* mobile: one round at a time + sticky selector (720px, wider than site 560px) */
+  .round-select{display:none;}
+  @media (max-width:720px){
+    .bracket-scroll{display:block;overflow-x:visible;}
+    .round-select{display:flex;gap:4px;overflow-x:auto;position:sticky;top:var(--header-h);z-index:50;
+      background:var(--bg-top);padding:8px 2px;margin:0 0 6px;}
+    .round-select button{font-family:'Barlow Condensed','Barlow',sans-serif;font-weight:600;
+      text-transform:uppercase;letter-spacing:.06em;font-size:13px;white-space:nowrap;
+      border:1px solid var(--hairline);background:var(--card);color:var(--muted);
+      padding:8px 14px;border-radius:9px;cursor:pointer;box-shadow:var(--shadow);}
+    .round-select button[aria-pressed="true"]{background:var(--band);color:#fff;border-color:var(--band);}
+    .round-select button:focus-visible{outline:2px solid var(--gold);outline-offset:2px;}
+    .round-col{flex:none;min-width:0;display:none;margin-bottom:8px;}
+    .round-col.active{display:block;}
+    .round-list{gap:12px;}
+  }
 </style>
 </head>
 <body>
@@ -307,74 +352,33 @@
     <a class="brand" href="/"><span class="ball" aria-hidden="true"></span>Men's World Cup 2026</a>
     <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Open menu"><span></span></button>
     <ul class="nav-links" id="nav-links">
-      <li><a href="/" aria-current="page">Tracker</a></li>
+      <li><a href="/">Tracker</a></li>
       <li><a href="/today">Today's Games</a></li>
-      <li><a href="/bracket">Bracket</a></li>
+      <li><a href="/bracket" aria-current="page">Bracket</a></li>
     </ul>
   </nav>
 </header>
 <main id="main">
 <div class="wrap">
 
-  <header class="hero">
-    <div class="hero-inner">
-      <div class="hero-title">
-        <div class="eyebrow">Your matchday companion</div>
-        <h1 id="t-title">FIFA World Cup 2026</h1>
-        <div class="hero-rule"></div>
-        <div class="sub" id="t-host"></div>
-        <div class="stage-tag" id="t-stage"></div>
-        <div class="where" id="t-where"></div>
-      </div>
-
-      <div class="nextup" id="nextup">
-        <!-- filled by script -->
-      </div>
-
-      <div class="ondeck-left" id="ondeck-left">
-        <!-- coming-up list, filled by script -->
-      </div>
-    </div>
+  <header class="bracket-hero">
+    <div class="eyebrow">Knockout stage</div>
+    <h1>Bracket</h1>
+    <div class="hero-rule"></div>
+    <p class="bracket-note" id="bracket-note"></p>
   </header>
 
-  <div class="controls">
-    <div class="seg" role="group" aria-label="Which groups to show">
-      <button id="btn-mine" aria-pressed="false">Our teams</button>
-      <button id="btn-all" aria-pressed="true">All groups</button>
-    </div>
-    <div class="search">
-      <span class="ico" aria-hidden="true"></span>
-      <input id="search" type="search" placeholder="Find a team" aria-label="Find a team">
-    </div>
+  <div class="legend">
+    <span class="k"><span class="sw" style="background:var(--qual)"></span> Winner advances</span>
+    <span class="k"><span class="sw" style="background:var(--third)"></span> Best third-placed entrant</span>
   </div>
 
-  <section aria-label="Our teams">
-    <div class="section-head">
-      <h2>Our teams</h2>
-      <span class="note">USA, Netherlands and England at a glance</span>
-    </div>
-    <div class="teams" id="teams"></div>
-  </section>
+  <nav class="round-select" id="round-select" role="group" aria-label="Choose a round to view"></nav>
 
-  <section aria-label="Group standings">
-    <div class="section-head">
-      <h2>Group standings</h2>
-      <span class="note" id="stand-note"></span>
-    </div>
-    <div class="groups" id="groups"></div>
-    <p class="no-result" id="no-result">No team matches that search.</p>
-
-    <div class="legend">
-      <span class="k"><span class="sw" style="background:var(--qual)"></span> Top 2 advance</span>
-      <span class="k"><span class="sw" style="background:var(--third)"></span> 3rd place (8 best advance)</span>
-      <span class="k"><span class="wl W" style="width:16px;height:16px">W</span> Win</span>
-      <span class="k"><span class="wl D" style="width:16px;height:16px">D</span> Draw</span>
-      <span class="k"><span class="wl L" style="width:16px;height:16px">L</span> Loss</span>
-    </div>
-  </section>
+  <section aria-label="Knockout bracket" id="bracket-desktop" class="bracket-scroll"></section>
 
   <div class="footer">
-    <span>Times shown in <b>ET</b>. Top two from each group plus the eight best third-placed teams reach the Round of 32.</span>
+    <span>Times shown in <b>ET</b>. Single elimination &middot; winners advance; the two losing semi-finalists meet in the third-place play-off.</span>
     <span id="updated"></span>
   </div>
 
@@ -1872,292 +1876,98 @@ const WC = {
 </script>
 <script>
 /* =========================================================================
-   The tracker renders from the shared WC object defined in data.js (loaded
-   above). The daily routine edits data.js, NOT this file. Do not change the
-   markup, CSS, or the JavaScript below.
+   The bracket page renders from WC.bracket in data.js (loaded above). The daily
+   routine edits data.js, NOT this file. Do not change the markup, CSS, or the
+   JavaScript below. Placeholder-tolerant: a slot shows its resolved team when
+   known, else its descriptor, so the whole tree renders before teams are set.
    ========================================================================= */
-const DATA = WC;
-
-/* =========================== rendering =========================== */
-const FAVS = DATA.teams.map(t=>t.name);
-const FAV_GROUPS = DATA.teams.map(t=>t.group);
-const kitFor = name => (DATA.teams.find(t=>t.name===name)||{}).kit || "var(--hairline-strong)";
+const WCB = (WC.bracket && WC.bracket.rounds) || [];
+const PHASE = (WC.meta && WC.meta.phase) || "group";
 
 function el(html){const d=document.createElement('div');d.innerHTML=html.trim();return d.firstChild;}
 function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function kitFor(name){ return (WC.today && WC.today.kits && WC.today.kits[name]) || "var(--hairline-strong)"; }
 
-/* ---- header text ---- */
-document.getElementById('t-title').textContent = DATA.meta.tournament;
-document.getElementById('t-host').textContent  = DATA.meta.host;
-document.getElementById('t-stage').textContent = DATA.meta.stage;
-document.getElementById('t-where').textContent = DATA.meta.where;
-document.getElementById('stand-note').textContent = DATA.meta.standNote;
-document.getElementById('updated').innerHTML = "Refreshed <b>"+esc(DATA.meta.updated)+"</b> &middot; verified each morning";
+document.getElementById('updated').innerHTML = "Refreshed <b>"+esc(WC.meta.updated)+"</b>";
 
-/* ---- flatten featured fixtures for the hero ---- */
-const allFixtures = [];
-DATA.teams.forEach(t=>t.fixtures.forEach(f=>allFixtures.push(Object.assign({team:t.name, kit:t.kit}, f))));
+const SHORT = {r32:"R32", r16:"R16", qf:"QF", sf:"SF", third:"3rd", final:"Final"};
 
-function pickHero(){
-  const now = Date.now();
-  const up = allFixtures.filter(f=>f.status==='upcoming');
-  const live = up.find(f=>{const k=+new Date(f.date); return now>=k && now < k + 150*60000;});
-  if(live) return {mode:'live', f:live};
-  const future = up.filter(f=>+new Date(f.date) > now).sort((a,b)=>+new Date(a.date)-+new Date(b.date));
-  if(future.length) return {mode:'count', f:future[0], rest:future.slice(1)};
-  return {mode:'done'};
+function renderRow(team, descriptor, isWinner, isLoser, score){
+  const resolved = !!team;
+  const cls = ["bm-row"];
+  if(!resolved) cls.push("unresolved");
+  else if(isWinner) cls.push("winner");
+  else if(isLoser) cls.push("loser");
+  const label = esc(resolved ? team : descriptor);
+  const from  = resolved ? '<span class="bm-from">'+esc(descriptor)+'</span>' : '';
+  const sc    = (score!=null) ? '<span class="bm-score">'+score+'</span>' : '';
+  return '<div class="'+cls.join(' ')+'">'+
+    '<span class="bm-kit" style="background:'+kitFor(team)+'"></span>'+
+    '<span class="bm-team">'+label+'</span>'+from+sc+'</div>';
 }
 
-/* group standings table for the next game's group, both teams highlighted */
-function heroGroupTable(teamName, oppName){
-  const t = DATA.teams.find(x=>x.name===teamName);
-  const g = t ? DATA.groups.find(x=>x.id===t.group) : null;
-  if(!g) return '';
-  const hl=[teamName, oppName];
-  const body = g.rows.map((r,i)=>{
-    const cls=[];
-    if(g.started){ if(i<2) cls.push('q-auto'); else if(i===2) cls.push('q-third'); }
-    if(hl.includes(r.team)) cls.push('hl');
-    const played=(r.pld||0)>0;
-    const gd = played ? (r.gd>0?'+'+r.gd:(''+r.gd)) : '-';
-    return '<tr class="'+cls.join(' ')+'">'+
-      '<td class="tm">'+esc(r.team)+'</td>'+
-      '<td>'+(r.pld||0)+'</td>'+
-      '<td>'+(played?r.w:'-')+'</td>'+
-      '<td>'+(played?r.d:'-')+'</td>'+
-      '<td>'+(played?r.l:'-')+'</td>'+
-      '<td>'+gd+'</td>'+
-      '<td class="pts">'+(played?r.pts:'-')+'</td>'+
-    '</tr>';
+function renderMatch(m){
+  const fin = m.status==="final";
+  const hw = fin && m.winner===m.homeTeam, aw = fin && m.winner===m.awayTeam;
+  const state = fin ? '<span class="bm-state final">Full time</span>'
+             : '<span class="bm-state upcoming">'+esc(m.kick||"")+'</span>';
+  const pens = (fin && m.pens) ? ' &middot; won '+esc(m.pens)+' on penalties' : '';
+  const hl = m.homeTeam || m.home, al = m.awayTeam || m.away;
+  let aria = esc(m.id)+': '+esc(hl)+' versus '+esc(al);
+  if(fin) aria += ', full time '+esc(hl)+' '+m.hs+', '+esc(al)+' '+m.as+(m.pens?' (won '+esc(m.pens)+' on penalties)':'');
+  return '<article class="bmatch" data-status="'+esc(m.status)+'" aria-label="'+aria+'">'+
+    '<div class="bm-head"><span class="bm-id">'+esc(m.id)+'</span>'+state+'</div>'+
+    renderRow(m.homeTeam, m.home, hw, fin&&!hw, fin?m.hs:null)+
+    renderRow(m.awayTeam, m.away, aw, fin&&!aw, fin?m.as:null)+
+    '<div class="bm-foot">'+esc(m.venue||"")+(m.tv?' &middot; '+esc(m.tv):'')+pens+'</div>'+
+  '</article>';
+}
+
+function earliestUnfinished(){
+  for(const rd of WCB){ if((rd.matches||[]).some(m=>m.status!=="final")) return rd.key; }
+  return WCB.length ? WCB[WCB.length-1].key : null;   // all final -> Final; none -> null
+}
+
+function buildBracket(){
+  const host = document.getElementById('bracket-desktop');
+  const sel  = document.getElementById('round-select');
+  const note = document.getElementById('bracket-note');
+
+  if(!WCB.length){
+    if(note) note.textContent = "The bracket opens after the group stage.";
+    host.innerHTML = '<article class="bmatch"><div class="bm-foot" style="padding:14px 16px;font-size:14px;color:var(--muted)">'+
+      'Bracket opens June 28 - check back after the group stage.</div></article>';
+    return;
+  }
+  if(note){
+    note.textContent = PHASE==="group"
+      ? "The knockout bracket fills in as groups finish. Round of 32 begins June 28."
+      : "Winners advance through the tree; the two losing semi-finalists meet in the third-place play-off.";
+  }
+
+  host.innerHTML = WCB.map(function(rd){
+    const n = (rd.matches||[]).length;
+    const cards = (rd.matches||[]).map(renderMatch).join('');
+    return '<div class="round-col" data-round="'+esc(rd.key)+'">'+
+      '<div class="round-head"><h2>'+esc(rd.label)+'</h2><span class="rc-count">'+n+(n===1?' tie':' ties')+'</span></div>'+
+      '<div class="round-list">'+cards+'</div>'+
+    '</div>';
   }).join('');
-  return '<div class="hx-h">Group '+esc(g.id)+' &middot; how they stand</div>'+
-    '<table class="hx-table"><thead><tr>'+
-      '<th class="tm">Team</th><th>P</th><th>W</th><th>D</th><th>L</th><th>GD</th><th>Pts</th>'+
-    '</tr></thead><tbody>'+body+'</tbody></table>';
-}
-/* forward-looking preview of the upcoming fixture (NOT a recap of the last game) */
-function heroPreview(f){
-  if(f && f.preview && f.preview.length){
-    return '<div class="hx-h hx-h2">What to watch</div>'+
-      '<ul class="hx-prev">'+f.preview.map(b=>'<li>'+esc(b)+'</li>').join('')+'</ul>';
+
+  sel.innerHTML = WCB.map(function(rd){
+    return '<button data-round="'+esc(rd.key)+'" aria-pressed="false">'+esc(SHORT[rd.key]||rd.label)+'</button>';
+  }).join('');
+
+  const cols = Array.prototype.slice.call(host.querySelectorAll('.round-col'));
+  const btns = Array.prototype.slice.call(sel.querySelectorAll('button'));
+  function select(key){
+    cols.forEach(function(c){ c.classList.toggle('active', c.getAttribute('data-round')===key); });
+    btns.forEach(function(b){ b.setAttribute('aria-pressed', String(b.getAttribute('data-round')===key)); });
   }
-  return '';
+  btns.forEach(function(b){ b.addEventListener('click', function(){ select(b.getAttribute('data-round')); }); });
+  select(earliestUnfinished() || (WCB[0] && WCB[0].key));
 }
-
-function renderHero(){
-  const box = document.getElementById('nextup');
-  const deck = document.getElementById('ondeck-left');
-  const h = pickHero();
-  if(deck) deck.innerHTML = '';
-  if(h.mode==='done'){
-    box.innerHTML = '<div class="label">Our teams</div><div style="margin-top:10px;font-size:15px;color:#C9D8E6">Group stage wrapped up. Check the knockout bracket for what comes next.</div>';
-    return;
-  }
-  const f = h.f;
-  const matchHtml =
-    '<div class="match"><span class="team"><span class="kit" style="background:'+f.kit+'"></span>'+esc(f.team)+'</span>'+
-    '<span class="vs">v</span><span class="team opp">'+esc(f.opp)+'</span></div>';
-  const meta =
-    '<div class="meta">'+esc(f.when)+' &nbsp;&middot;&nbsp; '+esc(f.venue)+' &nbsp;&middot;&nbsp; '+esc(f.tv)+'</div>';
-  const details =
-    '<div class="hx-details">'+heroGroupTable(f.team, f.opp)+heroPreview(f)+'</div>';
-
-  // "Coming up for our teams" -> left column, below the title
-  const rest = h.rest || [];
-  if(deck && rest.length){
-    deck.innerHTML = '<div class="ondeck"><div class="h">Coming up for our teams</div><ul>'+
-      rest.map(r=>{
-        const parts = r.when.split(',');
-        const od = esc(parts[0]);
-        const tm = esc(parts.slice(1).join(',').trim());
-        return '<li><span class="od-kit" style="background:'+r.kit+'"></span>'+
-          '<span class="od-body">'+
-            '<span class="od-top"><span class="od-date">'+od+'</span>'+esc(r.team)+' v '+esc(r.opp)+'</span>'+
-            '<span class="od-sub"><span>'+tm+'</span> &middot; <span>'+esc(r.venue)+'</span></span>'+
-          '</span></li>';
-      }).join('')+'</ul></div>';
-  }
-
-  if(h.mode==='live'){
-    box.innerHTML = '<div class="label"><span class="live-dot"></span> Live now</div>'+matchHtml+meta+details;
-    return;
-  }
-  box.innerHTML =
-    '<div class="label">Next up for our teams</div>'+matchHtml+
-    '<div class="countdown" id="cd"></div>'+meta+details;
-  tickCountdown(f.date);
-}
-
-let cdTimer=null;
-function tickCountdown(iso){
-  const cd = document.getElementById('cd');
-  if(!cd) return;
-  if(cdTimer) clearInterval(cdTimer);
-  const target = +new Date(iso);
-  function frame(){
-    let diff = target - Date.now();
-    if(diff<=0){ clearInterval(cdTimer); renderHero(); return; }
-    const d=Math.floor(diff/86400000); diff-=d*86400000;
-    const h=Math.floor(diff/3600000); diff-=h*3600000;
-    const m=Math.floor(diff/60000); diff-=m*60000;
-    const s=Math.floor(diff/1000);
-    const cell=(n,u)=>'<div class="cd-cell"><div class="n">'+String(n).padStart(2,'0')+'</div><div class="u">'+u+'</div></div>';
-    cd.innerHTML = cell(d,'Days')+cell(h,'Hrs')+cell(m,'Min')+cell(s,'Sec');
-  }
-  frame(); cdTimer=setInterval(frame,1000);
-}
-
-/* ---- featured team cards ---- */
-function groupRowFor(team){
-  const g = DATA.groups.find(x=>x.id===team.group);
-  if(!g) return {pos:'-',pts:'-'};
-  const idx = g.rows.findIndex(r=>r.team===team.name);
-  if(idx<0) return {pos:'-',pts:'-'};
-  const pts = g.rows[idx].pts;
-  return {pos: g.started ? idx+1 : '-', pts: (pts==null ? 0 : pts)};
-}
-function lastResult(team){
-  const fin = team.fixtures.filter(f=>f.status==='final');
-  return fin.length ? fin[fin.length-1] : null;
-}
-function nextMatch(team){
-  const now=Date.now();
-  return team.fixtures.find(f=>f.status==='upcoming' && +new Date(f.date)>now) || team.fixtures.find(f=>f.status==='upcoming');
-}
-function renderTeams(){
-  const wrap=document.getElementById('teams');
-  DATA.teams.forEach(t=>{
-    const gr=groupRowFor(t);
-    const lr=lastResult(t);
-    const nm=nextMatch(t);
-    let resultHtml;
-    if(lr){
-      const wl = lr.us>lr.them?'W':(lr.us<lr.them?'L':'D');
-      resultHtml = '<span class="pill"><span class="wl '+wl+'">'+wl+'</span><span class="score">'+lr.us+'-'+lr.them+'</span></span> <span class="next-x">v '+esc(lr.opp)+'</span>';
-    } else {
-      resultHtml = '<span class="pending">Yet to play</span>';
-    }
-    const nextHtml = nm
-      ? '<span class="next-d">v '+esc(nm.opp)+'</span> <span class="next-x">'+esc(nm.when)+'</span>'
-      : '<span class="pending">Group stage done</span>';
-
-    const card = el(
-      '<article class="tcard">'+
-        '<div class="stripe" style="background:'+t.kit+'"></div>'+
-        '<div class="body">'+
-          '<div class="top">'+
-            '<div><div class="name">'+esc(t.name)+'</div><div class="grp">Group '+esc(t.group)+'</div></div>'+
-            '<div class="pos"><div class="p">'+gr.pos+'</div><div class="pl">Pos</div><div class="pts">'+gr.pts+' pts</div></div>'+
-          '</div>'+
-          '<div class="rowline"><span class="tag">Last</span>'+resultHtml+'</div>'+
-          '<div class="rowline"><span class="tag">Next</span>'+nextHtml+'</div>'+
-          (nm && nm.venue ? '<div class="rowline"><span class="tag"></span><span class="next-x">'+esc(nm.venue)+' &middot; '+esc(nm.tv)+'</span></div>' : '')+
-          '<div class="tnote">'+esc(t.note)+'</div>'+
-        '</div>'+
-      '</article>');
-    wrap.appendChild(card);
-  });
-}
-
-/* ---- group standings ---- */
-function renderGroups(){
-  const wrap=document.getElementById('groups');
-  // favourite groups first, then the rest in order
-  const ordered = DATA.groups.slice().sort((a,b)=>{
-    const fa=FAV_GROUPS.includes(a.id)?0:1, fb=FAV_GROUPS.includes(b.id)?0:1;
-    if(fa!==fb) return fa-fb;
-    return a.id<b.id?-1:1;
-  });
-
-  ordered.forEach(g=>{
-    const isFav = FAV_GROUPS.includes(g.id);
-    const status = g.started ? 'Matchday 1 complete' : (g.note||'Not started');
-    // default: collapse non-started, non-favourite groups
-    const collapsed = (!g.started && !isFav);
-
-    const rowsHtml = g.rows.map((r,i)=>{
-      const favTeam = FAVS.includes(r.team);
-      const played = (r.pld||0)>0;
-      const cls=[];
-      if(g.started){
-        if(i<2) cls.push('q-auto'); else if(i===2) cls.push('q-third');
-      }
-      if(favTeam){ cls.push('favrow'); cls.push('kit-'+r.team.replace(/[^A-Za-z]/g,'')); }
-      const dash='<span class="muted-dash">-</span>';
-      const gdTxt = played ? (r.gd>0?'<span class="gd-pos">+'+r.gd+'</span>':(r.gd<0?'<span class="gd-neg">'+r.gd+'</span>':'0')) : dash;
-      return '<tr class="'+cls.join(' ')+'" data-team="'+esc(r.team.toLowerCase())+'">'+
-        '<td class="tm"><span class="teamcell"><span class="qedge"></span><span class="tn">'+esc(r.team)+'</span></span></td>'+
-        '<td>'+(r.pld||0)+'</td>'+
-        '<td>'+(played?r.w:dash)+'</td>'+
-        '<td>'+(played?r.d:dash)+'</td>'+
-        '<td>'+(played?r.l:dash)+'</td>'+
-        '<td>'+gdTxt+'</td>'+
-        '<td class="pts">'+(played?r.pts:dash)+'</td>'+
-      '</tr>';
-    }).join('');
-
-    const card = el(
-      '<div class="gcard'+(isFav?' fav':'')+(collapsed?' collapsed':'')+'" data-fav="'+(isFav?1:0)+'" data-group="'+g.id+'">'+
-        '<button class="ghead" aria-expanded="'+(!collapsed)+'">'+
-          '<span class="gt"><span class="chev"></span><span class="gname">Group '+g.id+'</span>'+
-            (isFav?'<span class="fav-flag">Ours</span>':'')+'</span>'+
-          '<span class="gstatus">'+esc(status)+'</span>'+
-        '</button>'+
-        '<div class="gbody">'+
-          '<table><thead><tr>'+
-            '<th class="tm">Team</th><th>P</th><th>W</th><th>D</th><th>L</th><th>GD</th><th>Pts</th>'+
-          '</tr></thead><tbody>'+rowsHtml+'</tbody></table>'+
-        '</div>'+
-      '</div>');
-
-    const btn=card.querySelector('.ghead');
-    btn.addEventListener('click',()=>{
-      const isC=card.classList.toggle('collapsed');
-      btn.setAttribute('aria-expanded', String(!isC));
-    });
-    wrap.appendChild(card);
-  });
-}
-
-/* ---- controls: view toggle + search ---- */
-let viewMine=false, query='';
-function applyFilters(){
-  const cards=document.querySelectorAll('.gcard');
-  let anyVisible=false;
-  cards.forEach(card=>{
-    const isFav = card.getAttribute('data-fav')==='1';
-    let visible = viewMine ? isFav : true;
-    // search
-    card.querySelectorAll('tbody tr').forEach(tr=>tr.classList.remove('row-hit'));
-    if(visible && query){
-      const matches=[...card.querySelectorAll('tbody tr')].filter(tr=>tr.getAttribute('data-team').includes(query));
-      if(matches.length){
-        matches.forEach(tr=>tr.classList.add('row-hit'));
-        if(card.classList.contains('collapsed')){
-          card.classList.remove('collapsed');
-          card.querySelector('.ghead').setAttribute('aria-expanded','true');
-        }
-      } else {
-        visible=false;
-      }
-    }
-    card.style.display = visible ? '' : 'none';
-    if(visible) anyVisible=true;
-  });
-  document.getElementById('no-result').style.display = anyVisible ? 'none' : 'block';
-}
-function setView(mine){
-  viewMine=mine;
-  document.getElementById('btn-mine').setAttribute('aria-pressed', String(mine));
-  document.getElementById('btn-all').setAttribute('aria-pressed', String(!mine));
-  applyFilters();
-}
-document.getElementById('btn-mine').addEventListener('click',()=>setView(true));
-document.getElementById('btn-all').addEventListener('click',()=>setView(false));
-document.getElementById('search').addEventListener('input',e=>{
-  query=e.target.value.trim().toLowerCase();
-  applyFilters();
-});
+buildBracket();
 
 /* ---- sticky nav: mobile menu toggle ---- */
 (function(){
@@ -2168,12 +1978,6 @@ document.getElementById('search').addEventListener('input',e=>{
     t.setAttribute('aria-expanded', String(open));
   });
 })();
-
-/* ---- go ---- */
-renderHero();
-renderTeams();
-renderGroups();
-applyFilters();
 </script>
 </body>
 </html>

@@ -45,12 +45,13 @@ Each run of this routine must follow these steps in order:
    before you continue. If it prints any `[FAIL]`, fix `data.js` and re-run until
    clean - never edit the validator to silence a check. The **Validation**
    section below lists what it enforces.
-6. Save a dated, self-contained snapshot of the tracker by running
-   `node scripts/snapshot.mjs` (it inlines `data.js` into
-   `snapshots/world_cup_tracker_YYYY-MM-DD.html` so the dated copy is frozen).
-   All dated copies live in `snapshots/`; never write them to the repository
-   root. (Only the tracker is snapshotted; `today.html` is not.)
-7. Commit every changed file (`data.js` and the new snapshot; the HTML pages
+6. Save dated, self-contained snapshots by running `node scripts/snapshot.mjs`
+   (it inlines `data.js` into `snapshots/world_cup_tracker_YYYY-MM-DD.html` and,
+   once `bracket.html` exists, also `snapshots/world_cup_bracket_YYYY-MM-DD.html`,
+   so each dated copy is frozen). All dated copies live in `snapshots/`; never
+   write them to the repository root. (The tracker and the bracket are
+   snapshotted; `today.html` is not.)
+7. Commit every changed file (`data.js` and the new snapshot(s); the HTML pages
    change only if you intentionally edited them) to the development branch that
    is checked out at the start of the run, with a message such as
    `Update tracker for <date>`.
