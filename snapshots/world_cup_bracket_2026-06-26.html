@@ -270,6 +270,29 @@
   .gd-pos{color:var(--qual);} .gd-neg{color:var(--loss);}
   .muted-dash{color:var(--faint);}
 
+  /* ---------- Third-place race ---------- */
+  .tp-card{margin-top:2px;}
+  .tp-table .tp-rank{width:34px;font-family:'Barlow Condensed','Barlow',sans-serif;font-weight:700;color:var(--muted);}
+  .tp-table th.tp-rank{color:var(--faint);}
+  .tp-table .tp-grp{font-weight:600;color:var(--muted);}
+  .tp-table .tp-gf{font-variant-numeric:tabular-nums;}
+  .tp-table tr.tp-in  .qedge{background:var(--qual);}
+  .tp-table tr.tp-out .qedge{background:var(--third);}
+  .tp-table tr.tp-out td{color:var(--muted);}
+  .tp-table tr.tp-cut td{padding:0;border-bottom:0;border-top:2px dashed var(--hairline-strong);
+    background:linear-gradient(180deg, rgba(30,158,99,.05), rgba(224,150,43,.05));}
+  .tp-cut-label{display:block;text-align:center;padding:5px 6px;
+    font-family:'Barlow Condensed','Barlow',sans-serif;text-transform:uppercase;
+    letter-spacing:.08em;font-size:10.5px;font-weight:700;color:var(--faint);}
+  .tp-caveat{margin:12px 2px 0;color:var(--faint);font-size:12px;line-height:1.5;}
+  .tp-empty{margin:8px 2px;color:var(--muted);font-size:14px;}
+
+  @media (max-width:560px){
+    .tp-table .tp-rank,.tp-table thead th.tp-rank{display:none;}
+    .tp-table td:nth-child(4),.tp-table thead th:nth-child(4){display:none;}  /* Pld */
+    .tp-table{font-size:13px;}
+  }
+
   /* ---------- Legend + footer ---------- */
   .legend{display:flex;flex-wrap:wrap;gap:18px;align-items:center;margin:22px 2px 0;color:var(--muted);font-size:13px;}
   .legend .k{display:inline-flex;align-items:center;gap:7px;}
@@ -303,19 +326,34 @@
   .bracket-hero{margin:16px 2px 14px;}
   .bracket-hero h1{font-family:'Barlow Condensed','Barlow',sans-serif;font-weight:700;font-size:38px;line-height:1;margin:4px 0 0;letter-spacing:.005em;}
   .bracket-note{color:var(--muted);font-size:14px;margin:11px 2px 0;max-width:66ch;}
-  .bracket-scroll{display:flex;gap:18px;overflow-x:auto;padding:4px 2px 14px;scroll-snap-type:x proximity;}
-  .round-col{flex:0 0 290px;min-width:290px;scroll-snap-align:start;}
-  .round-head{display:flex;align-items:baseline;gap:10px;margin:6px 0 12px;}
-  .round-head h2{font-family:'Barlow Condensed','Barlow',sans-serif;font-weight:700;font-size:22px;margin:0;letter-spacing:.01em;}
-  .round-head .rc-count{color:var(--muted);font-size:12.5px;}
-  .round-list{display:flex;flex-direction:column;gap:14px;}
 
+  /* ----- Desktop: mirrored NCAA-style tree (absolute-positioned cards + SVG connectors) ----- */
+  .bracket-mirror{overflow-x:auto;padding:6px 0 16px;-webkit-overflow-scrolling:touch;}
+  .bx-canvas{position:relative;margin:0 auto;}
+  .bx-conn{position:absolute;left:0;top:0;pointer-events:none;}
+  .bx-col-h{position:absolute;top:0;font-family:'Barlow Condensed','Barlow',sans-serif;text-transform:uppercase;
+    letter-spacing:.07em;font-size:11px;font-weight:700;color:var(--faint);text-align:center;}
+  .bx{position:absolute;background:var(--card);border:1px solid var(--hairline);border-radius:8px;box-shadow:var(--shadow);overflow:hidden;}
+  .bx.final{border-color:var(--gold);box-shadow:0 0 0 1px rgba(233,185,73,.45),var(--shadow);}
+  .bx.third{border-style:dashed;}
+  .bx-row{display:flex;align-items:center;gap:6px;padding:4px 9px;}
+  .bx-row + .bx-row{border-top:1px solid #EEF2F6;}
+  .bx-kit{width:3px;height:15px;border-radius:2px;flex:none;}
+  .bx-team{font-family:'Barlow Condensed','Barlow',sans-serif;font-weight:600;font-size:13.5px;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;min-width:0;}
+  .bx-row.unresolved .bx-team{color:var(--faint);font-weight:500;}
+  .bx-row.winner .bx-team{font-weight:700;color:var(--ink);}
+  .bx-row.loser .bx-team,.bx-row.loser .bx-sc{color:var(--faint);}
+  .bx-sc{margin-left:auto;font-family:'Barlow Condensed','Barlow',sans-serif;font-weight:700;font-size:14px;color:var(--ink);}
+  .bx-id{position:absolute;top:-15px;left:1px;font-family:'Barlow Condensed','Barlow',sans-serif;
+    font-size:9.5px;letter-spacing:.05em;color:var(--faint);text-transform:uppercase;white-space:nowrap;}
+
+  /* ----- Shared match card vocabulary (mobile per-round list) ----- */
   .bmatch{background:var(--card);border:1px solid var(--hairline);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;}
   .bm-head{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:9px 12px;background:#F7F9FB;border-bottom:1px solid var(--hairline);}
   .bm-id{font-family:'Barlow Condensed','Barlow',sans-serif;text-transform:uppercase;letter-spacing:.07em;font-size:11px;font-weight:700;color:var(--faint);}
   .bm-state{font-size:12px;font-weight:600;color:var(--muted);}
   .bm-state.final{color:var(--faint);}
-
   .bm-row{display:flex;align-items:center;gap:10px;padding:9px 12px;}
   .bm-row + .bm-row{border-top:1px solid #EEF2F6;}
   .bm-kit{width:4px;height:22px;border-radius:3px;flex:none;}
@@ -327,10 +365,16 @@
   .bm-row.unresolved .bm-team{color:var(--faint);font-weight:600;}
   .bm-foot{padding:8px 12px;border-top:1px solid #EEF2F6;color:var(--faint);font-size:12px;}
 
-  /* mobile: one round at a time + sticky selector (720px, wider than site 560px) */
+  /* ----- Mobile per-round list + sticky selector (hidden on desktop) ----- */
   .round-select{display:none;}
+  .bracket-rounds{display:none;}
+  .round-head{display:flex;align-items:baseline;gap:10px;margin:10px 0 12px;}
+  .round-head h2{font-family:'Barlow Condensed','Barlow',sans-serif;font-weight:700;font-size:22px;margin:0;letter-spacing:.01em;}
+  .round-head .rc-count{color:var(--muted);font-size:12.5px;}
+  .round-list{display:flex;flex-direction:column;gap:12px;}
+
   @media (max-width:720px){
-    .bracket-scroll{display:block;overflow-x:visible;}
+    .bracket-mirror{display:none;}
     .round-select{display:flex;gap:4px;overflow-x:auto;position:sticky;top:var(--header-h);z-index:50;
       background:var(--bg-top);padding:8px 2px;margin:0 0 6px;}
     .round-select button{font-family:'Barlow Condensed','Barlow',sans-serif;font-weight:600;
@@ -339,9 +383,9 @@
       padding:8px 14px;border-radius:9px;cursor:pointer;box-shadow:var(--shadow);}
     .round-select button[aria-pressed="true"]{background:var(--band);color:#fff;border-color:var(--band);}
     .round-select button:focus-visible{outline:2px solid var(--gold);outline-offset:2px;}
-    .round-col{flex:none;min-width:0;display:none;margin-bottom:8px;}
+    .bracket-rounds{display:block;}
+    .round-col{display:none;margin-bottom:8px;}
     .round-col.active{display:block;}
-    .round-list{gap:12px;}
   }
 </style>
 </head>
@@ -371,11 +415,15 @@
   <div class="legend">
     <span class="k"><span class="sw" style="background:var(--qual)"></span> Winner advances</span>
     <span class="k"><span class="sw" style="background:var(--third)"></span> Best third-placed entrant</span>
+    <span class="k" style="color:var(--faint)">Scroll sideways to follow each side of the draw to the Final.</span>
   </div>
 
-  <nav class="round-select" id="round-select" role="group" aria-label="Choose a round to view"></nav>
+  <section aria-label="Knockout bracket" class="bracket-mirror" id="bracket-mirror">
+    <div class="bx-canvas" id="bx-canvas"></div>
+  </section>
 
-  <section aria-label="Knockout bracket" id="bracket-desktop" class="bracket-scroll"></section>
+  <nav class="round-select" id="round-select" role="group" aria-label="Choose a round to view"></nav>
+  <section aria-label="Knockout bracket by round" class="bracket-rounds" id="bracket-rounds"></section>
 
   <div class="footer">
     <span>Times shown in <b>ET</b>. Single elimination &middot; winners advance; the two losing semi-finalists meet in the third-place play-off.</span>
@@ -1878,88 +1926,151 @@ const WC = {
 /* =========================================================================
    The bracket page renders from WC.bracket in data.js (loaded above). The daily
    routine edits data.js, NOT this file. Do not change the markup, CSS, or the
-   JavaScript below. Placeholder-tolerant: a slot shows its resolved team when
-   known, else its descriptor, so the whole tree renders before teams are set.
+   JavaScript below. Two synchronized renderings: a mirrored NCAA-style tree for
+   wide screens (absolute-positioned cards + SVG connectors, computed from the
+   feedsInto/feedsSide wiring) and a per-round list with a sticky selector for
+   narrow screens. Placeholder-tolerant: a slot shows its resolved team when
+   known, else its descriptor.
    ========================================================================= */
 const WCB = (WC.bracket && WC.bracket.rounds) || [];
 const PHASE = (WC.meta && WC.meta.phase) || "group";
-
 function el(html){const d=document.createElement('div');d.innerHTML=html.trim();return d.firstChild;}
 function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 function kitFor(name){ return (WC.today && WC.today.kits && WC.today.kits[name]) || "var(--hairline-strong)"; }
-
 document.getElementById('updated').innerHTML = "Refreshed <b>"+esc(WC.meta.updated)+"</b>";
 
 const SHORT = {r32:"R32", r16:"R16", qf:"QF", sf:"SF", third:"3rd", final:"Final"};
+const noteEl = document.getElementById('bracket-note');
 
-function renderRow(team, descriptor, isWinner, isLoser, score){
-  const resolved = !!team;
-  const cls = ["bm-row"];
-  if(!resolved) cls.push("unresolved");
-  else if(isWinner) cls.push("winner");
-  else if(isLoser) cls.push("loser");
-  const label = esc(resolved ? team : descriptor);
-  const from  = resolved ? '<span class="bm-from">'+esc(descriptor)+'</span>' : '';
-  const sc    = (score!=null) ? '<span class="bm-score">'+score+'</span>' : '';
-  return '<div class="'+cls.join(' ')+'">'+
-    '<span class="bm-kit" style="background:'+kitFor(team)+'"></span>'+
-    '<span class="bm-team">'+label+'</span>'+from+sc+'</div>';
+/* wiring derived from the data (assigned in buildShared, used by both renderers) */
+let allSlots, byId, children, roundKey, finalId, thirdId, SF1, SF2, LEFT, RIGHT;
+
+if(!WCB.length){
+  if(noteEl) noteEl.textContent = "The bracket opens after the group stage.";
+  document.getElementById('bracket-mirror').innerHTML =
+    '<article class="bmatch" style="max-width:420px"><div class="bm-foot" style="padding:14px 16px;font-size:14px;color:var(--muted)">'+
+    'Bracket opens June 28 - check back after the group stage.</div></article>';
+} else {
+  if(noteEl){
+    noteEl.textContent = PHASE==="group"
+      ? "The knockout bracket fills in as groups finish. Round of 32 begins June 28. Group winners and runners-up appear as soon as a group is decided."
+      : "Winners advance through the tree; the two losing semi-finalists meet in the third-place play-off.";
+  }
+  buildShared();
+  buildMirror();
+  buildRounds();
 }
 
+/* ---------- shared wiring derived from the data ---------- */
+function buildShared(){
+  allSlots = WCB.flatMap(r=>r.matches);
+  byId = {}; allSlots.forEach(m=>byId[m.id]=m);
+  roundKey = id=>{const r=WCB.find(rr=>rr.matches.some(m=>m.id===id));return r&&r.key;};
+  children = {}; allSlots.forEach(m=>{ if(m.feedsInto){ (children[m.feedsInto]=children[m.feedsInto]||{})[m.feedsSide]=m.id; } });
+  const fr = WCB.find(r=>r.key==='final'); finalId = fr && fr.matches[0] ? fr.matches[0].id : null;
+  const tr = WCB.find(r=>r.key==='third'); thirdId = tr && tr.matches[0] ? tr.matches[0].id : null;
+  SF1 = finalId && children[finalId] ? children[finalId].home : null;
+  SF2 = finalId && children[finalId] ? children[finalId].away : null;
+  LEFT = SF1 ? subtree(SF1,{}) : {}; RIGHT = SF2 ? subtree(SF2,{}) : {};
+}
+function subtree(id,acc){ const rk=roundKey(id); (acc[rk]=acc[rk]||[]).push(id); const c=children[id]||{}; if(c.home)subtree(c.home,acc); if(c.away)subtree(c.away,acc); return acc; }
+
+/* ---------- DESKTOP: mirrored tree ---------- */
+function buildMirror(){
+  const canvas = document.getElementById('bx-canvas');
+  if(!canvas || !finalId || !SF1 || !SF2){ return; }
+  const CW=144, CH=46, COLGAP=46, H=496, PADX=14, PADTOP=22;
+  const COL={ L:{r32:0,r16:1,qf:2,sf:3}, C:{final:4}, R:{sf:5,qf:6,r16:7,r32:8} };
+  const N={r32:8,r16:4,qf:2,sf:1};
+  const colX=c=>PADX+c*(CW+COLGAP);
+  const yC=(i,n)=>PADTOP+(i+0.5)/n*H;
+  const pos={};
+  ['r32','r16','qf','sf'].forEach(rk=>{
+    (LEFT[rk]||[]).forEach((id,i)=>pos[id]={x:colX(COL.L[rk]),y:yC(i,N[rk])});
+    (RIGHT[rk]||[]).forEach((id,i)=>pos[id]={x:colX(COL.R[rk]),y:yC(i,N[rk])});
+  });
+  pos[finalId]={x:colX(COL.C.final),y:PADTOP+H/2};
+  if(thirdId) pos[thirdId]={x:colX(COL.C.final),y:PADTOP+H+50};
+  const totalW=colX(8)+CW+PADX, totalH=PADTOP+H+(thirdId?86:20);
+
+  function mrow(team,desc,win,los,score){
+    const resolved=!!team; const cls=['bx-row'];
+    if(!resolved)cls.push('unresolved'); else if(win)cls.push('winner'); else if(los)cls.push('loser');
+    return '<div class="'+cls.join(' ')+'"><span class="bx-kit" style="background:'+kitFor(team)+'"></span>'+
+      '<span class="bx-team">'+esc(resolved?team:desc)+'</span>'+(score!=null?'<span class="bx-sc">'+score+'</span>':'')+'</div>';
+  }
+  function mcard(m){
+    const p=pos[m.id]; if(!p) return '';
+    const fin=m.status==='final'; const hw=fin&&m.winner===m.homeTeam, aw=fin&&m.winner===m.awayTeam;
+    const extra=(m.id===finalId?' final':'')+(m.id===thirdId?' third':'');
+    const idlbl=(m.id===thirdId?'Third place':(m.id===finalId?'Final':esc(m.id)));
+    return '<article class="bx'+extra+'" style="left:'+p.x+'px;top:'+(p.y-CH/2)+'px;width:'+CW+'px" '+
+      'title="'+esc((m.kick||'')+(m.venue?' - '+m.venue:'')+(m.tv?' - '+m.tv:''))+'" '+
+      'aria-label="'+esc(idlbl+': '+(m.homeTeam||m.home)+' versus '+(m.awayTeam||m.away))+'">'+
+      '<span class="bx-id">'+idlbl+'</span>'+
+      mrow(m.homeTeam,m.home,hw,fin&&!hw,fin?m.hs:null)+
+      mrow(m.awayTeam,m.away,aw,fin&&!aw,fin?m.as:null)+
+    '</article>';
+  }
+  const ln=d=>'<path d="'+d+'" fill="none" stroke="var(--hairline-strong)" stroke-width="1.4"/>';
+  let paths='';
+  ['r16','qf','sf'].forEach(rk=>{
+    (LEFT[rk]||[]).forEach(id=>{ const c=children[id]; if(!c||!pos[c.home]||!pos[c.away])return;
+      const D=pos[id],Fh=pos[c.home],Fa=pos[c.away],sp=(Fh.x+CW+D.x)/2;
+      paths+=ln('M'+(Fh.x+CW)+' '+Fh.y+' H'+sp)+ln('M'+(Fa.x+CW)+' '+Fa.y+' H'+sp)+ln('M'+sp+' '+Fh.y+' V'+Fa.y)+ln('M'+sp+' '+D.y+' H'+D.x); });
+    (RIGHT[rk]||[]).forEach(id=>{ const c=children[id]; if(!c||!pos[c.home]||!pos[c.away])return;
+      const D=pos[id],Fh=pos[c.home],Fa=pos[c.away],sp=(D.x+CW+Fh.x)/2;
+      paths+=ln('M'+Fh.x+' '+Fh.y+' H'+sp)+ln('M'+Fa.x+' '+Fa.y+' H'+sp)+ln('M'+sp+' '+Fh.y+' V'+Fa.y)+ln('M'+sp+' '+D.y+' H'+(D.x+CW)); });
+  });
+  const F=pos[finalId],s1=pos[SF1],s2=pos[SF2];
+  paths+=ln('M'+(s1.x+CW)+' '+s1.y+' H'+F.x)+ln('M'+s2.x+' '+s2.y+' H'+(F.x+CW));
+  const conn='<svg class="bx-conn" width="'+totalW+'" height="'+totalH+'" aria-hidden="true">'+paths+'</svg>';
+  const hdrs=[['Round of 32',COL.L.r32],['Round of 16',COL.L.r16],['Quarter-finals',COL.L.qf],['Semi-finals',COL.L.sf],['Final',COL.C.final],['Semi-finals',COL.R.sf],['Quarter-finals',COL.R.qf],['Round of 16',COL.R.r16],['Round of 32',COL.R.r32]]
+    .map(l=>'<div class="bx-col-h" style="left:'+colX(l[1])+'px;width:'+CW+'px">'+l[0]+'</div>').join('');
+  canvas.style.width=totalW+'px'; canvas.style.height=totalH+'px';
+  canvas.innerHTML=conn+hdrs+allSlots.map(mcard).join('');
+}
+
+/* ---------- MOBILE: per-round list + sticky selector ---------- */
+function renderRow(team, descriptor, isWinner, isLoser, score){
+  const resolved=!!team; const cls=["bm-row"];
+  if(!resolved)cls.push("unresolved"); else if(isWinner)cls.push("winner"); else if(isLoser)cls.push("loser");
+  const label=esc(resolved?team:descriptor);
+  const from=resolved?'<span class="bm-from">'+esc(descriptor)+'</span>':'';
+  const sc=(score!=null)?'<span class="bm-score">'+score+'</span>':'';
+  return '<div class="'+cls.join(' ')+'"><span class="bm-kit" style="background:'+kitFor(team)+'"></span>'+
+    '<span class="bm-team">'+label+'</span>'+from+sc+'</div>';
+}
 function renderMatch(m){
-  const fin = m.status==="final";
-  const hw = fin && m.winner===m.homeTeam, aw = fin && m.winner===m.awayTeam;
-  const state = fin ? '<span class="bm-state final">Full time</span>'
-             : '<span class="bm-state upcoming">'+esc(m.kick||"")+'</span>';
-  const pens = (fin && m.pens) ? ' &middot; won '+esc(m.pens)+' on penalties' : '';
-  const hl = m.homeTeam || m.home, al = m.awayTeam || m.away;
-  let aria = esc(m.id)+': '+esc(hl)+' versus '+esc(al);
-  if(fin) aria += ', full time '+esc(hl)+' '+m.hs+', '+esc(al)+' '+m.as+(m.pens?' (won '+esc(m.pens)+' on penalties)':'');
-  return '<article class="bmatch" data-status="'+esc(m.status)+'" aria-label="'+aria+'">'+
-    '<div class="bm-head"><span class="bm-id">'+esc(m.id)+'</span>'+state+'</div>'+
-    renderRow(m.homeTeam, m.home, hw, fin&&!hw, fin?m.hs:null)+
-    renderRow(m.awayTeam, m.away, aw, fin&&!aw, fin?m.as:null)+
+  const fin=m.status==="final";
+  const hw=fin&&m.winner===m.homeTeam, aw=fin&&m.winner===m.awayTeam;
+  const state=fin?'<span class="bm-state final">Full time</span>':'<span class="bm-state upcoming">'+esc(m.kick||"")+'</span>';
+  const pens=(fin&&m.pens)?' &middot; won '+esc(m.pens)+' on penalties':'';
+  const idlbl=(m.id===thirdId?'Third place':(m.id===finalId?'Final':esc(m.id)));
+  return '<article class="bmatch" data-status="'+esc(m.status)+'">'+
+    '<div class="bm-head"><span class="bm-id">'+idlbl+'</span>'+state+'</div>'+
+    renderRow(m.homeTeam,m.home,hw,fin&&!hw,fin?m.hs:null)+
+    renderRow(m.awayTeam,m.away,aw,fin&&!aw,fin?m.as:null)+
     '<div class="bm-foot">'+esc(m.venue||"")+(m.tv?' &middot; '+esc(m.tv):'')+pens+'</div>'+
   '</article>';
 }
-
 function earliestUnfinished(){
   for(const rd of WCB){ if((rd.matches||[]).some(m=>m.status!=="final")) return rd.key; }
-  return WCB.length ? WCB[WCB.length-1].key : null;   // all final -> Final; none -> null
+  return WCB.length ? WCB[WCB.length-1].key : null;
 }
-
-function buildBracket(){
-  const host = document.getElementById('bracket-desktop');
-  const sel  = document.getElementById('round-select');
-  const note = document.getElementById('bracket-note');
-
-  if(!WCB.length){
-    if(note) note.textContent = "The bracket opens after the group stage.";
-    host.innerHTML = '<article class="bmatch"><div class="bm-foot" style="padding:14px 16px;font-size:14px;color:var(--muted)">'+
-      'Bracket opens June 28 - check back after the group stage.</div></article>';
-    return;
-  }
-  if(note){
-    note.textContent = PHASE==="group"
-      ? "The knockout bracket fills in as groups finish. Round of 32 begins June 28."
-      : "Winners advance through the tree; the two losing semi-finalists meet in the third-place play-off.";
-  }
-
-  host.innerHTML = WCB.map(function(rd){
-    const n = (rd.matches||[]).length;
-    const cards = (rd.matches||[]).map(renderMatch).join('');
+function buildRounds(){
+  const host=document.getElementById('bracket-rounds');
+  const sel=document.getElementById('round-select');
+  host.innerHTML=WCB.map(function(rd){
+    const n=(rd.matches||[]).length;
     return '<div class="round-col" data-round="'+esc(rd.key)+'">'+
       '<div class="round-head"><h2>'+esc(rd.label)+'</h2><span class="rc-count">'+n+(n===1?' tie':' ties')+'</span></div>'+
-      '<div class="round-list">'+cards+'</div>'+
+      '<div class="round-list">'+(rd.matches||[]).map(renderMatch).join('')+'</div>'+
     '</div>';
   }).join('');
-
-  sel.innerHTML = WCB.map(function(rd){
-    return '<button data-round="'+esc(rd.key)+'" aria-pressed="false">'+esc(SHORT[rd.key]||rd.label)+'</button>';
-  }).join('');
-
-  const cols = Array.prototype.slice.call(host.querySelectorAll('.round-col'));
-  const btns = Array.prototype.slice.call(sel.querySelectorAll('button'));
+  sel.innerHTML=WCB.map(function(rd){ return '<button data-round="'+esc(rd.key)+'" aria-pressed="false">'+esc(SHORT[rd.key]||rd.label)+'</button>'; }).join('');
+  const cols=Array.prototype.slice.call(host.querySelectorAll('.round-col'));
+  const btns=Array.prototype.slice.call(sel.querySelectorAll('button'));
   function select(key){
     cols.forEach(function(c){ c.classList.toggle('active', c.getAttribute('data-round')===key); });
     btns.forEach(function(b){ b.setAttribute('aria-pressed', String(b.getAttribute('data-round')===key)); });
@@ -1967,7 +2078,6 @@ function buildBracket(){
   btns.forEach(function(b){ b.addEventListener('click', function(){ select(b.getAttribute('data-round')); }); });
   select(earliestUnfinished() || (WCB[0] && WCB[0].key));
 }
-buildBracket();
 
 /* ---- sticky nav: mobile menu toggle ---- */
 (function(){
