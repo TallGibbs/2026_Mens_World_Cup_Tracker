@@ -270,6 +270,29 @@
   .gd-pos{color:var(--qual);} .gd-neg{color:var(--loss);}
   .muted-dash{color:var(--faint);}
 
+  /* ---------- Third-place race ---------- */
+  .tp-card{margin-top:2px;}
+  .tp-table .tp-rank{width:34px;font-family:'Barlow Condensed','Barlow',sans-serif;font-weight:700;color:var(--muted);}
+  .tp-table th.tp-rank{color:var(--faint);}
+  .tp-table .tp-grp{font-weight:600;color:var(--muted);}
+  .tp-table .tp-gf{font-variant-numeric:tabular-nums;}
+  .tp-table tr.tp-in  .qedge{background:var(--qual);}
+  .tp-table tr.tp-out .qedge{background:var(--third);}
+  .tp-table tr.tp-out td{color:var(--muted);}
+  .tp-table tr.tp-cut td{padding:0;border-bottom:0;border-top:2px dashed var(--hairline-strong);
+    background:linear-gradient(180deg, rgba(30,158,99,.05), rgba(224,150,43,.05));}
+  .tp-cut-label{display:block;text-align:center;padding:5px 6px;
+    font-family:'Barlow Condensed','Barlow',sans-serif;text-transform:uppercase;
+    letter-spacing:.08em;font-size:10.5px;font-weight:700;color:var(--faint);}
+  .tp-caveat{margin:12px 2px 0;color:var(--faint);font-size:12px;line-height:1.5;}
+  .tp-empty{margin:8px 2px;color:var(--muted);font-size:14px;}
+
+  @media (max-width:560px){
+    .tp-table .tp-rank,.tp-table thead th.tp-rank{display:none;}
+    .tp-table td:nth-child(4),.tp-table thead th:nth-child(4){display:none;}  /* Pld */
+    .tp-table{font-size:13px;}
+  }
+
   /* ---------- Legend + footer ---------- */
   .legend{display:flex;flex-wrap:wrap;gap:18px;align-items:center;margin:22px 2px 0;color:var(--muted);font-size:13px;}
   .legend .k{display:inline-flex;align-items:center;gap:7px;}
@@ -371,6 +394,15 @@
       <span class="k"><span class="wl D" style="width:16px;height:16px">D</span> Draw</span>
       <span class="k"><span class="wl L" style="width:16px;height:16px">L</span> Loss</span>
     </div>
+  </section>
+
+  <section aria-label="Best third-placed teams">
+    <div class="section-head">
+      <h2>Best third-placed teams</h2>
+      <span class="note">Eight best of twelve reach the Round of 32 &middot; provisional, as things stand</span>
+    </div>
+    <div id="third-place"></div>
+    <p class="tp-caveat">Ordering only &middot; the cutoff can still swing on the final group matchday. Not a statement that any team has qualified or been eliminated.</p>
   </section>
 
   <div class="footer">
@@ -631,10 +663,70 @@ function renderGroups(){
   });
 }
 
+/* =========================================================================
+   Best third-placed teams race (Tracker page).
+   Derived live from WC.groupsFinal || WC.groups - NO stored copy. ORDERING
+   ONLY with a provisional top-8 cutoff. NEVER renders a client-computed
+   "clinched"/"eliminated" status (CLAUDE.md data rules). Ranking: Pts>GD>GF.
+   ========================================================================= */
+function renderThirdPlace(){
+  const mount = document.getElementById('third-place');
+  if(!mount) return;
+  const src = (DATA.groupsFinal && DATA.groupsFinal.length) ? DATA.groupsFinal : DATA.groups;
+
+  const num = (v)=> (typeof v==='number' && !Number.isNaN(v)) ? v : 0;
+  const cmp = (a,b)=> (b.pts-a.pts) || (b.gd-a.gd) || (b.gf-a.gf) ||
+                      (a.team<b.team?-1:(a.team>b.team?1:0));
+
+  const thirds = [];
+  src.forEach(g=>{
+    if(!g.started) return;
+    // sort this group's rows defensively before taking index 2
+    const ranked = (g.rows||[]).slice().sort((x,y)=>
+      (num(y.pts)-num(x.pts)) || (num(y.gd)-num(x.gd)) || (num(y.gf)-num(x.gf)) ||
+      (x.team<y.team?-1:(x.team>y.team?1:0)));
+    const r = ranked[2];
+    if(!r || num(r.pld)<=0) return;
+    thirds.push({ group:g.id, team:r.team, pld:num(r.pld), gd:num(r.gd), gf:num(r.gf), pts:num(r.pts) });
+  });
+  thirds.sort(cmp);
+
+  if(!thirds.length){
+    mount.innerHTML = '<p class="tp-empty">Third-place places fill in once every group has played. Check back after the next matchday.</p>';
+    return;
+  }
+
+  const CUT = 8, showCut = thirds.length > CUT;
+  let body = '';
+  thirds.forEach((t,idx)=>{
+    const rank = idx+1, advancing = rank <= CUT;
+    const gdTxt = t.gd>0 ? '<span class="gd-pos">+'+t.gd+'</span>'
+                : (t.gd<0 ? '<span class="gd-neg">'+t.gd+'</span>' : '0');
+    if(showCut && rank===CUT+1){
+      body += '<tr class="tp-cut" aria-hidden="true"><td colspan="7">'+
+              '<span class="tp-cut-label">Top 8 advance (provisional) &middot; cutoff as things stand</span></td></tr>';
+    }
+    body += '<tr class="tp-row '+(advancing?'tp-in':'tp-out')+'">'+
+      '<td class="tp-rank">'+rank+'</td>'+
+      '<td class="tm"><span class="teamcell"><span class="qedge"></span><span class="tn">'+esc(t.team)+'</span></span></td>'+
+      '<td class="tp-grp">'+esc(t.group)+'</td>'+
+      '<td>'+t.pld+'</td>'+
+      '<td>'+gdTxt+'</td>'+
+      '<td class="tp-gf">'+t.gf+'</td>'+
+      '<td class="pts">'+t.pts+'</td></tr>';
+  });
+
+  mount.innerHTML =
+    '<div class="gcard tp-card"><div class="gbody"><table class="tp-table">'+
+      '<thead><tr><th class="tp-rank">#</th><th class="tm">Team</th><th class="tp-grp">Grp</th>'+
+      '<th>Pld</th><th>GD</th><th>GF</th><th>Pts</th></tr></thead>'+
+      '<tbody>'+body+'</tbody></table></div></div>';
+}
+
 /* ---- controls: view toggle + search ---- */
 let viewMine=false, query='';
 function applyFilters(){
-  const cards=document.querySelectorAll('.gcard');
+  const cards=document.querySelectorAll('#groups .gcard');
   let anyVisible=false;
   cards.forEach(card=>{
     const isFav = card.getAttribute('data-fav')==='1';
@@ -685,6 +777,7 @@ document.getElementById('search').addEventListener('input',e=>{
 renderHero();
 renderTeams();
 renderGroups();
+renderThirdPlace();
 applyFilters();
 </script>
 </body>
