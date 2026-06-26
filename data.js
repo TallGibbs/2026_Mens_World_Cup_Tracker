@@ -24,7 +24,7 @@ const WC = {
     "stage": "Group Stage",
     "where": "Group stage runs Jun 11 - Jun 27. Round of 32 begins Jun 28. Final Jul 19 at MetLife Stadium, New Jersey.",
     "standNote": "All 12 groups. Our teams' groups are pinned to the top.",
-    "updated": "June 25, 2026"
+    "updated": "June 26, 2026"
   },
   "teams": [
     {
@@ -58,15 +58,12 @@ const WC = {
           "date": "2026-06-25T22:00:00-04:00",
           "venue": "SoFi Stadium, Los Angeles",
           "tv": "FOX",
-          "status": "upcoming",
-          "preview": [
-            "The USA have already clinched a Round of 32 place, so this Group D finale is about seeding and top spot.",
-            "Turkiye, still without a point, must win to keep any qualifying hope alive.",
-            "Pochettino may rotate and manage minutes with progress already secured."
-          ]
+          "status": "final",
+          "us": 2,
+          "them": 3
         }
       ],
-      "note": "Back-to-back wins: a 4-1 opener over Paraguay and a 2-0 shutout of Australia have the USA on six points and already into the Round of 32 with a group game to spare."
+      "note": "With a Round of 32 place already secured, a rotated USA slipped to a 3-2 loss against Turkiye in the finale, but the two earlier wins were enough to win Group D outright on six points. They now await their Round of 32 opponent."
     },
     {
       "name": "Netherlands",
@@ -99,15 +96,12 @@ const WC = {
           "date": "2026-06-25T19:00:00-04:00",
           "venue": "Arrowhead Stadium, Kansas City",
           "tv": "FS1",
-          "status": "upcoming",
-          "preview": [
-            "Group F finale; a win would clinch top spot for the Netherlands, while a draw should be enough to advance.",
-            "Tunisia, beaten in both group games so far, are already eliminated and playing for pride.",
-            "Expect the Dutch to manage minutes with a Round of 32 place all but secured."
-          ]
+          "status": "final",
+          "us": 3,
+          "them": 1
         }
       ],
-      "note": "The Dutch bounced back from a 2-2 draw with Japan to rout Sweden 5-1, climbing to four points and the top of Group F on goals scored. They close the group against Tunisia on Jun 25."
+      "note": "The Dutch beat Tunisia 3-1 to finish top of Group F on seven points, sealing first place and a Round of 32 berth. They now await their knockout opponent."
     },
     {
       "name": "England",
@@ -284,39 +278,39 @@ const WC = {
       "rows": [
         {
           "team": "USA",
-          "pld": 2,
+          "pld": 3,
           "w": 2,
           "d": 0,
-          "l": 0,
-          "gd": 5,
+          "l": 1,
+          "gd": 4,
           "pts": 6
         },
         {
           "team": "Australia",
-          "pld": 2,
+          "pld": 3,
           "w": 1,
-          "d": 0,
+          "d": 1,
           "l": 1,
           "gd": 0,
-          "pts": 3
+          "pts": 4
         },
         {
           "team": "Paraguay",
-          "pld": 2,
+          "pld": 3,
           "w": 1,
-          "d": 0,
+          "d": 1,
           "l": 1,
           "gd": -2,
-          "pts": 3
+          "pts": 4
         },
         {
           "team": "Turkiye",
-          "pld": 2,
-          "w": 0,
+          "pld": 3,
+          "w": 1,
           "d": 0,
           "l": 2,
-          "gd": -3,
-          "pts": 0
+          "gd": -2,
+          "pts": 3
         }
       ]
     },
@@ -326,38 +320,38 @@ const WC = {
       "rows": [
         {
           "team": "Germany",
-          "pld": 2,
+          "pld": 3,
           "w": 2,
           "d": 0,
-          "l": 0,
-          "gd": 7,
+          "l": 1,
+          "gd": 6,
           "pts": 6
         },
         {
           "team": "Ivory Coast",
-          "pld": 2,
-          "w": 1,
+          "pld": 3,
+          "w": 2,
           "d": 0,
           "l": 1,
-          "gd": 0,
-          "pts": 3
+          "gd": 2,
+          "pts": 6
         },
         {
           "team": "Ecuador",
-          "pld": 2,
-          "w": 0,
+          "pld": 3,
+          "w": 1,
           "d": 1,
           "l": 1,
-          "gd": -1,
-          "pts": 1
+          "gd": 0,
+          "pts": 4
         },
         {
           "team": "Curacao",
-          "pld": 2,
+          "pld": 3,
           "w": 0,
           "d": 1,
-          "l": 1,
-          "gd": -6,
+          "l": 2,
+          "gd": -8,
           "pts": 1
         }
       ]
@@ -368,38 +362,38 @@ const WC = {
       "rows": [
         {
           "team": "Netherlands",
-          "pld": 2,
-          "w": 1,
+          "pld": 3,
+          "w": 2,
           "d": 1,
           "l": 0,
-          "gd": 4,
-          "pts": 4
+          "gd": 6,
+          "pts": 7
         },
         {
           "team": "Japan",
-          "pld": 2,
+          "pld": 3,
           "w": 1,
-          "d": 1,
+          "d": 2,
           "l": 0,
           "gd": 4,
-          "pts": 4
+          "pts": 5
         },
         {
           "team": "Sweden",
-          "pld": 2,
+          "pld": 3,
           "w": 1,
-          "d": 0,
+          "d": 1,
           "l": 1,
           "gd": 0,
-          "pts": 3
+          "pts": 4
         },
         {
           "team": "Tunisia",
-          "pld": 2,
+          "pld": 3,
           "w": 0,
           "d": 0,
-          "l": 2,
-          "gd": -8,
+          "l": 3,
+          "gd": -10,
           "pts": 0
         }
       ]
@@ -658,119 +652,119 @@ const WC = {
     }
   ],
   "today": {
-    "date": "Thursday, June 25, 2026",
+    "date": "Friday, June 26, 2026",
     "stageLabel": "Group Stage",
     "tz": "All kickoff times are listed in Eastern Time (ET). US broadcast on FOX / FS1, with Spanish-language coverage on Telemundo; FOX One streams every match.",
-    "schedNote": "Six matches today - the Matchday 3 finales for Groups D, E and F, with each group's pair kicking off simultaneously.",
+    "schedNote": "Six matches today - the Matchday 3 finales for Groups G, H and I, with each group's pair kicking off simultaneously.",
     "kits": {
-      "Curacao": "#002B7F",
-      "Ivory Coast": "#FF8200",
-      "Ecuador": "#FFD100",
-      "Germany": "#000000",
-      "Japan": "#0033A0",
-      "Sweden": "#006AA7",
-      "Tunisia": "#E70013",
-      "Netherlands": "#FF7900",
-      "Paraguay": "#D52B1E",
-      "Australia": "#00843D",
-      "Turkiye": "#E30A17",
-      "USA": "#0A3161"
+      "Norway": "#BA0C2F",
+      "France": "#002654",
+      "Senegal": "#00853F",
+      "Iraq": "#007A3D",
+      "Cape Verde": "#003893",
+      "Saudi Arabia": "#006C35",
+      "Uruguay": "#5CBFEB",
+      "Spain": "#C60B1E",
+      "Egypt": "#CE1126",
+      "Iran": "#239F40",
+      "New Zealand": "#111111",
+      "Belgium": "#E30613"
     },
     "games": [
       {
-        "group": "E",
-        "stage": "Group E - Matchday 3",
-        "home": "Curacao",
-        "away": "Ivory Coast",
-        "kick": "4:00 PM ET",
-        "iso": "2026-06-25T16:00:00-04:00",
-        "venue": "Lincoln Financial Field, Philadelphia",
+        "group": "I",
+        "stage": "Group I - Matchday 3",
+        "home": "Norway",
+        "away": "France",
+        "kick": "3:00 PM ET",
+        "iso": "2026-06-26T15:00:00-04:00",
+        "venue": "Gillette Stadium, Foxborough",
         "tv": "FOX",
         "stream": "FOX One / Telemundo (ES)",
         "bullets": [
-          "Ivory Coast sit on three points and a win would likely book their place in the Round of 32.",
-          "Curacao, on one point with a heavy goal difference, must win and hope results elsewhere fall their way.",
-          "With Germany clear at the top, second place is the realistic prize on offer here."
+          "France and Norway are both already through on six points, so this finale decides first place in Group I.",
+          "Goal difference favours France, meaning Norway likely need a win to top the group outright.",
+          "Watch whether Haaland and Mbappe are both unleashed or rested with the knockouts in mind."
         ]
       },
       {
-        "group": "E",
-        "stage": "Group E - Matchday 3",
-        "home": "Ecuador",
-        "away": "Germany",
-        "kick": "4:00 PM ET",
-        "iso": "2026-06-25T16:00:00-04:00",
-        "venue": "MetLife Stadium, East Rutherford",
+        "group": "I",
+        "stage": "Group I - Matchday 3",
+        "home": "Senegal",
+        "away": "Iraq",
+        "kick": "3:00 PM ET",
+        "iso": "2026-06-26T15:00:00-04:00",
+        "venue": "BMO Field, Toronto",
         "tv": "FS1",
         "stream": "FOX One / Telemundo (ES)",
         "bullets": [
-          "Germany are already through on six points and a draw guarantees top spot in Group E.",
-          "Ecuador, on a single point, must win to keep alive any hope of advancing as a best third-place side.",
-          "Watch whether Germany rotate with qualification secured ahead of the knockouts."
+          "Both sides are pointless and already eliminated, so this is a battle to avoid finishing bottom of Group I.",
+          "Senegal will want a first win to salvage some pride from a disappointing campaign.",
+          "Expect both coaches to look at fringe players with nothing left to play for."
         ]
       },
       {
-        "group": "F",
-        "stage": "Group F - Matchday 3",
-        "home": "Japan",
-        "away": "Sweden",
-        "kick": "7:00 PM ET",
-        "iso": "2026-06-25T19:00:00-04:00",
-        "venue": "AT&T Stadium, Arlington",
+        "group": "H",
+        "stage": "Group H - Matchday 3",
+        "home": "Cape Verde",
+        "away": "Saudi Arabia",
+        "kick": "8:00 PM ET",
+        "iso": "2026-06-26T20:00:00-04:00",
+        "venue": "NRG Stadium, Houston",
         "tv": "FOX",
         "stream": "FOX One / Telemundo (ES)",
         "bullets": [
-          "Japan need only a draw to be sure of advancing, while a win could see them top Group F.",
-          "Sweden, on three points, likely must win to leapfrog into the qualifying places.",
-          "Both attacks have shown teeth, so a tight game could swing on a single moment."
+          "Cape Verde, on two points, can seal a place in the Round of 32 with a win in their final group game.",
+          "Saudi Arabia sit bottom on one point and must win and hope results elsewhere go their way.",
+          "A draw would leave Cape Verde sweating on the Uruguay-Spain result running alongside."
         ]
       },
       {
-        "group": "F",
-        "stage": "Group F - Matchday 3",
-        "home": "Tunisia",
-        "away": "Netherlands",
-        "kick": "7:00 PM ET",
-        "iso": "2026-06-25T19:00:00-04:00",
-        "venue": "Arrowhead Stadium, Kansas City",
+        "group": "H",
+        "stage": "Group H - Matchday 3",
+        "home": "Uruguay",
+        "away": "Spain",
+        "kick": "8:00 PM ET",
+        "iso": "2026-06-26T20:00:00-04:00",
+        "venue": "Estadio Akron, Guadalajara",
         "tv": "FS1",
         "stream": "FOX One / Telemundo (ES)",
         "bullets": [
-          "A win would clinch top spot in Group F for the Netherlands, and a draw should be enough to advance.",
-          "Tunisia, beaten in both group games, are already eliminated and playing for pride.",
-          "Expect the Dutch to manage minutes with a Round of 32 place all but secured."
+          "Spain top Group H on four points and a draw would be enough to guarantee first place.",
+          "Uruguay, on two points, likely need a win to be certain of advancing from a tight group.",
+          "A meeting of two possession-minded sides should decide who tops the section heading into the knockouts."
         ]
       },
       {
-        "group": "D",
-        "stage": "Group D - Matchday 3",
-        "home": "Paraguay",
-        "away": "Australia",
-        "kick": "10:00 PM ET",
-        "iso": "2026-06-25T22:00:00-04:00",
-        "venue": "Levi's Stadium, Santa Clara",
+        "group": "G",
+        "stage": "Group G - Matchday 3",
+        "home": "Egypt",
+        "away": "Iran",
+        "kick": "11:00 PM ET",
+        "iso": "2026-06-26T23:00:00-04:00",
+        "venue": "Lumen Field, Seattle",
         "tv": "FOX",
         "stream": "FOX One / Telemundo (ES)",
         "bullets": [
-          "Level on three points, the winner is in pole position to grab second place behind the USA.",
-          "Australia hold the goal-difference edge, so Paraguay likely need to win outright to overtake them.",
-          "A draw could leave both sweating on the best third-place permutations."
+          "Egypt lead Group G on four points and a draw would likely be enough to seal top spot.",
+          "Iran, on two points, need a positive result to be sure of reaching the Round of 32.",
+          "Salah will be central to Egypt's hopes of finishing the group stage unbeaten."
         ]
       },
       {
-        "group": "D",
-        "stage": "Group D - Matchday 3",
-        "home": "Turkiye",
-        "away": "USA",
-        "kick": "10:00 PM ET",
-        "iso": "2026-06-25T22:00:00-04:00",
-        "venue": "SoFi Stadium, Los Angeles",
+        "group": "G",
+        "stage": "Group G - Matchday 3",
+        "home": "New Zealand",
+        "away": "Belgium",
+        "kick": "11:00 PM ET",
+        "iso": "2026-06-26T23:00:00-04:00",
+        "venue": "BC Place, Vancouver",
         "tv": "FS1",
         "stream": "FOX One / Telemundo (ES)",
         "bullets": [
-          "The USA have already clinched a Round of 32 place, so this finale is about locking up top spot and seeding.",
-          "Turkiye, still without a point, must win to keep any faint qualifying hope alive.",
-          "Pochettino may rotate and manage minutes with progress already secured."
+          "Belgium, on two points, can clinch a knockout place with a win over the tournament's surprise package.",
+          "New Zealand sit on one point but a victory could send them through in a wide-open Group G.",
+          "Expect Belgium to push for goals knowing goal difference may decide the qualifying order."
         ]
       }
     ]
