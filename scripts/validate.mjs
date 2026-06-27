@@ -256,6 +256,54 @@ if (WC) {
         if (slot !== m.winner) fail(`WC.bracket ${m.id}: winner "${m.winner}" not keyed into ${m.feedsInto}.${m.feedsSide} (found "${slot}")`);
       }
     }
+
+    // Resolution gate: a knockout slot must be filled the moment its feeder is
+    // decided, so a knowable opponent can never sit empty (the "USA vs unknown"
+    // class of failure). Group-fed slots ("Winner/Runner-up Group X") resolve as
+    // soon as that group is complete; the best-third-placed slots resolve only
+    // once ALL twelve groups are complete (the FIFA combination table needs the
+    // full set of qualified third-placed teams), and the slot must then hold an
+    // actual third-placed team. Knockout-fed slots are already forced to fill by
+    // the advancement check above.
+    const liveGroups = WC.groupsFinal || WC.groups || [];
+    const gInfo = {};
+    const thirds = new Set();
+    let allGroupsComplete = liveGroups.length === 12;
+    for (const g of liveGroups) {
+      const rows = g.rows || [];
+      const complete = rows.length === 4 && rows.every(r => r.pld === 3);
+      if (!complete) allGroupsComplete = false;
+      gInfo[g.id] = { complete, winner: rows[0] && rows[0].team, runner: rows[1] && rows[1].team };
+      if (complete && rows[2]) thirds.add(rows[2].team);
+    }
+    const r32 = (WC.bracket.rounds || []).find(r => r.key === 'r32');
+    for (const m of ((r32 && r32.matches) || [])) {
+      for (const side of ['home', 'away']) {
+        const label = m[side] || '';
+        const teamKey = side + 'Team';
+        const cur = m[teamKey];
+        const empty = cur == null || cur === '';
+        let mm;
+        if ((mm = /^Winner Group ([A-L])$/.exec(label))) {
+          const g = gInfo[mm[1]];
+          if (g && g.complete) {
+            if (empty) fail(`WC.bracket ${m.id}: ${teamKey} is empty but Group ${mm[1]} is complete - resolve it to the winner "${g.winner}"`);
+            else if (cur !== g.winner) fail(`WC.bracket ${m.id}: ${teamKey} "${cur}" should be Group ${mm[1]} winner "${g.winner}"`);
+          }
+        } else if ((mm = /^Runner-up Group ([A-L])$/.exec(label))) {
+          const g = gInfo[mm[1]];
+          if (g && g.complete) {
+            if (empty) fail(`WC.bracket ${m.id}: ${teamKey} is empty but Group ${mm[1]} is complete - resolve it to the runner-up "${g.runner}"`);
+            else if (cur !== g.runner) fail(`WC.bracket ${m.id}: ${teamKey} "${cur}" should be Group ${mm[1]} runner-up "${g.runner}"`);
+          }
+        } else if (/\b3rd\b|third/i.test(label)) {
+          if (allGroupsComplete) {
+            if (empty) fail(`WC.bracket ${m.id}: ${teamKey} is a best-third-placed slot but all twelve groups are complete - resolve it to the qualified third-placed team`);
+            else if (!thirds.has(cur)) fail(`WC.bracket ${m.id}: ${teamKey} "${cur}" is not a third-placed team of any group`);
+          }
+        }
+      }
+    }
   }
 
   // Phase consistency: once past group, the frozen final table must exist.
