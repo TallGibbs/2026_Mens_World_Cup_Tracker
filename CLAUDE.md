@@ -38,6 +38,14 @@ Each run of this routine must follow these steps in order:
    - `WC.today` for the Today's Games page (see "Today's Games page" below).
      today.html derives its standings from `WC.groups`, so there is no separate
      standings copy to maintain.
+   - `WC.bracket` for the knockout page (see "Knockout bracket (WC.bracket)"
+     below). Once the tournament reaches the knockout stage, resolve every slot
+     whose feeder is now decided - a group-fed slot the moment its group is
+     complete, the best-third-placed slots once all twelve groups are complete,
+     and a knockout-fed slot the moment its feeding match is final - and record
+     finished knockout scores. A knowable opponent must never be left as a
+     placeholder (this is the "USA vs unknown opponent" failure this routine
+     exists to prevent).
    Verify every group's goal differences sum to zero before saving.
 4. Save `data.js`.
 5. **Validate before going further.** Run `node scripts/validate.mjs` (it checks
@@ -191,6 +199,18 @@ Note on environment: as of this writing neither `FOOTBALL_DATA_API_KEY` nor
 the active primary source. Add either key as an environment variable to promote
 Tiers 1/3 ahead of it.
 
+Source-outage warning (observed 2026-06-27): the session's egress policy can
+block the sports-data hosts. When that happens every tier above returns a gateway
+`403`/`connect_rejected` (check `curl -sS "$HTTPS_PROXY/__agentproxy/status"`),
+and with no API key set the routine has **no permitted structured source at all**.
+`scripts/preflight.sh` now probes reachability and prints a `BLOCKED`/`WARNING`
+banner so this can never be silent. If you see it: do **not** fill results or
+bracket slots from a web search or any AI summary (that is the exact prohibited
+path). Hold the data stale, still refresh `meta.updated`/`WC.today`, note the
+outage in the run, and restore a source (set an API key, or have the egress
+allowlist re-opened for `site.api.espn.com` / `api.football-data.org` /
+`v3.football.api-sports.io`) before recording any new result.
+
 ## Data rules
 
 - `WC.meta.updated` must be set to today's date (e.g. "June 16, 2026").
@@ -229,6 +249,15 @@ It must print `ALL CHECKS PASSED`. What it enforces:
   and its two teams appear in that group's table.
 - **Hygiene:** the tournament is labelled "Men's", and there are no emojis or
   placeholder tokens in the data.
+- **Bracket resolution (gated on `WC.bracket`):** every knockout slot whose
+  feeder is decided must already be filled and correct - a `Winner/Runner-up
+  Group X` slot must equal that group's winner/runner-up the moment the group is
+  complete, and once all twelve groups are complete every best-third-placed slot
+  must name an actual third-placed team. This is the check that catches a
+  knowable opponent left as a placeholder (the bug where the USA's Round-of-32
+  opponent stayed "unknown" after it was decided). Note it stays silent while a
+  feeder is genuinely undecided - e.g. the best-third-placed slots correctly
+  remain empty until the last group games (Groups J/K/L) are played.
 
 Cross-page agreement no longer needs a check: both pages render from the same
 `WC.groups`, so their standings cannot disagree. If a check fails, fix `data.js` -
@@ -311,3 +340,43 @@ standings copy to maintain on this page - just keep `WC.groups` correct. The
 If no matches are scheduled on the current date, set `WC.today.games` to an empty
 array (the page renders a tidy "no matches today" card) and still refresh `date`
 and `schedNote`.
+
+## Knockout bracket (`WC.bracket`)
+
+`bracket.html` renders the knockout tree from `WC.bracket`. Each match slot has a
+descriptor (`home`/`away`, e.g. `"Winner Group D"` or `"Best third-placed team"`)
+and a resolved team (`homeTeam`/`awayTeam`, `null` until known), plus `status`,
+`hs`/`as`/`pens`/`winner`, and `feedsInto`/`feedsSide` linking it to the next
+round. The descriptors and the schedule (`iso`, `venue`, `tv`) are fixed by the
+official match schedule and do not change run to run; what the routine maintains
+is **resolving slots and recording knockout scores** as the tournament unfolds.
+This section exists because the bracket once left the USA's Round-of-32 opponent
+showing as an unknown placeholder after it had actually been decided - the daily
+routine had no step to fill it in.
+
+Each run, once the knockout stage is in play:
+
+- **Resolve every slot whose feeder is now decided** (and only from the same
+  structured tier sources used for the tracker - never from a web/AI summary):
+  - A `Winner Group X` / `Runner-up Group X` slot: fill with that group's winner
+    or runner-up the moment Group X is complete (all four teams have played 3).
+  - A best-third-placed slot (`Best 3rd (...)` / `Best third-placed team`): these
+    depend on the FIFA combination table, which needs the **full set** of eight
+    qualified third-placed teams, so they can only be filled **after all twelve
+    groups are complete**. Until the last group games are played (e.g. Groups
+    J/K/L), leave these slots `null` - that is correct, not a bug. When all
+    groups are done, apply FIFA's official Round-of-32 combination table to map
+    each qualified third-placed team to its group-winner opponent.
+  - A knockout-fed slot (`Winner R32-9`, `Winner R16-3`, ...): fill it with the
+    feeding match's `winner` the moment that match is `final`.
+- **Record finished knockout matches:** set `status:"final"`, integer `hs`/`as`,
+  `winner`, and (only when the 90/120-minute score was level) a `pens` string
+  like `"4-3"`. The same completion guard as group games applies - a match is
+  `final` only when a structured source reports it completed AND its kickoff is
+  well past. Then make sure the winner is keyed into its `feedsInto` slot.
+- Update `WC.bracket.source` to name the structured source and retrieval date.
+
+`node scripts/validate.mjs` enforces this mechanically: it fails if a slot whose
+group is complete is empty or wrong, if a best-third-placed slot is empty once all
+groups are done, and it checks the winner/score/penalty/advancement math (see
+**Validation**). A knowable opponent left blank will no longer pass silently.
