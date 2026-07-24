@@ -17,7 +17,7 @@
  * Exit codes: 0 = all checks pass, 1 = at least one failure, 2 = bad invocation.
  */
 
-import { readFileSync } from 'node:fs';
+import { readFileSync, existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 
@@ -43,6 +43,17 @@ const expectedShort = fmt({ month: 'long', day: 'numeric', year: 'numeric' });
 const expectedLong = fmt({ weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
 const norm = (s) => String(s == null ? '' : s).replace(/\s+/g, ' ').trim();
 
+/* V8 silently rolls an out-of-range ISO day over ("2027-06-31" parses as July 1)
+   instead of rejecting it, so Number.isNaN alone would let a typo shift a
+   countdown target by a day. Check the calendar fields round-trip. */
+function isRealCalendarDate(iso) {
+  const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(String(iso || ''));
+  if (!m) return false;
+  const [, y, mo, d] = m.map(Number);
+  const probe = new Date(Date.UTC(y, mo - 1, d));
+  return probe.getUTCFullYear() === y && probe.getUTCMonth() === mo - 1 && probe.getUTCDate() === d;
+}
+
 /* ---------- pull a top-level `const NAME = {...}` object literal ---------- */
 function extractObject(src, name) {
   const at = src.indexOf('const ' + name);
@@ -64,6 +75,7 @@ function extractObject(src, name) {
 const EMOJI = /[\u{1F000}-\u{1FAFF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{1F1E6}-\u{1F1FF}️]/u;
 const PLACEHOLDER = /\b(TBD|TODO|FIXME|PLACEHOLDER|Lorem ipsum|XXXX?)\b/i;
 const PHASES = ['group', 'r32', 'r16', 'qf', 'sf', 'final', 'done'];
+const EDITION = /(men's|women's)/i;   // a tournament name must say which edition it is
 const ROUND_KEYS = ['r32', 'r16', 'qf', 'sf', 'third', 'final']; // a today-game's `stage` set to one of these marks it knockout
 function scanEmoji(label, text) { if (text && EMOJI.test(text)) fail(`${label}: contains an emoji character (none allowed)`); }
 function scanPlaceholder(label, obj) { if (obj) { const m = JSON.stringify(obj).match(PLACEHOLDER); if (m) fail(`${label}: contains placeholder token "${m[0]}"`); } }
@@ -112,13 +124,22 @@ const byId = {};
 if (WC) {
   if (!WC.meta) fail('WC.meta is missing');
   else {
-    if (!/men's/i.test(WC.meta.tournament || '')) fail(`WC.meta.tournament should say "Men's" (got "${WC.meta.tournament}")`);
+    // The site now spans editions (a frozen men's archive plus a women's
+    // countdown), so "must say Men's" is wrong. The invariant that actually
+    // matters is unchanged: a tournament name must never be ambiguous about
+    // WHICH edition its numbers belong to.
+    if (!EDITION.test(WC.meta.tournament || '')) fail(`WC.meta.tournament must name its edition explicitly ("Men's" or "Women's") - got "${WC.meta.tournament}"`);
     if (norm(WC.meta.updated) !== norm(expectedShort)) fail(`WC.meta.updated = "${WC.meta.updated}", expected today "${expectedShort}"`);
     if (WC.meta.phase != null && !PHASES.includes(WC.meta.phase)) fail(`WC.meta.phase must be one of ${PHASES.join('|')} (got "${WC.meta.phase}")`);
   }
   const PHASE = (WC.meta && WC.meta.phase) || 'group';
 
   for (const g of (WC.groups || [])) { byId[g.id] = g; checkGroupRows(g.id, g.rows || []); }
+
+  // Every team name that appears in a group table - used to reject a recap or a
+  // bracket slot that names a team the tournament never had.
+  const knownTeamNames = new Set();
+  for (const g of (WC.groupsFinal || WC.groups || [])) for (const r of (g.rows || [])) knownTeamNames.add(r.team);
 
   // Index every bracket slot by id (empty until WC.bracket exists - Phase 1).
   const bracketById = {};
@@ -134,6 +155,57 @@ if (WC) {
       if (f.status === 'final' && (!Number.isInteger(f.us) || !Number.isInteger(f.them) || f.us < 0 || f.them < 0)) fail(`${t.name} v ${f.opp}: a final fixture needs integer us/them scores`);
       if (f.status === 'upcoming' && (!Array.isArray(f.preview) || f.preview.length < 2)) fail(`${t.name} v ${f.opp}: an upcoming fixture needs a "preview" array of >=2 forward-looking bullets`);
     }
+  }
+
+  /* ---------- WC.next: the forward countdown target (hybrid/off-season mode) ----------
+     Optional - absent during a live tournament, when the hero counts down to a
+     featured fixture instead. When present it drives the hero countdown, so a
+     target that does not parse (or has already passed) would silently render
+     "NaN" or send tickCountdown into a re-render loop. Both are checked. */
+  if (WC.next) {
+    const n = WC.next;
+    for (const k of ['tournament', 'label', 'eventLabel', 'iso', 'when', 'venue', 'note', 'source'])
+      if (typeof n[k] !== 'string' || !n[k].trim()) fail(`WC.next: missing or empty "${k}"`);
+    if (!EDITION.test(n.tournament || ''))
+      fail(`WC.next.tournament must name its edition explicitly ("Men's" or "Women's") - got "${n.tournament}"`);
+    if (!Array.isArray(n.bullets) || n.bullets.length < 2)
+      fail('WC.next: needs a "bullets" array of >=2 forward-looking entries');
+    const nextAt = +new Date(n.iso);
+    if (Number.isNaN(nextAt)) fail(`WC.next.iso "${n.iso}" is not a valid date - the countdown would render NaN`);
+    else if (!isRealCalendarDate(n.iso)) fail(`WC.next.iso "${n.iso}" is not a real calendar date (the day does not exist in that month)`);
+    else if (nextAt <= +targetNoon) fail(`WC.next.iso "${n.iso}" is not in the future as of ${targetYMD} - retarget it or remove WC.next`);
+  }
+
+  /* ---------- WC.recap: how the archived tournament finished ----------
+     Optional. Its archive links are the only route to the frozen snapshots, so
+     every href is resolved against the working tree - a dead archive link is
+     the failure this check exists to prevent. */
+  if (WC.recap) {
+    const r = WC.recap;
+    for (const k of ['headline', 'line', 'source'])
+      if (typeof r[k] !== 'string' || !r[k].trim()) fail(`WC.recap: missing or empty "${k}"`);
+
+    if (!Array.isArray(r.podium) || !r.podium.length) fail('WC.recap.podium must be a non-empty array');
+    else r.podium.forEach((p, i) => {
+      for (const k of ['place', 'team', 'detail']) if (!p[k]) fail(`WC.recap.podium[${i}]: missing "${k}"`);
+      if (p.team && !knownTeamNames.has(p.team)) fail(`WC.recap.podium[${i}]: team "${p.team}" is not in any group table`);
+    });
+
+    if (!Array.isArray(r.ourTeams)) fail('WC.recap.ourTeams must be an array');
+    else r.ourTeams.forEach((t, i) => {
+      for (const k of ['team', 'finish', 'detail']) if (!t[k]) fail(`WC.recap.ourTeams[${i}]: missing "${k}"`);
+      if (t.team && !(WC.teams || []).some((x) => x.name === t.team))
+        fail(`WC.recap.ourTeams[${i}]: team "${t.team}" is not one of WC.teams`);
+    });
+
+    if (!Array.isArray(r.archive) || !r.archive.length) fail('WC.recap.archive must be a non-empty array');
+    else r.archive.forEach((a, i) => {
+      for (const k of ['label', 'href', 'detail']) if (!a[k]) fail(`WC.recap.archive[${i}]: missing "${k}"`);
+      if (!a.href) return;
+      if (!a.href.startsWith('/')) { fail(`WC.recap.archive[${i}]: href "${a.href}" must be a site-root path starting with "/"`); return; }
+      if (!existsSync(join(root, a.href.replace(/^\//, ''))))
+        fail(`WC.recap.archive[${i}]: href "${a.href}" does not exist in the repository - dead archive link`);
+    });
   }
 
   /* Today's Games */

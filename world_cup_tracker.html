@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Men's World Cup 2026 - Matchday Companion</title>
+<title>World Cup Tracker - Men's 2026 Recap and Women's 2027 Countdown</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -168,6 +168,11 @@
   .hx-prev li{position:relative;padding-left:16px;font-size:13.5px;color:#C9D8E6;line-height:1.45;}
   .hx-prev li::before{content:"";position:absolute;left:2px;top:7px;width:5px;height:5px;
     border-radius:50%;background:var(--gold);}
+  /* Hero in countdown mode (between tournaments): the next-event card */
+  .nextup .team.event{font-size:26px;line-height:1.06;}
+  .nx-note{margin:12px 0 0;font-size:12.5px;color:#7F95AB;line-height:1.45;}
+  .nx-empty{margin-top:12px;font-size:15px;color:#C9D8E6;}
+
   .ondeck{margin-top:14px;border-top:1px solid rgba(255,255,255,.12);padding-top:12px;}
   .ondeck .h{font-family:'Barlow Condensed','Barlow',sans-serif;text-transform:uppercase;
     letter-spacing:.12em;font-weight:600;font-size:11.5px;color:#7F95AB;margin-bottom:7px;}
@@ -203,6 +208,47 @@
   .section-head h2{font-family:'Barlow Condensed','Barlow',sans-serif;font-weight:700;
     font-size:24px;margin:0;letter-spacing:.01em;}
   .section-head .note{color:var(--muted);font-size:13.5px;}
+
+  /* ---------- Tournament recap (hybrid mode) ---------- */
+  #recap-section{margin-bottom:34px;}
+  .rp-line{margin:0 0 16px;color:var(--muted);font-size:15px;max-width:70ch;}
+  .rp-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px;}
+  .rp-card{background:var(--card);border:1px solid var(--hairline);border-radius:var(--radius);
+    box-shadow:var(--shadow);padding:14px 16px 16px;border-top:4px solid var(--hairline-strong);}
+  .rp-card.rp-1{border-top-color:var(--gold);}
+  .rp-card.rp-2{border-top-color:var(--hairline-strong);}
+  .rp-card.rp-3{border-top-color:var(--third);}
+  .rp-place{font-family:'Barlow Condensed','Barlow',sans-serif;text-transform:uppercase;
+    letter-spacing:.12em;font-weight:600;font-size:11.5px;color:var(--faint);}
+  .rp-team{font-family:'Barlow Condensed','Barlow',sans-serif;font-weight:700;
+    font-size:27px;line-height:1.05;margin:4px 0 7px;}
+  .rp-detail{color:var(--muted);font-size:13.5px;line-height:1.45;}
+
+  .recap-cols{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  .rcard{background:var(--card);border:1px solid var(--hairline);border-radius:var(--radius);
+    box-shadow:var(--shadow);padding:16px 18px 18px;}
+  .rc-h{font-family:'Barlow Condensed','Barlow',sans-serif;text-transform:uppercase;
+    letter-spacing:.12em;font-weight:600;font-size:11.5px;color:var(--faint);margin-bottom:12px;}
+  .ro-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:13px;}
+  .ro-list li{display:flex;align-items:flex-start;gap:11px;}
+  .ro-kit{width:7px;height:34px;border-radius:3px;flex:none;margin-top:1px;}
+  .ro-body{display:flex;flex-direction:column;gap:3px;min-width:0;}
+  .ro-top{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap;}
+  .ro-name{font-family:'Barlow Condensed','Barlow',sans-serif;font-weight:700;font-size:19px;}
+  .ro-finish{font-size:12px;font-weight:600;color:var(--muted);background:var(--bg-bot);
+    border:1px solid var(--hairline);border-radius:999px;padding:1px 9px;}
+  .ro-detail{color:var(--muted);font-size:13.5px;line-height:1.45;}
+
+  .ra-links{display:flex;flex-direction:column;gap:10px;}
+  .ra-link{display:flex;flex-direction:column;gap:2px;text-decoration:none;
+    border:1px solid var(--hairline);border-radius:10px;padding:11px 13px;
+    background:var(--bg-top);transition:border-color .15s ease, background .15s ease;}
+  .ra-link:hover{border-color:var(--hairline-strong);background:#fff;}
+  .ra-link:focus-visible{outline:2px solid var(--gold);outline-offset:2px;}
+  .ra-label{font-family:'Barlow Condensed','Barlow',sans-serif;font-weight:700;
+    font-size:16px;color:var(--ink);letter-spacing:.01em;}
+  .ra-detail{color:var(--muted);font-size:13px;line-height:1.4;}
+  .ra-note{margin:12px 0 0;color:var(--faint);font-size:12.5px;line-height:1.45;}
 
   /* ---------- Featured team cards ---------- */
   .teams{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:34px;}
@@ -307,6 +353,8 @@
     .teams{grid-template-columns:1fr;}
     .groups{grid-template-columns:1fr;}
     .hero-title h1{font-size:36px;}
+    .rp-row{grid-template-columns:repeat(2,1fr);}
+    .recap-cols{grid-template-columns:1fr;}
   }
   @media (max-width:560px){
     .search input{width:100%;}
@@ -315,7 +363,10 @@
     .cd-cell{min-width:0;flex:1;}
     .nextup .team{font-size:25px;}
     .nextup .team.opp{font-size:22px;}
+    .nextup .team.event{font-size:22px;}
     .cd-cell .n{font-size:28px;}
+    .rp-row{grid-template-columns:1fr;}
+    .rp-team{font-size:24px;}
   }
   @media (prefers-reduced-motion:no-preference){
     .live-dot{animation:pulse 1.8s infinite;}
@@ -327,7 +378,7 @@
 <a class="skip-link" href="#main">Skip to content</a>
 <header class="site-header">
   <nav class="site-nav" aria-label="Primary">
-    <a class="brand" href="/"><span class="ball" aria-hidden="true"></span>Men's World Cup 2026</a>
+    <a class="brand" href="/"><span class="ball" aria-hidden="true"></span>World Cup Tracker</a>
     <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Open menu"><span></span></button>
     <ul class="nav-links" id="nav-links">
       <li><a href="/" aria-current="page">Tracker</a></li>
@@ -342,8 +393,8 @@
   <header class="hero">
     <div class="hero-inner">
       <div class="hero-title">
-        <div class="eyebrow">Your matchday companion</div>
-        <h1 id="t-title">FIFA World Cup 2026</h1>
+        <div class="eyebrow">Recap and countdown</div>
+        <h1 id="t-title">FIFA World Cup</h1>
         <div class="hero-rule"></div>
         <div class="sub" id="t-host"></div>
         <div class="stage-tag" id="t-stage"></div>
@@ -359,6 +410,14 @@
       </div>
     </div>
   </header>
+
+  <section aria-label="Tournament recap" id="recap-section">
+    <div class="section-head">
+      <h2 id="recap-h">How it finished</h2>
+      <span class="note" id="recap-note"></span>
+    </div>
+    <div id="recap"></div>
+  </section>
 
   <div class="controls">
     <div class="seg" role="group" aria-label="Which groups to show">
@@ -399,14 +458,14 @@
   <section aria-label="Best third-placed teams">
     <div class="section-head">
       <h2>Best third-placed teams</h2>
-      <span class="note">Eight best of twelve reach the Round of 32 &middot; provisional, as things stand</span>
+      <span class="note" id="tp-note"></span>
     </div>
     <div id="third-place"></div>
-    <p class="tp-caveat">Ordering only &middot; the cutoff can still swing on the final group matchday. Not a statement that any team has qualified or been eliminated.</p>
+    <p class="tp-caveat" id="tp-caveat"></p>
   </section>
 
   <div class="footer">
-    <span>Times shown in <b>ET</b>. Top two from each group plus the eight best third-placed teams reach the Round of 32.</span>
+    <span id="foot-note"></span>
     <span id="updated"></span>
   </div>
 
@@ -494,7 +553,30 @@ function renderHero(){
   const h = pickHero();
   if(deck) deck.innerHTML = '';
   if(h.mode==='done'){
-    box.innerHTML = '<div class="label">Our teams</div><div style="margin-top:10px;font-size:15px;color:#C9D8E6">Group stage wrapped up. Check the knockout bracket for what comes next.</div>';
+    /* No featured fixture left to count down to. Between tournaments the hero
+       counts down to WC.next instead, reusing tickCountdown() unchanged. */
+    const n = DATA.next;
+    if(!n){
+      box.innerHTML = '<div class="label">Our teams</div><div class="nx-empty">The tournament is complete. See the recap below.</div>';
+      return;
+    }
+    /* Only count down while the target is still ahead. tickCountdown() calls
+       renderHero() when it reaches zero, so counting down to a past date here
+       would recurse forever. */
+    const target = +new Date(n.iso);
+    const ticking = !Number.isNaN(target) && target > Date.now();
+    box.innerHTML =
+      '<div class="label">'+esc(n.label)+'</div>'+
+      '<div class="match"><span class="team event">'+esc(n.tournament)+'</span></div>'+
+      (ticking ? '<div class="countdown" id="cd"></div>'
+               : '<div class="nx-empty">Under way. The tracker is being rebuilt for it.</div>')+
+      '<div class="meta">'+esc(n.eventLabel)+' &nbsp;&middot;&nbsp; '+esc(n.when)+' &nbsp;&middot;&nbsp; '+esc(n.venue)+'</div>'+
+      '<div class="hx-details">'+
+        '<div class="hx-h">What is coming</div>'+
+        '<ul class="hx-prev">'+n.bullets.map(b=>'<li>'+esc(b)+'</li>').join('')+'</ul>'+
+        '<p class="nx-note">'+esc(n.note)+'</p>'+
+      '</div>';
+    if(ticking) tickCountdown(n.iso);
     return;
   }
   const f = h.f;
@@ -551,6 +633,54 @@ function tickCountdown(iso){
   frame(); cdTimer=setInterval(frame,1000);
 }
 
+/* =========================================================================
+   Tournament recap (hybrid mode). Renders WC.recap: the podium, how the
+   featured teams finished, and links to the frozen dated snapshots. Silently
+   renders nothing when WC.recap is absent, so a live tournament is unaffected.
+   ========================================================================= */
+function renderRecap(){
+  const mount = document.getElementById('recap');
+  const r = DATA.recap;
+  const sec = document.getElementById('recap-section');
+  if(!mount || !r){ if(sec) sec.style.display='none'; return; }
+
+  document.getElementById('recap-h').textContent = r.headline;
+  document.getElementById('recap-note').textContent = DATA.meta.tournament;
+
+  const podium = (r.podium||[]).map((p,i)=>
+    '<div class="rp-card rp-'+(i+1)+'">'+
+      '<div class="rp-place">'+esc(p.place)+'</div>'+
+      '<div class="rp-team">'+esc(p.team)+'</div>'+
+      '<div class="rp-detail">'+esc(p.detail)+'</div>'+
+    '</div>').join('');
+
+  const ours = (r.ourTeams||[]).map(t=>
+    '<li><span class="ro-kit" style="background:'+kitFor(t.team)+'"></span>'+
+      '<span class="ro-body">'+
+        '<span class="ro-top"><span class="ro-name">'+esc(t.team)+'</span>'+
+          '<span class="ro-finish">'+esc(t.finish)+'</span></span>'+
+        '<span class="ro-detail">'+esc(t.detail)+'</span>'+
+      '</span></li>').join('');
+
+  const links = (r.archive||[]).map(a=>
+    '<a class="ra-link" href="'+esc(a.href)+'">'+
+      '<span class="ra-label">'+esc(a.label)+'</span>'+
+      '<span class="ra-detail">'+esc(a.detail)+'</span>'+
+    '</a>').join('');
+
+  mount.innerHTML =
+    '<p class="rp-line">'+esc(r.line)+'</p>'+
+    '<div class="rp-row">'+podium+'</div>'+
+    '<div class="recap-cols">'+
+      '<div class="rcard"><div class="rc-h">Our teams in 2026</div>'+
+        '<ul class="ro-list">'+ours+'</ul></div>'+
+      '<div class="rcard"><div class="rc-h">Archive</div>'+
+        '<div class="ra-links">'+links+'</div>'+
+        (r.archiveNote ? '<p class="ra-note">'+esc(r.archiveNote)+'</p>' : '')+
+      '</div>'+
+    '</div>';
+}
+
 /* ---- featured team cards ---- */
 function groupRowFor(team){
   const g = DATA.groups.find(x=>x.id===team.group);
@@ -583,7 +713,7 @@ function renderTeams(){
     }
     const nextHtml = nm
       ? '<span class="next-d">v '+esc(nm.opp)+'</span> <span class="next-x">'+esc(nm.when)+'</span>'
-      : '<span class="pending">Group stage done</span>';
+      : '<span class="pending">No fixture scheduled</span>';
 
     const card = el(
       '<article class="tcard">'+
@@ -615,7 +745,11 @@ function renderGroups(){
 
   ordered.forEach(g=>{
     const isFav = FAV_GROUPS.includes(g.id);
-    const status = g.started ? 'Matchday 1 complete' : (g.note||'Not started');
+    // Derive the label from the rows, not from a fixed string: a completed
+    // group must not keep reporting "Matchday 1 complete".
+    const md = Math.max(0, ...g.rows.map(r=>r.pld||0));
+    const status = !g.started ? (g.note||'Not started')
+                 : (md>=3 ? 'Final table' : (md>0 ? 'Matchday '+md+' complete' : 'Not started'));
     // default: collapse non-started, non-favourite groups
     const collapsed = (!g.started && !isFav);
 
@@ -674,6 +808,23 @@ function renderThirdPlace(){
   if(!mount) return;
   const src = (DATA.groupsFinal && DATA.groupsFinal.length) ? DATA.groupsFinal : DATA.groups;
 
+  // Once every group is complete this is settled history, not a live race, so
+  // the surrounding copy has to switch tense with the data.
+  const settled = src.length===12 &&
+    src.every(g=>(g.rows||[]).length===4 && g.rows.every(r=>(r.pld||0)>=3));
+  const noteEl = document.getElementById('tp-note');
+  const cavEl  = document.getElementById('tp-caveat');
+  const footEl = document.getElementById('foot-note');
+  if(noteEl) noteEl.textContent = settled
+    ? 'The eight that reached the Round of 32, best to worst'
+    : 'Eight best of twelve reach the Round of 32 - provisional, as things stand';
+  if(cavEl) cavEl.textContent = settled
+    ? 'Final order, ranked on points, then goal difference, then goals for.'
+    : 'Ordering only - the cutoff can still swing on the final group matchday. Not a statement that any team has qualified or been eliminated.';
+  if(footEl) footEl.innerHTML = settled
+    ? 'Times shown in <b>ET</b>. The top two from each group, plus the eight best third-placed teams, reached the Round of 32.'
+    : 'Times shown in <b>ET</b>. Top two from each group plus the eight best third-placed teams reach the Round of 32.';
+
   const num = (v)=> (typeof v==='number' && !Number.isNaN(v)) ? v : 0;
   const cmp = (a,b)=> (b.pts-a.pts) || (b.gd-a.gd) || (b.gf-a.gf) ||
                       (a.team<b.team?-1:(a.team>b.team?1:0));
@@ -704,7 +855,9 @@ function renderThirdPlace(){
                 : (t.gd<0 ? '<span class="gd-neg">'+t.gd+'</span>' : '0');
     if(showCut && rank===CUT+1){
       body += '<tr class="tp-cut" aria-hidden="true"><td colspan="7">'+
-              '<span class="tp-cut-label">Top 8 advance (provisional) &middot; cutoff as things stand</span></td></tr>';
+              '<span class="tp-cut-label">'+(settled
+                ? 'Top 8 advanced to the Round of 32'
+                : 'Top 8 advance (provisional) &middot; cutoff as things stand')+'</span></td></tr>';
     }
     body += '<tr class="tp-row '+(advancing?'tp-in':'tp-out')+'">'+
       '<td class="tp-rank">'+rank+'</td>'+
@@ -775,6 +928,7 @@ document.getElementById('search').addEventListener('input',e=>{
 
 /* ---- go ---- */
 renderHero();
+renderRecap();
 renderTeams();
 renderGroups();
 renderThirdPlace();

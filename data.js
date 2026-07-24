@@ -1,21 +1,32 @@
 /*
- * data.js - the single source of truth for the Men's World Cup 2026 tracker.
+ * data.js - the single source of truth for the World Cup tracker.
  *
- * Both pages load this file (as a classic <script>, before their render script),
- * so the tournament data lives in exactly ONE place:
- *   - world_cup_tracker.html uses WC as its DATA (meta, teams, groups)
+ * The site is currently a HYBRID: a frozen recap/archive of the Men's World Cup
+ * 2026 (complete - Spain beat Argentina 1-0 in the final on July 19, 2026) plus
+ * a live countdown to the next major FIFA event, the Women's World Cup 2027 in
+ * Brazil. See docs/ROADMAP.md for the phased plan.
+ *
+ * All three pages load this file (as a classic <script>, before their render
+ * script), so the tournament data lives in exactly ONE place:
+ *   - world_cup_tracker.html uses WC as its DATA (meta, recap, next, teams, groups)
  *   - today.html uses WC.today for the day's games and derives each game's
  *     standings table from the shared WC.groups - there is no second copy.
+ *   - bracket.html renders WC.bracket.
  *
- * The daily routine edits ONLY this file's data. After editing, run
+ * The weekly routine edits ONLY this file's data. After editing, run
  * "node scripts/validate.mjs" (must pass) and "node scripts/snapshot.mjs".
  * See CLAUDE.md.
  *
  * Shape:
- *   meta   - tournament/meta strings incl. updated (today's date)
- *   teams  - featured teams (USA, Netherlands, England) + their fixtures
- *   groups - all 12 groups with standings rows (GD must sum to zero per group)
- *   today  - the Today's Games page: date, stageLabel, tz, schedNote, kits, games
+ *   meta        - tournament/meta strings for the ARCHIVED tournament, incl.
+ *                 updated (the run date)
+ *   next        - the forward-looking countdown target (Women's WC 2027)
+ *   recap       - how the archived tournament finished, plus archive links
+ *   teams       - featured teams (USA, Netherlands, England) + their fixtures
+ *   groups      - all 12 groups with standings rows (GD must sum to zero per group)
+ *   groupsFinal - the frozen final group tables
+ *   today       - the Today's Games page: date, stageLabel, tz, schedNote, kits, games
+ *   bracket     - the knockout tree
  */
 const WC = {
   "meta": {
@@ -26,6 +37,80 @@ const WC = {
     "where": "Spain are the FIFA World Cup 2026 champions, beating holders Argentina 1-0 in the final at MetLife Stadium, New Jersey, on Jul 19. England took third place, beating France 6-4 in the play-off in Miami Gardens on Jul 18. The tournament is complete.",
     "standNote": "Final group tables - all 12 groups. Our teams' groups are pinned to the top.",
     "updated": "July 23, 2026"
+  },
+  "next": {
+    "tournament": "FIFA Women's World Cup 2027",
+    "label": "Counting down to",
+    "eventLabel": "Opening day",
+    "iso": "2027-06-24T00:00:00-03:00",
+    "when": "Thursday, June 24, 2027",
+    "window": "June 24 to July 25, 2027",
+    "venue": "Eight host cities across Brazil",
+    "note": "The match schedule and kickoff times are not published yet, so this counts down to the start of opening day in Brazil, not to a kickoff. It will be repointed at the real opening match once FIFA publishes the schedule.",
+    "bullets": [
+      "Thirty-two teams, the second and last edition at that size before the tournament expands to forty-eight in 2031.",
+      "Eight host cities - Belo Horizonte, Brasilia, Fortaleza, Porto Alegre, Recife, Rio de Janeiro, Salvador and Sao Paulo - all of them 2014 World Cup venues.",
+      "Spain arrive as holders, having won their first women's title in 2023.",
+      "Group tables, matchday pages and a knockout bracket return to this site once the draw is made."
+    ],
+    "source": "Wikidata Q64979822 (P580 start time 2027-06-24, P582 end time 2027-07-25, P17 country Brazil), cross-checked against the Wikipedia infobox for the 2027 FIFA Women's World Cup (dates 24 June to 25 July, 32 teams, 8 venues). Retrieved 2026-07-23. ESPN's fifa.wwc API still reports 2023 as its latest season, so no Tier 1-3 structured source carries the 2027 schedule yet."
+  },
+  "recap": {
+    "headline": "Spain are world champions",
+    "line": "Forty-eight teams, twelve groups and one hundred and four matches across the USA, Canada and Mexico. Spain won it, Argentina fell one game short of retaining it, and England came home with bronze.",
+    "podium": [
+      {
+        "place": "Champions",
+        "team": "Spain",
+        "detail": "Beat Argentina 1-0 in the final at MetLife Stadium, East Rutherford, on July 19."
+      },
+      {
+        "place": "Runners-up",
+        "team": "Argentina",
+        "detail": "The holders reached a second straight final, beating England 2-1 in the semi-final in Atlanta."
+      },
+      {
+        "place": "Third",
+        "team": "England",
+        "detail": "Beat France 6-4 in the third-place play-off in Miami Gardens on July 18."
+      },
+      {
+        "place": "Fourth",
+        "team": "France",
+        "detail": "Won Group I with a perfect nine points, then lost 2-0 to Spain in the semi-final in Arlington."
+      }
+    ],
+    "ourTeams": [
+      {
+        "team": "USA",
+        "finish": "Round of 16",
+        "detail": "Topped Group D and beat Bosnia and Herzegovina 2-0 in the Round of 32, before Belgium won 4-1 in Seattle."
+      },
+      {
+        "team": "Netherlands",
+        "finish": "Round of 32",
+        "detail": "Won Group F on seven points, then drew 1-1 with Morocco and went out 3-2 on penalties in Guadalupe."
+      },
+      {
+        "team": "England",
+        "finish": "Third place",
+        "detail": "Won Group L, knocked out Mexico and Norway, lost the semi-final to Argentina, then took bronze from France."
+      }
+    ],
+    "archive": [
+      {
+        "label": "Frozen 2026 tracker",
+        "href": "/snapshots/world_cup_tracker_2026-07-22.html",
+        "detail": "The matchday companion exactly as it stood at the end of the tournament."
+      },
+      {
+        "label": "Frozen 2026 bracket",
+        "href": "/snapshots/world_cup_bracket_2026-07-22.html",
+        "detail": "The complete knockout tree, Round of 32 through the final."
+      }
+    ],
+    "archiveNote": "Every update run from June 15 onwards left a dated, self-contained copy under /snapshots/, named world_cup_tracker_YYYY-MM-DD.html and world_cup_bracket_YYYY-MM-DD.html.",
+    "source": "Built from this file's own groupsFinal and bracket, both recorded from structured sources during the tournament."
   },
   "teams": [
     {
@@ -1429,9 +1514,9 @@ const WC = {
   ],
   "today": {
     "date": "Thursday, July 23, 2026",
-    "stageLabel": "Tournament complete",
-    "tz": "All kickoff times are listed in Eastern Time (ET). US broadcast on FOX, with Spanish-language coverage on Telemundo; FOX One streams every match.",
-    "schedNote": "No matches today. The FIFA World Cup 2026 is complete - Spain lifted the trophy at MetLife Stadium on July 19.",
+    "stageLabel": "Between tournaments",
+    "tz": "Kickoff times are listed in Eastern Time (ET) whenever there are matches to list. There are none until the Women's World Cup opens in Brazil on June 24, 2027.",
+    "schedNote": "No matches. The Men's World Cup 2026 finished on July 19 and the next tournament is the Women's World Cup, which opens in Brazil on June 24, 2027. This page refreshes weekly and will fill up again once that schedule is published.",
     "kits": {},
     "games": []
   },
